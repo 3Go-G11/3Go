@@ -1,4 +1,5 @@
 # Projeto 3Go
+<img src="/logo3GO.png" width="250px">
 Um projeto para a matéria de Pesquisa e Inovação da São Paulo Tech School. 
 
 Nosso projeto terá como foco o controle de temperatura e umidade em câmaras de crescimento de trigo.
