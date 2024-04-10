@@ -39,3 +39,9 @@ insert into camara (linha, coluna, fkSensor) values
 ('A', '12', 1);
 
 select*from usuario;
+
+desc sensor;
+
+alter table sensor modify column temperatura double;
+
+alter table sensor modify column humidade double;
