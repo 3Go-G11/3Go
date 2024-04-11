@@ -1,5 +1,5 @@
 # Projeto 3Go
-<img src="/logoProjeto3GO.png" width="250px">
+<img src="./assets/logoProjeto3GO.png" width="250px">
 
 Um projeto para a matéria de Pesquisa e Inovação da São Paulo Tech School. 
 
