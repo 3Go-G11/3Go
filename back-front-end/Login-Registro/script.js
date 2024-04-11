@@ -49,6 +49,7 @@ function entrar(){
         document.getElementById("spanEntrar").style.color = "#00FF00";
         spanEntrar.innerHTML=`Login realizado com sucesso`
     } else {
+        document.getElementById("spanEntrar").style.color = "#FF0000";
         spanEntrar.innerHTML=`Email ou Senha incorretos`
     }
 }

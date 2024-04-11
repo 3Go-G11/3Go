@@ -43,7 +43,8 @@
     flex-direction: column;
     width: 60%;
     height: 100vh;
-    background-image: url(./wheat-6536039_1280.jpg);
+    background-image: url('../../assets/wheat-6536039_1280.jpg');
+    
     background-repeat: repeat;
     opacity: 0.7;
     align-items: start;
@@ -79,7 +80,7 @@ span {
     margin-top: 20px;
 }
 
-#spanEmail, #spanSenha, #spanEntrar, #spanConfirmarSenha {
+#spanEmail, #spanSenha,  #spanConfirmarSenha {
     color: #FF0000;
     margin-bottom: 10px;
 }
