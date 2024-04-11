@@ -4,14 +4,14 @@ use threego;
 
 create table usuario (
 id int primary key auto_increment,
-nome varchar(35) not null,
-sobrenome varchar(45),
+nome varchar(50) not null,
 funcao varchar (40), 
 email varchar(70) not null unique ,
-	constraint chkEmail check (email like ('%@%')),
-senha varchar(40),
 cpf varchar (14) not null unique, 
-telefone varchar(16)not null);
+telefone varchar(16)not null, 
+senha varchar(40));
+
+alter table usuario add constraint chkEmail check (email like('%@%'));
 
 desc usuario;
 
@@ -29,19 +29,15 @@ fkSensor int,
 	constraint fkCamaraSensor foreign key (fkSensor)
 		references sensor(idSensor));
         
-insert into usuario (nome, sobrenome, email, senha, cpf, telefone) values 
-('Joao', 'Silva', 'jotinhasilva@sptech.school','senhasecreta', '123.456.789-10','5511999998888');
+insert into usuario (nome,email, cpf, telefone,senha) values 
+('Joao Silva', 'jotinhasilva@sptech.school', '123.456.789-10','5511999998888','senhasecreta');
 
 insert into sensor(temperatura, humidade) values
 (23.4, 35);
 
 insert into camara (linha, coluna, fkSensor) values
 ('A', '12', 1);
+ 
+        
+        
 
-select*from usuario;
-
-desc sensor;
-
-alter table sensor modify column temperatura double;
-
-alter table sensor modify column humidade double;
