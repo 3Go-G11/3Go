@@ -77,10 +77,20 @@ span {
     font-weight: 600;
     transition: 1.5s;
     cursor: pointer;
-    margin-top: 20px;
+}
+
+.btnContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
 }
 
 #spanEmail, #spanSenha,  #spanConfirmarSenha {
     color: #FF0000;
     margin-bottom: 10px;
+}
+
+#spanRealizado {
+    color: #00FF00;
+    margin-top: 10px;
 }
