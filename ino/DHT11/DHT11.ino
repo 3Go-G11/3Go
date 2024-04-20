@@ -1,4 +1,4 @@
-#include "DHT.h"
+#include <DHT_U.h>
 #define dht_type DHT11
 
 int dht_pin = A0;
@@ -23,5 +23,5 @@ void loop() {
     Serial.println(temperatura);
     //Serial.println(" ºC");
   }
-  delay(2000);
+  delay(60000);
 }
