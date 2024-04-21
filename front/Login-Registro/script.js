@@ -1,3 +1,6 @@
+var upperValidate = false
+var lowerValidate = false
+var numberValidate = false
 
 function cadastrarempresa(){
     var razao = inputRazao.value;
@@ -8,34 +11,62 @@ function cadastrarempresa(){
     var senhaEmpresa = inputSenha.value;
     var confirmEmpresa = inputConfirmarSenha.value;
     var indice_arroba = emailEmpresa.indexOf('@')
+
+    var validate;
    
-    if(indice_arroba >= 0 && senhaEmpresa.length >= 8 && confirmEmpresa == senhaEmpresa){
-        spanEmail.innerHTML = ``;
-        spanSenha.innerHTML = ``;
-        spanConfirmarSenha.innerHTML = ``;
-        spanRealizado.innerHTML = `Cadastro Realizado`
-    } if(indice_arroba < 0){
+
+    for (var i = 0; i < senhaEmpresa.length && upperValidate == false; i++) {
+        if (senhaEmpresa[i] == senhaEmpresa[i].toUpperCase()) {
+            upperValidate = true;
+        }
+    }
+    
+    for (var i = 0; i < senhaEmpresa.length && lowerValidate == false ; i++) {
+        if (senhaEmpresa[i] == senhaEmpresa[i].toLowerCase()) {
+            lowerValidate = true;
+        }
+    }
+
+    var validNumbers = '0123456789'
+    for (var i = 0; i < senhaEmpresa.length && numberValidate == false ; i++) {
+        if (validNumbers.indexOf(senhaEmpresa[i]) >= 0) {
+            numberValidate = true;
+        }
+    }
+
+    if(indice_arroba < 0){
+        validate = false
         spanEmail.innerHTML=`Insira um email valido`
-    } if(senhaEmpresa.length < 8){
-        spanSenha.innerHTML=`Senha fraca, insira no minímo de 8 digitos`
-    } if(confirmEmpresa != senhaEmpresa){
-        spanConfirmarSenha.innerHTML=`A confirmação de senha não corresponde`
+    } else{
+        spanEmail.innerHTML=``
+    }
+    if(senhaEmpresa.length < 8 || upperValidate == false || lowerValidate == false || numberValidate == false){
+        validate = false
+        spanSenha.innerHTML=`Senha fraca, sua senha deve conter no minímo 8 digitos, 1 letra maiúscula, 1 letra minúscula e 1 número`
+    } else{
+        spanSenha.innerHTML=``
     } 
-}
-
-function entrar(){
-    var email = inputEmail.value;
-    var senha = inputSenha.value;
-
-    if(email == '@empresa' && senha == 'empresa123' || (email == '@func' && senha == 'func123')){
-        spanEntrar.style.color = "#00FF00";
-        spanEntrar.innerHTML=`Login realizado com sucesso`
+    if(confirmEmpresa != senhaEmpresa){
+        validate = false
+        spanConfirmarSenha.innerHTML=`A confirmação de senha não corresponde`
     } else {
-        document.getElementById("spanEntrar").style.color = "#FF0000";
-        spanEntrar.innerHTML=`Email ou Senha incorretos`
+        spanConfirmarSenha.innerHTML=``
+    } 
+    
+    if (indice_arroba >= 0 && senhaEmpresa.length >=8 && confirmEmpresa == senhaEmpresa && upperValidate == true && lowerValidate == true && numberValidate == true){
+        validate = true;
+        spanRealizado.innerHTML = `Cadastro Realizado`
+        window.location.href = "./Login.html"
     }
 
 
+    
+
+
+
+    console.log(`Numero valido${numberValidate}`)
+    console.log(`Maior${upperValidate}`)
+    console.log(`Menor${lowerValidate}`)
 }
 
 function cadastrarfunc(){
@@ -47,16 +78,66 @@ function cadastrarfunc(){
     var indice_arroba = emailFunc.indexOf('@');
 
 
-    if(indice_arroba >= 0 && senhaFunc.length >= 8 && confirmFunc == senhaFunc){
-        spanEmail.innerHTML = ``;
-        spanSenha.innerHTML = ``;
-        spanConfirmarSenha.innerHTML = ``;
-        spanRealizado.innerHTML = `Cadastro Realizado`
-    } if(indice_arroba < 0){
+    var validate;
+   
+
+    for (var i = 0; i < senhaFunc.length && upperValidate == false; i++) {
+        if (senhaFunc[i] == senhaFunc[i].toUpperCase()) {
+            upperValidate = true;
+        }
+    }
+    
+    for (var i = 0; i < senhaFunc.length && lowerValidate == false ; i++) {
+        if (senhaFunc[i] == senhaFunc[i].toLowerCase()) {
+            lowerValidate = true;
+        }
+    }
+
+    var validNumbers = '0123456789'
+    for (var i = 0; i < senhaFunc.length && numberValidate == false ; i++) {
+        if (validNumbers.indexOf(senhaFunc[i]) >= 0) {
+            numberValidate = true;
+        }
+    }
+
+    if(indice_arroba < 0){
+        validate = false
         spanEmail.innerHTML=`Insira um email valido`
-    } if(senhaFunc.length < 8){
-        spanSenha.innerHTML=`Senha fraca, insira no minímo de 8 digitos`
-    } if(confirmFunc != senhaFunc){
-        spanConfirmarSenha.innerHTML=`A confirmação de senha não corresponde`
+    } else{
+        spanEmail.innerHTML=``
+    }
+    if(senhaFunc.length < 8 || upperValidate == false || lowerValidate == false || numberValidate == false){
+        validate = false
+        spanSenha.innerHTML=`Senha fraca, sua senha deve conter no minímo 8 digitos, 1 letra maiúscula, 1 letra minúscula e 1 número`
+    } else{
+        spanSenha.innerHTML=``
     } 
+    if(confirmFunc != senhaFunc){
+        validate = false
+        spanConfirmarSenha.innerHTML=`A confirmação de senha não corresponde`
+    } else {
+        spanConfirmarSenha.innerHTML=``
+    } 
+    
+    if (indice_arroba >= 0 && senhaFunc.length >=8 && confirmFunc == senhaFunc && upperValidate == true && lowerValidate == true && numberValidate == true){
+        validate = true;
+        spanRealizado.innerHTML = `Cadastro Realizado`
+        window.location.href = "./Login.html"
+    }
+}
+
+function entrar(){
+    var email = inputEmail.value;
+    var senha = inputSenha.value;
+
+    if(email == '@empresa' && senha == 'empresa123' || (email == '@func' && senha == 'func123')){
+        spanEntrar.style.color = "#00FF00";
+        spanEntrar.innerHTML=`Login realizado com sucesso`
+
+    } else {
+        document.getElementById("spanEntrar").style.color = "#FF0000";
+        spanEntrar.innerHTML=`Email ou Senha incorretos`
+    }
+
+
 }
