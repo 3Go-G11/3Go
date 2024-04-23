@@ -15,21 +15,35 @@
 .containPrincipal {
     display: flex;
     flex-direction: column;
-    width: 60%;
+    justify-content: center;
+    width: 50%;
     height: 100vh;
     background-color: #1d1d1d;
     padding: 1rem;
     gap: 8px;
+
+}
+
+.table {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 50px;
+    margin-bottom: 70px;
+    background-color: white;
+    width: auto;
+    
+}
+#dados.table {
+    width: 50%;
 }
 
 .containIncrement {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 50%;
     height: 100vh;
     background-image: url(./wheat-6536039_1280.jpg);
     background-repeat: repeat;
-    opacity: 0.7;
     align-items: start;
     justify-content: center;
     
@@ -93,18 +107,40 @@ select {
     width: 30%;
 }
 .mensagem {
-    width: 90%;
-    height: auto;
-    padding: 1rem;
-    padding-bottom: 3rem;
-    padding-top: 2rem;
-    background-color: #1d1d1d;
+    width: 40%;
+    max-height: auto;
+    padding: 2rem 3rem;
+    background-color: #1d1d1dd6;
     display: flex;
+    border-radius: 10px;
     justify-content: center;
     flex-direction: column;
     align-items: start;
     gap: 2rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    backdrop-filter: blur(20px);
+    transform: translate(-50%, -50%);
+    min-height: 70%;
 
+}
+.sair {
+    width: 30px;
+    cursor: pointer;
+    height: 30px;
+    border-radius: 100px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-image: url('https://www.freeiconspng.com/uploads/close-icon-39.png');
+    background-position: 50%, 50%;
+    background-size: cover;
+    filter: invert(1);
+    transition: 0.5s ease-in-out;
+}
+.sair:hover{
+    transform: rotate( 180deg);
 }
 .mensagemDis {
     display: none;
