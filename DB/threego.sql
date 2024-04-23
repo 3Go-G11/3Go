@@ -10,6 +10,8 @@ CREATE TABLE empresa (
   telefone VARCHAR(45),
   senha VARCHAR(45)); 
   
+alter table empresa add constraint chkEmailEmpresa check (emailRepresentante like('%@%'));
+  
 CREATE TABLE funcionario (
   idFunc INT,
   fkEmpresa INT,
@@ -19,6 +21,8 @@ CREATE TABLE funcionario (
   nomeFunc VARCHAR(45),
   emailFunc VARCHAR(90),
   senhaFunc VARCHAR(45));
+
+alter table funcionario add constraint chkEmailFunc check (emailFunc like('%@%'));
 
 CREATE TABLE sensor (
   idSensor INT PRIMARY KEY AUTO_INCREMENT,
@@ -38,7 +42,7 @@ CREATE TABLE dados(
   fkSensor INT,
   CONSTRAINT fkSensorDados FOREIGN KEY (fkSensor)
     REFERENCES sensor (idSensor),
-  CONSTRAINT pkCompostaDados PRIMARY KEY (idDados, fkSensor)
+  CONSTRAINT pkCompostaDados PRIMARY KEY (idDados, fkSensor),
   dht11Temperatura DOUBLE,
   dht11Umidade DOUBLE,
   datahora DATETIME DEFAULT CURRENT_TIMESTAMP);
@@ -66,6 +70,25 @@ INSERT INTO dados (idDados, fkSensor, dht11Temperatura, dht11Umidade)
 VALUES (1, 1, 25.5, 60.2),
        (2, 1, 24.8, 58.6),
        (3, 1, 26.0, 62.3);
+       
+INSERT INTO dados (fkSensor, dht11Temperatura, dht11Umidade, datahora) VALUES
+(1, 21.3, 55.1, '2023-03-19'),
+(1, 24.5, 68.7, '2023-06-15 12:30:00'),
+(1, 22.8, 72.1, '2023-09-20 18:45:00'),
+(1, 25.3, 63.5, '2023-11-10 09:15:00'),
+(1, 23.7, 59.8, '2023-07-05 07:00:00'),
+(1, 26.1, 71.2, '2023-08-08 15:20:00');
+       
+select concat('Usuário: ',emailRepresentante, ' ','Senha: ', senha) as LoginEmpresa from empresa;
 
-
-
+select empresa.razaosocial, empresa.nomeRepresentante, empresa.emailRepresentante, funcionario.nomeFunc, funcionario.emailFunc 
+ from empresa
+ join funcionario on empresa.idEmpresa = funcionario.fkEmpresa;
+ 
+ select empresa.razaosocial as NomeEmpresa, camaras.fkSensor as NºSensor,
+		dados.dht11Temperatura as Temperatura, dht11Umidade as Umidade
+			from empresa left join camaras on camaras.fkEmpresa = empresa.idEmpresa
+            left join dados on dados.fkSensor = camaras.fkSensor;
+      
+select*from dados where datahora between '2023-03-19' and '2023-11-10' order by datahora;
+            
