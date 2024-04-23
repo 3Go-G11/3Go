@@ -1,80 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
+
 <body class="allOfCode">
-    <div id='dados' style="display:none" >
-        <script type="text/javascript" src="https://www.cepea.esalq.usp.br/br/widgetproduto.js.php?fonte=arial&tamanho=10&largura=400px&corfundo=dbd6b2&cortexto=333333&corlinha=ede7bf&id_indicador%5B%5D=178"></script>
+
+    <div class="containIncrement">
+
+        <div class="mensagemDis" id="mensagem">
+
+        </div>
     </div>
-    <div class="containIncrement" >
-        <div class="mensagemDis" id="mensagem"></div></div> <div class="containPrincipal">
-    <p>Cotação do dia <label id="lbl_dia_cotacao"></label>:</p><input readonly class="textInput" id="ipt_cotacao"><br>
-    <p>Insira quanto você produz (kg): </p><input class="textInput" type="number" id="ipt_safraProd"placeholder = "Insira apenas numeros"><br>
-    <p>Perdas de safra por variação de temperatura (kg): </p><input  class="textInput" type="text" id="ipt_perdaTemp"placeholder = "Insira apenas numeros"><br>
-    <p>Perdas de safra por variação de umidade (kg): </p></p><input  class="textInput" type="text" id="ipt_perdaUmid"placeholder = "Insira apenas numeros"><br>
-    <p>Custo dos insumos (R$): </p><input  class="textInput" type="number" id="ipt_insumo"placeholder = "Insira apenas numeros"><br>
+    <div class="containPrincipal">
 
-    <button class="btn" onclick="calcular()">calcular</button><br>
+        <p>Cotação do dia <label id="lbl_dia_cotacao"></label>:</p><input readonly class="textInput"
+            id="ipt_cotacao"><br>
+        <p>Insira quanto você produz (kg): </p><input class="textInput" type="number" id="ipt_safraProd"
+            placeholder="Insira apenas numeros"><br>
+        <p>Perdas de safra por variação de temperatura (kg): </p><input class="textInput" type="text" id="ipt_perdaTemp"
+            placeholder="Insira apenas numeros"><br>
+        <p>Perdas de safra por variação de umidade (kg): </p>
+        </p><input class="textInput" type="text" id="ipt_perdaUmid" placeholder="Insira apenas numeros"><br>
+        <p>Custo dos insumos (R$): </p><input class="textInput" type="number" id="ipt_insumo"
+            placeholder="Insira apenas numeros"><br>
+
+        <button class="btn" onclick="calcular()">calcular</button>
+        <div class="table" id='dados'>
+            <script type="text/javascript"
+                src="https://www.cepea.esalq.usp.br/br/widgetproduto.js.php?fonte=arial&tamanho=10&largura=400px&corfundo=dbd6b2&cortexto=333333&corlinha=ede7bf&id_indicador%5B%5D=178"></script>
+        </div>
 
 
-</div>
+    </div>
 </body>
+
 </html>
 <script>
-    function calcular(){
-        var safra = Number(ipt_safraProd.value)
-        var cotacao = Number(ipt_cotacao.value)
-        var perdaTemperatura = Number(ipt_perdaTemp.value)
-        var perdaUmidade = Number(ipt_perdaUmid.value)
-        var insumo = Number(ipt_insumo.value)
+    function closeModal() {
+        mensagem.classList.remove('mensagem')
+        mensagem.classList.add('mensagemDis')
+
+    }
+    function calcular() {
+        var safra = Number(ipt_safraProd.value);
+        var cotacao = Number(ipt_cotacao.value).toFixed(2);
+        var perdaTemperatura = Number(ipt_perdaTemp.value);
+        var perdaUmidade = Number(ipt_perdaUmid.value);
+        var insumo = Number(ipt_insumo.value);
         mensagem.classList.remove('mensagemDis')
+
         mensagem.classList.add('mensagem')
-        
-        
-        
-        var bruto = safra * cotacao
-        var custoTemp = perdaTemperatura * cotacao
-        var custoUmid = perdaUmidade * cotacao
-        var custoTotal = custoTemp + custoUmid + insumo
-        var perda = bruto - custoTotal
-        var solucao  = bruto - insumo
-        var lucro = perda
-        var lucroLiquido = solucao
-        
-        var gastoTemp = (perdaTemperatura * 0.775) * cotacao
-        var gastoUmid = (perdaUmidade * 0.775) * cotacao
 
-        var economiaTemp = (perdaTemperatura * 0.225) * cotacao
-        var economiaUmid = (perdaUmidade * 0.225) * cotacao
 
-        var percentual_perdaprocesso = ((bruto-custoTotal)/bruto)*100
-        var percentual_solucao = ((bruto-(insumo + gastoTemp + gastoUmid))/bruto)*100
 
-        if(safra<perdaTemperatura || safra<perdaUmidade){
+        var bruto = (safra * cotacao).toFixed(2);
+        var custoTemp = perdaTemperatura * cotacao;
+        var custoUmid = perdaUmidade * cotacao;
+        var custoTotal = (custoTemp + custoUmid + insumo).toFixed(2);
+        var perda = bruto - custoTotal;
+        var solucao = bruto - insumo;
+
+        var gastoTemp = (perdaTemperatura * 0.775) * cotacao;
+        var gastoUmid = (perdaUmidade * 0.775) * cotacao;
+        var gastoEconomico = (gastoTemp + gastoUmid + insumo).toFixed(2);
+        var final = custoTotal - gastoEconomico.toFixed(2);
+        var porcentagem = (gastoEconomico / custoTotal * 100).toFixed(0);
+
+
+        if (safra < perdaTemperatura || safra < perdaUmidade) {
             mensagem.innerHTML = `<p>Você inseriu algum dado errado. Sua perda não pode ser maior que sua produção</p>`
         }
-        else{
-        mensagem.innerHTML = 
-        mensagem.innerHTML = 
-        `<p>Você faturou <strong class ='ganho'> R$${bruto} </strong> brutos</p>
-        <p>Você perdeu <strong class ='perda'>R$${custoTemp} </strong> devido a problemas com temperatura</p>
-        <p>Você perdeu  <strong class ='perda'> R$${custoUmid} </strong>devido a problemas com umidade</p>
-        <p>sem o nosso sistema daria  <strong class ='perda'>  R$${lucro} </strong> e com o nosso sistema  <strong class ='ganho'>  R$${lucroLiquido} </strong></p>
-        <p>Sem o nosso sistema de umidade você perderia   <strong class ='perda'> R$${custoUmid}</strong>. Com o controle de umidade sua perda reduzirá <strong class ='ganho'> R$${economiaUmid} </strong> gastando apenas <strong class ='gasto'>  R$${gastoUmid} </strong></p>
-        <p>Sem o nosso sistema de temperatura você perderia   <strong class ='perda'> R$${custoTemp}</strong>. Com o controle de temperatura sua perda reduzirá <strong class ='ganho'> R$${economiaTemp} </strong> gastando apenas <strong class ='gasto'>  R$${gastoUmid}</p>`
-            }
-
+        else {
+            mensagem.innerHTML =
+                mensagem.innerHTML =
+                ` <div class="sair" id="exit" onclick="closeModal()"></div> <p>  Você faturou <strong class ='ganho'> R$${bruto} </strong> brutos</p>
+        <p>Você teve <strong class ='perda'>R$${custoTotal} </strong> de despesas com problemas de temperatura, umidade e insumos</p>
+        <p> Com o controle de umidade e temperatura sua perda reduzirá <strong class ='ganho'> R$${final} </strong> gastando apenas <strong>  R$${gastoEconomico} </strong> economizando <strong class ='ganho'> ${porcentagem}% </strong></p>`
         }
-        document.addEventListener("DOMContentLoaded", function() {
-            const divDados = document.getElementById('dados');
-            const tabela = divDados.querySelector('.imagenet-widget-tabela tbody');
-            const dia = tabela.querySelector('tr td:nth-child(1)').textContent.trim();
-            document.getElementById('lbl_dia_cotacao').innerText = dia + ' (R$)';
-            const valor = tabela.querySelector('tr td:nth-child(3) span.maior').textContent.trim();
-            document.getElementById('ipt_cotacao').value = valor.replace(".", "").replace(",",".");
-        });
+
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+        var divDados = document.getElementById('dados');
+        var tabela = divDados.querySelector('.imagenet-widget-tabela tbody');
+        var dia = tabela.querySelector('tr td:nth-child(1)').textContent.trim();
+        document.getElementById('lbl_dia_cotacao').innerText = dia + ' (R$)';
+        var valor = tabela.querySelector('tr td:nth-child(3) span.maior').textContent.trim();
+        document.getElementById('ipt_cotacao').value = valor.replace(".", "").replace(",", ".");
+    });
 </script>
