@@ -290,12 +290,32 @@
     new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['1', '2', '3', '4', '5', '6'],
+        labels: ['Dia 1', 'Dia 2', 'Dia 3', 'Dia 4', 'Dia 5', 'Dia 6', 'Dia 7'],
         datasets: [{
-          label: 'Dados Extremos de cada dia',
-          data: [12 , 19, 3, 5, 2, 3],
-          borderWidth: 1
-        }]
+          label: 'Temperatura mais alta',
+          data: [27 , 27, 27, 27, 27, 27, 27],
+          borderWidth: 1,
+          backgroundColor: 'red'
+        },
+        {
+            label: 'Temperatura mais baixa',
+            data: [17, 17, 17, 17, 17, 17, 17],
+            borderWidth: 1,
+            backgroundColor: 'orange'
+        },
+        {
+            label: 'Umidade mais alta',
+            data: [65, 65, 65, 65, 65, 65, 65],
+            borderWidth: 1,
+            backgroundColor: 'blue'
+        },
+        {
+            label: 'Umidade mais baixa',
+            data: [45, 45, 45, 45, 45, 45, 45],
+            borderWidth: 1,
+            backgroundColor: 'lightblue'
+        }
+        ]
       },
       options: {
         scales: {
