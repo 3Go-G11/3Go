@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 
@@ -48,7 +48,7 @@
     }
     function calcular() {
         var safra = Number(ipt_safraProd.value);
-        var cotacao = Number(ipt_cotacao.value);
+        var cotacao = Number(ipt_cotacao.value).toFixed(2);
         var perdaTemperatura = Number(ipt_perdaTemp.value);
         var perdaUmidade = Number(ipt_perdaUmid.value);
         var insumo = Number(ipt_insumo.value);
@@ -67,8 +67,7 @@
 
         var gastoTemp = (perdaTemperatura * 0.775) * cotacao;
         var gastoUmid = (perdaUmidade * 0.775) * cotacao;
-        var gastoEconomico = (gastoTemp + gastoUmid + insumo);
-        var textoGasto = gastoEconomico.toFixed(2);
+        var gastoEconomico = (gastoTemp + gastoUmid + insumo).toFixed(2);
         var final = custoTotal - gastoEconomico.toFixed(2);
         var porcentagem = (gastoEconomico / custoTotal * 100).toFixed(0);
 
@@ -81,7 +80,7 @@
                 mensagem.innerHTML =
                 ` <div class="sair" id="exit" onclick="closeModal()"></div> <p>  Você faturou <strong class ='ganho'> R$${bruto} </strong> brutos</p>
         <p>Você teve <strong class ='perda'>R$${custoTotal} </strong> de despesas com problemas de temperatura, umidade e insumos</p>
-        <p> Com o controle de umidade e temperatura sua perda reduzirá <strong class ='ganho'> R$${final} </strong> gastando apenas <strong>  R$${textoGasto} </strong> o equivalente a <strong class ='ganho'> ${porcentagem}%</strong> do valor inicial  </p>`
+        <p> Com o controle de umidade e temperatura sua perda reduzirá <strong class ='ganho'> R$${final} </strong> gastando apenas <strong>  R$${gastoEconomico} </strong> economizando <strong class ='ganho'> ${porcentagem}% </strong></p>`
         }
 
     }
