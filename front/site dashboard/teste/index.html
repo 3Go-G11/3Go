@@ -1,497 +1,1010 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
+ 
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="style.css">
+
     <title>Dashboard</title>
-    <script src="https://code.highcharts.com/stock/highstock.js"></script>
-    <script src="https://code.highcharts.com/stock/highcharts-more.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src=https://code.highcharts.com/stock/highstock.js></script>
+
+    <script src=https://code.highcharts.com/stock/highcharts-more.js></script>
+
+    <script src=https://cdn.jsdelivr.net/npm/chart.js></script>
+
+    <meta name="viewport" content="width=], initial-scale=1.0" />
+
+    <link rel="preconnect" href=https://fonts.googleapis.com />
+
+    <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
+
+    <link rel="preconnect" href=https://fonts.googleapis.com />
+
+    <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
+
+    <link
+
+      href=https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
+
+      rel="stylesheet" />
+
+    <link
+
+      href=https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
+
+      rel="stylesheet" />
+
 </head>
 
+ 
+
 <body>
+
     <div class="principal">
+
         <nav class="lateral">
+
             <span style="color: white;">Olá, Vini Jr<br><br>Bem vindo a 3Go analytics<br><br>Suas camaras: <br>1<br>2<br>3<br><br>Configurações<br>Minha conta<br>Preferências<br>Especificações<br><br>sair</span>
+
         </nav>
 
+ 
+
         <div class="content">
-            <div class="alignKPI">
-                <div class="kpi temp">Temperatura 14°C<br>Situação (boa, ruim, critica)</div>
-                <div class="kpi umid">Umidade 60%<br>Situação Umidade (boa, ruim, critica)</div>
-            </div>
+
             <div class="alignDailyChart">
+
+                <div class="att two">Temperatura 14°C</div>
+
+                <div class="att one">Umidade 60%</div>
+
+                <div class="att two">Está tudo certo</div>
+
+   
+
+            </div>
+
+            <div class="alignDailyChart">
+
                 <div id="teste" class="doubleChart"></div>
+
                 <div id="teste2" class="doubleChart"></div>
+
             </div>
-            <div class="alignKPI">
-                <div class="kpi temp">Temperatura mais alta do dia</div>
-                <div class="kpi temp">Temperatura mais baixa do dia</div>
-                <div class="kpi umid">Umidade mais alta do dia</div>
-                <div class="kpi umid">Umidade mais baixa do dia</div>
-            </div>
-            <div class="alignDailyChart">
+
+       
+
+            <div class="alignDailyChart ultimate">
+
                 <canvas id="myChart"></canvas>
+
            </div>
-            
+
+           
+
             <div class="alignDailyChart">
+
                 <canvas id="myChart2"></canvas>
+
             </div>
+
         </div>
+
     </div>
+
+ 
 
 </body>
 
+ 
+
 </html>
 
+ 
+
 <script>
+
     var chart;
+
     chart = Highcharts.chart('teste', {
+
         chart: {
+
             type: 'gauge',
+
             plotBackgroundColor: null,
+
             plotBackgroundImage: null,
+
             plotBorderWidth: 0,
+
             plotShadow: false,
+
             height: '70%'
+
         },
+
         accessibility: {
+
             enable: false
+
         },
+
+ 
 
         title: {
+
             text: 'Temperatura'
+
         },
+
+ 
 
         pane: {
+
             startAngle: -90,
+
             endAngle: 90,
+
             background: null,
+
             center: ['50%', '75%'],
+
             size: '120%'
+
         },
+
+ 
 
         // the value axis
+
         yAxis: {
+
             min: 6,
+
             max: 22,
+
             tickPixelInterval: 72,
+
             tickPosition: 'inside',
+
             tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+
             tickLength: 20,
+
             tickWidth: 2,
+
             minorTickInterval: null,
+
             labels: {
+
                 distance: 20,
+
                 style: {
+
                     fontSize: '14px'
+
                 }
+
             },
+
             lineWidth: 0,
+
             plotBands: [{
+
                 from: 6,
+
                 to: 8,
+
                 color: '#FF0000',
+
                 thickness: 20
+
             }, {
+
                 from: 8,
+
                 to: 10,
+
                 color: '#FFFF00',
+
                 thickness: 20
+
             },
+
             {
+
                 from: 10,
+
                 to: 18,
+
                 color: '#00FF00',
+
                 thickness: 20
+
             },
+
             {
+
                 from: 18,
+
                 to: 20,
+
                 color: '#FFFF00',
+
                 thickness: 20
+
             }, {
+
                 from: 20,
+
                 to: 22,
+
                 color: '#FF0000',
+
                 thickness: 20
+
             }]
+
         },
 
+ 
+
         series: [{
+
             name: 'Temperatura',
+
             data: [6],
+
             tooltip: {
+
                 valueSuffix: '°C'
+
             },
+
             dataLabels: {
+
                 format: 'Temperatura °C',
+
                 borderWidth: 0,
+
                 color: (
+
                     Highcharts.defaultOptions.title &&
+
                     Highcharts.defaultOptions.title.style &&
+
                     Highcharts.defaultOptions.title.style.color
+
                 ) || '#333333',
+
                 style: {
+
                     fontSize: '16px'
+
                 }
+
             },
+
             dial: {
+
                 radius: '70%',
+
                 backgroundColor: 'gray',
+
                 baseWidth: 12,
+
                 baseLength: '0%',
+
                 rearLength: '0%'
+
             },
+
             pivot: {
+
                 backgroundColor: 'gray',
+
                 radius: 6
+
             }
+
+ 
 
         }]
 
+ 
+
     });
 
+ 
+
     // Add some life
+
     setInterval(() => {
+
         const chart = Highcharts.charts[0];
+
         if (chart && !chart.renderer.forExport) {
+
             const point = chart.series[0].points[0],
+
                 inc = Math.round((Math.random() - 0.5) * 22);
 
+ 
+
             let newVal = point.y + inc;
+
             if (newVal < 6 || newVal > 22) {
+
                 newVal = point.y - inc;
+
             }
 
+ 
+
             point.update(newVal);
+
         }
+
+ 
 
     }, 3000);
 
+ 
+
     var chart2;
+
     chart2 = Highcharts.chart('teste2', {
+
         chart: {
+
             type: 'gauge',
+
             plotBackgroundColor: null,
+
             plotBackgroundImage: null,
+
             plotBorderWidth: 0,
+
             plotShadow: false,
+
             height: '70%'
+
         },
+
         accessibility: {
+
             enable: false
+
         },
+
+ 
 
         title: {
+
             text: 'Umidade'
+
         },
+
+ 
 
         pane: {
+
             startAngle: -90,
+
             endAngle: 90,
+
             background: null,
+
             center: ['50%', '75%'],
+
             size: '120%'
+
         },
+
+ 
 
         // the value axis
+
         yAxis: {
+
             min: 50,
+
             max: 80,
+
             tickPixelInterval: 72,
+
             tickPosition: 'inside',
+
             tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+
             tickLength: 20,
+
             tickWidth: 2,
+
             minorTickInterval: null,
+
             labels: {
+
                 distance: 20,
+
                 style: {
+
                     fontSize: '14px'
+
                 }
+
             },
+
             lineWidth: 0,
+
             plotBands: [{
+
                 from: 50,
+
                 to: 55,
+
                 color: '#FF0000',
+
                 thickness: 20
+
             }, {
+
                 from: 55,
+
                 to: 60,
+
                 color: '#FFFF00',
+
                 thickness: 20
+
             },
+
             {
+
                 from: 60,
+
                 to: 70,
+
                 color: '#00FF00',
+
                 thickness: 20
+
             },
+
             {
+
                 from: 70,
+
                 to: 75,
+
                 color: '#FFFF00',
+
                 thickness: 20
+
             }, {
+
                 from: 75,
+
                 to: 80,
+
                 color: '#FF0000',
+
                 thickness: 20
+
             }]
+
         },
 
+ 
+
         series: [{
+
             name: 'Umidade',
+
             data: [50],
+
             tooltip: {
+
                 valueSuffix: '%'
+
             },
+
             dataLabels: {
+
                 format: 'Umidade%',
+
                 borderWidth: 0,
+
                 color: (
+
                     Highcharts.defaultOptions.title &&
+
                     Highcharts.defaultOptions.title.style &&
+
                     Highcharts.defaultOptions.title.style.color
+
                 ) || '#333333',
+
                 style: {
+
                     fontSize: '16px'
+
                 }
+
             },
+
             dial: {
+
                 radius: '70%',
+
                 backgroundColor: 'gray',
+
                 baseWidth: 12,
+
                 baseLength: '0%',
+
                 rearLength: '0%'
+
             },
+
             pivot: {
+
                 backgroundColor: 'gray',
+
                 radius: 6
+
             }
+
+ 
 
         }]
 
+ 
+
     });
+
+ 
 
     // Add some life
 
+ 
+
     setInterval(() => {
+
         const chart = Highcharts.charts[0];
+
         if (chart2 && !chart2.renderer.forExport) {
+
             const point2 = chart2.series[0].points[0],
+
                 inc = Math.round((Math.random() - 0.5) * 28);
 
+ 
+
             let newVal2 = point2.y + inc;
+
             if (newVal2 < 50 || newVal2 > 80) {
+
                 newVal2 = point2.y - inc;
+
             }
 
+ 
+
             point2.update(newVal2);
+
         }
 
+ 
+
     }, 3000);
+
+ 
 
     const ctx = document.getElementById('myChart');
 
+   
+
+ 
+
     new Chart(ctx, {
+
         type: 'line',
+
         data: {
+
             labels: ['18:00', '18:10', '18:20', '18:30', '18:40', '18:50', '19:00',],
+
             datasets: [{
+
                 label: 'Temperatura mais alta',
+
                 data: [27, 27, 27, 27, 27, 27, 27],
+
                 borderWidth: 1,
+
                 backgroundColor: 'red',
-                borderColor: 'red'
-            },
+
+                borderColor: 'red',
+
+                color: 'white'            },
+
             {
+
                 label: 'Temperatura mais baixa',
+
                 data: [17, 17, 17, 17, 17, 17, 17],
+
                 borderWidth: 1,
+
                 backgroundColor: 'orange',
-                borderColor: 'orange'
+
+                borderColor: 'orange',
+
+                color: 'white'  
+
             },
+
             {
+
                 label: 'Umidade mais alta',
+
                 data: [65, 65, 65, 65, 65, 65, 65],
+
                 borderWidth: 1,
+
                 backgroundColor: 'blue',
-                borderColor: 'blue'
+
+                borderColor: 'blue',
+
+                color: 'white'  
+
             },
+
             {
+
                 label: 'Umidade mais baixa',
+
                 data: [45, 45, 45, 45, 45, 45, 45],
+
                 borderWidth: 1,
+
                 backgroundColor: 'lightblue',
+
                 borderColor: 'lightblue'
+
             }
+
             ]
+
         },
+
         options: {
+
             scales: {
+
                 y: {
+
                     beginAtZero: true
+
                 }
+
             }
-        }
+
+        },
+
     });
+
+ 
 
     const ctx2 = document.getElementById('myChart2');
 
+ 
+
     new Chart(ctx2, {
+
         type: 'bar',
+
         data: {
+
             labels: ['Dia 1', 'Dia 2', 'Dia 3', 'Dia 4', 'Dia 5', 'Dia 6', 'Dia 7'],
+
             datasets: [{
+
                 label: 'Temperatura mais alta',
+
                 data: [27, 27, 27, 27, 27, 27, 27],
+
                 borderWidth: 1,
+
                 backgroundColor: 'red'
+
             },
+
             {
+
                 label: 'Temperatura mais baixa',
+
                 data: [17, 17, 17, 17, 17, 17, 17],
+
                 borderWidth: 1,
+
                 backgroundColor: 'orange'
+
             },
+
             {
+
                 label: 'Umidade mais alta',
+
                 data: [65, 65, 65, 65, 65, 65, 65],
+
                 borderWidth: 1,
+
                 backgroundColor: 'blue'
+
             },
+
             {
+
                 label: 'Umidade mais baixa',
+
                 data: [45, 45, 45, 45, 45, 45, 45],
+
                 borderWidth: 1,
+
                 backgroundColor: 'lightblue'
+
             }
+
             ]
+
         },
+
         options: {
+
             scales: {
+
                 y: {
+
                     beginAtZero: true
+
                 }
+
             }
+
         }
+
     });
+
 
 
 
     Highcharts.chart('container', {
 
+ 
+
     chart: {
+
         type: 'gauge',
+
         plotBackgroundColor: null,
+
         plotBackgroundImage: null,
+
         plotBorderWidth: 0,
+
         plotShadow: false,
+
         height: '80%'
+
     },
+
+ 
 
     title: {
+
         text: 'Speedometer'
+
     },
+
+ 
 
     pane: {
+
         startAngle: -90,
+
         endAngle: 89.9,
+
         background: null,
+
         center: ['50%', '75%'],
+
         size: '110%'
+
     },
+
+ 
 
     // the value axis
+
     yAxis: {
+
         min: 0,
+
         max: 200,
+
         tickPixelInterval: 72,
+
         tickPosition: 'inside',
+
         tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+
         tickLength: 20,
+
         tickWidth: 2,
+
         minorTickInterval: null,
+
         labels: {
+
             distance: 20,
+
             style: {
+
                 fontSize: '14px'
+
             }
+
         },
+
         lineWidth: 0,
+
         plotBands: [{
+
             from: 0,
+
             to: 120,
+
             color: '#55BF3B', // green
+
             thickness: 20
+
         }, {
+
             from: 120,
+
             to: 160,
+
             color: '#DDDF0D', // yellow
+
             thickness: 20
+
         }, {
+
             from: 160,
+
             to: 200,
+
             color: '#DF5353', // red
+
             thickness: 20
+
         }]
+
     },
 
+ 
+
     series: [{
+
         name: 'Speed',
+
         data: [80],
+
         tooltip: {
+
             valueSuffix: ' km/h'
+
         },
+
         dataLabels: {
+
             format: '{y} km/h',
+
             borderWidth: 0,
+
             color: (
+
                 Highcharts.defaultOptions.title &&
+
                 Highcharts.defaultOptions.title.style &&
+
                 Highcharts.defaultOptions.title.style.color
+
             ) || '#333333',
+
             style: {
+
                 fontSize: '16px'
+
             }
+
         },
-        
+
+       
+
         dial: {
+
             radius: '80%',
+
             backgroundColor: 'gray',
+
             baseWidth: 12,
+
             baseLength: '0%',
+
             rearLength: '0%'
+
         },
+
         pivot: {
+
             backgroundColor: 'gray',
+
             radius: 6
+
         }
+
+ 
 
     }]
 
+ 
+
 });
 
+ 
+
 // Add some life
+
 setInterval(() => {
+
     const chart = Highcharts.charts[0];
+
     if (chart && !chart.renderer.forExport) {
+
         const point = chart.series[0].points[0],
+
             inc = Math.round((Math.random() - 0.5) * 20);
 
+ 
+
         let newVal = point.y + inc;
+
         if (newVal < 0 || newVal > 200) {
+
             newVal = point.y - inc;
+
         }
 
+ 
+
         point.update(newVal);
+
     }
 
-}, 3000);
-</script>
+ 
 
+}, 3000);
+
+</script>
