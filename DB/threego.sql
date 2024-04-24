@@ -74,21 +74,32 @@ VALUES (1, 1, 25.5, 60.2),
 INSERT INTO dados (fkSensor, dht11Temperatura, dht11Umidade, datahora) VALUES
 (1, 21.3, 55.1, '2023-03-19 03:11:59'),
 (1, 24.5, 68.7, '2023-06-15 12:30:00'),
-(1, 22.8, 72.1, '2023-09-20 18:45:00'),
-(1, 25.3, 63.5, '2023-11-10 09:15:00'),
-(1, 23.7, 59.8, '2023-07-05 07:00:00'),
-(1, 26.1, 71.2, '2023-08-08 15:20:00');
+(2, 22.8, 72.1, '2023-09-20 18:45:00'),
+(2, 25.3, 63.5, '2023-11-10 09:15:00'),
+(3, 23.7, 59.8, '2023-07-05 07:00:00'),
+(3, 26.1, 71.2, '2023-08-08 15:20:00');
        
 select concat('Usuário: ',emailRepresentante, ' ','Senha: ', senha) as LoginEmpresa from empresa;
 
-select empresa.razaosocial, empresa.nomeRepresentante, empresa.emailRepresentante, funcionario.nomeFunc, funcionario.emailFunc 
- from empresa
- join funcionario on empresa.idEmpresa = funcionario.fkEmpresa;
+select empresa.razaosocial, empresa.nomeRepresentante as Representante, empresa.emailRepresentante,
+ funcionario.nomeFunc as Funcionário, funcionario.emailFunc as emailFuncionário
+ from empresa join funcionario on empresa.idEmpresa = funcionario.fkEmpresa where empresa.razaosocial = 'Empresa XYZ'; -- Seleciona os funcionários e representantes 
+																													   -- de uma empresa específica
  
- select empresa.razaosocial as NomeEmpresa, camaras.fkSensor as NºSensor,
-		dados.dht11Temperatura as Temperatura, dht11Umidade as Umidade
+ select empresa.razaosocial as NomeEmpresa, camaras.fkSensor as NºSensor, sensor.nomeSensor,
+		dados.dht11Temperatura as Temperatura, dht11Umidade as Umidade, dados.datahora
 			from empresa left join camaras on camaras.fkEmpresa = empresa.idEmpresa
-            left join dados on dados.fkSensor = camaras.fkSensor;
+            left join dados on dados.fkSensor = camaras.fkSensor 
+            join sensor on idSensor = camaras.fkSensor where dados.datahora >'2023-05-01' 
+            and empresa.razaosocial = 'Empresa ABC' order by datahora; -- Exibe todos os dados de sensores de uma empresa específica a partir de uma data e ordena
+																	   -- do mais antigo para o mais novo.
       
-select*from dados where datahora between '2023-03-19' and '2023-11-10' order by datahora;
-            
+select*from dados where datahora between '2023-03-19' and '2023-11-10' order by datahora desc; -- Exibe e ordena os dados do mais recente para o mais 
+																						       -- antigo em um intervalo de tempo específico.
+
+select nomeSensor, dht11Temperatura as Temperatura, dht11Umidade as Umidade, datahora, idCamara
+ from sensor join dados on dados.fkSensor = idSensor
+ join camaras on camaras.fkSensor = idSensor
+ join empresa on camaras.fkEmpresa = idEmpresa
+ where dht11Temperatura > 25 and empresa.razaosocial = 'Empresa ABC';  -- Mostra os registros de temperatura acima do ideal
+																	   -- de uma empresa específica.          
