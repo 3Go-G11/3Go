@@ -1,108 +1,60 @@
 <!DOCTYPE html>
-
 <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=], initial-scale=1.0" />
+        <title>Dashboard</title>
 
+        <script src=https://code.highcharts.com/stock/highstock.js></script>
+        <script src=https://code.highcharts.com/stock/highcharts-more.js></script>
+        <script src=https://cdn.jsdelivr.net/npm/chart.js></script>
 
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href=https://fonts.googleapis.com />
+        <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
+        <link rel="preconnect" href=https://fonts.googleapis.com />
+        <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
 
-<head>
+        <link
+            href=https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
+            rel="stylesheet" />
+        <link
+            href=https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
+            rel="stylesheet" />
+    </head>
+    <body>
+        <div class="principal">
 
-    <meta charset="UTF-8">
+            <nav class="lateral">
+                <span style="color: white;">Olá, Vini Jr<br><br>Bem vindo a 3Go analytics<br><br>Suas camaras:
+                    <br>1<br>2<br>3<br><br>Configurações<br>Minha conta<br>Preferências<br>Especificações<br><br>sair</span>
+            </nav>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <div class="content">
+                <div class="alignDailyChart">
+                    <div class="att two" id="kpiTemp"></div>
+                    <div class="att two" id="kpiUmi"></div>
+                    <div class="att two" id="aviso">Situação</div>
+                </div>
 
-    <link rel="stylesheet" href="style.css">
+                <div class="alignDailyChart">
+                    <div id="gaugeTemp" class="doubleChart"></div>
+                    <div id="gaugeUmi" class="doubleChart"></div>
+                </div>
 
-    <title>Dashboard</title>
+                <div class="alignDailyChart ultimate">
+                    <canvas id="dadosHora"></canvas>
+                </div>
 
-    <script src=https://code.highcharts.com/stock/highstock.js></script>
-
-    <script src=https://code.highcharts.com/stock/highcharts-more.js></script>
-
-    <script src=https://cdn.jsdelivr.net/npm/chart.js></script>
-
-    <meta name="viewport" content="width=], initial-scale=1.0" />
-
-    <link rel="preconnect" href=https://fonts.googleapis.com />
-
-    <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
-
-    <link rel="preconnect" href=https://fonts.googleapis.com />
-
-    <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
-
-    <link
-        href=https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
-        rel="stylesheet" />
-
-    <link
-        href=https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
-        rel="stylesheet" />
-
-</head>
-
-
-
-<body>
-
-    <div class="principal">
-
-        <nav class="lateral">
-
-            <span style="color: white;">Olá, Vini Jr<br><br>Bem vindo a 3Go analytics<br><br>Suas camaras:
-                <br>1<br>2<br>3<br><br>Configurações<br>Minha conta<br>Preferências<br>Especificações<br><br>sair</span>
-
-        </nav>
-
-
-
-        <div class="content">
-
-            <div class="alignDailyChart">
-
-                <div class="att two" id="kpi1"></div>
-
-                <div class="att two" id="kpi2"></div>
-
-                <div class="att two" id="resultado">Está tudo certo</div>
-
-
-
-            </div>
-
-            <div class="alignDailyChart">
-
-                <div id="teste" class="doubleChart"></div>
-
-                <div id="teste2" class="doubleChart"></div>
-
-            </div>
-
-
-
-            <div class="alignDailyChart ultimate">
-
-                <canvas id="myChart"></canvas>
-
-            </div>
-
-
-
-            <div class="alignDailyChart">
-
-                <canvas id="myChart2"></canvas>
+                <div class="alignDailyChart">
+                    <canvas id="semanaExtremos"></canvas>
+                </div>
 
             </div>
 
         </div>
-
-    </div>
-
-
-
-</body>
-
-
-
+    </body>
 </html>
 
 
@@ -114,356 +66,188 @@
     var analiseBomUmi;
     var analiseMedioUmi;
     var analiseRuimUmi;
+    var gaugeTemp;
+    var gaugeUmi;
+    var dadosHora;
+    var semanaExtremos;
 
-    var chart;
-
-    chart = Highcharts.chart('teste', {
-
+    gaugeTemp = Highcharts.chart('gaugeTemp', {
         chart: {
-
             type: 'gauge',
-
             plotBackgroundColor: null,
-
             plotBackgroundImage: null,
-
             plotBorderWidth: 0,
-
             plotShadow: false,
-
             height: '70%'
-
         },
-
-        accessibility: {
-
-            enable: false
-
-        },
-
-
 
         title: {
-
             text: 'Temperatura'
-
         },
-
-
 
         pane: {
-
             startAngle: -90,
-
             endAngle: 90,
-
             background: null,
-
             center: ['50%', '75%'],
-
             size: '120%'
-
         },
-
-
-
-        // the value axis
-
         yAxis: {
-
             min: 6,
-
             max: 22,
-
             tickPixelInterval: 72,
-
             tickPosition: 'inside',
-
             tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
-
             tickLength: 20,
-
             tickWidth: 2,
-
             minorTickInterval: null,
 
             labels: {
-
                 distance: 20,
-
                 style: {
-
                     fontSize: '14px'
-
                 }
-
             },
 
             lineWidth: 0,
 
             plotBands: [{
-
                 from: 6,
-
                 to: 8,
-
                 color: '#FF0000',
-
                 thickness: 20
-
             }, {
-
                 from: 8,
-
                 to: 10,
-
                 color: '#FFFF00',
-
                 thickness: 20
-
             },
-
             {
-
                 from: 10,
-
                 to: 18,
-
                 color: '#00FF00',
-
                 thickness: 20
-
             },
-
             {
-
                 from: 18,
-
                 to: 20,
-
                 color: '#FFFF00',
-
                 thickness: 20
-
             }, {
-
                 from: 20,
-
                 to: 22,
-
                 color: '#FF0000',
-
                 thickness: 20
-
             }]
-
         },
-
-
-
         series: [{
-
             name: 'Temperatura',
-
             data: [6],
-
             tooltip: {
-
                 valueSuffix: '°C'
-
             },
-
             dataLabels: {
-
                 format: 'Temperatura °C',
-
                 borderWidth: 0,
-
                 color: (
-
                     Highcharts.defaultOptions.title &&
-
                     Highcharts.defaultOptions.title.style &&
-
                     Highcharts.defaultOptions.title.style.color
-
                 ) || '#333333',
-
                 style: {
-
                     fontSize: '16px'
-
                 }
-
             },
-
             dial: {
-
                 radius: '70%',
-
                 backgroundColor: 'gray',
-
                 baseWidth: 12,
-
                 baseLength: '0%',
-
                 rearLength: '0%'
-
             },
-
             pivot: {
-
                 backgroundColor: 'gray',
-
                 radius: 6
-
             }
-
-
-
         }]
-
-
-
     });
 
-
-
-    // Add some life
-
     setInterval(() => {
-
         const chart = Highcharts.charts[0];
-
-        if (chart && !chart.renderer.forExport) {
-
-            const point = chart.series[0].points[0],
-
-                inc = Math.round((Math.random() * 16) + 6);
-
-
-
+        if (gaugeTemp && !gaugeTemp.renderer.forExport) {
+            const point = gaugeTemp.series[0].points[0],
+              inc = Math.round((Math.random() * 16) + 6);
 
             let newVal = point.y + inc;
             console.log(newVal, inc, point.y)
+            
             newVal = inc;
+
             var decimal = inc.toFixed(2)
             var kpiAtt = document.getElementsByClassName('.att')
+            
             if (inc >= 10 && inc <= 18) {
-                kpi1.innerHTML = `<div class = "avisoCerto"> Temperatura:${decimal} </div>`
+                kpiTemp.innerHTML = `<div class = "avisoCerto"> Temperatura:${decimal} </div>`
                 analiseBomTemp = true
                 analiseMedioTemp = false
                 analiseRuimTemp = false
 
             } else if ((inc >= 8 && inc <= 10) || (inc >= 18 && inc <= 20)) {
-                kpi1.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimal} </div>`
+                kpiTemp.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimal} </div>`
                 analiseBomTemp = false
                 analiseMedioTemp = true
                 analiseRuimTemp = false
 
-
             } else if (inc <= 8 || inc > 20) {
-                kpi1.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimal} </div>`
+                kpiTemp.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimal} </div>`
                 analiseBomTemp = false
                 analiseMedioTemp = false
                 analiseRuimTemp = true
             }
 
-
-
-
             point.update(newVal);
-
-
-
         }
-
-
-
     }, 1000);
 
-
-
-    var chart2;
-
-    chart2 = Highcharts.chart('teste2', {
-
+    gaugeUmi = Highcharts.chart('gaugeUmi', {
         chart: {
-
             type: 'gauge',
-
             plotBackgroundColor: null,
-
             plotBackgroundImage: null,
-
             plotBorderWidth: 0,
-
             plotShadow: false,
-
             height: '70%'
-
         },
-
-        accessibility: {
-
-            enable: false
-
-        },
-
-
 
         title: {
-
             text: 'Umidade'
-
         },
 
 
 
         pane: {
-
             startAngle: -90,
-
             endAngle: 90,
-
             background: null,
-
             center: ['50%', '75%'],
-
             size: '120%'
-
         },
 
-
-
-        // the value axis
-
         yAxis: {
-
             min: 50,
-
             max: 80,
-
             tickPixelInterval: 72,
-
             tickPosition: 'inside',
-
             tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
-
             tickLength: 20,
-
             tickWidth: 2,
-
             minorTickInterval: null,
 
             labels: {
-
                 distance: 20,
 
                 style: {
-
                     fontSize: '14px'
-
                 }
 
             },
@@ -471,370 +255,205 @@
             lineWidth: 0,
 
             plotBands: [{
-
                 from: 50,
-
                 to: 55,
-
                 color: '#FF0000',
-
                 thickness: 20
-
             }, {
-
                 from: 55,
-
                 to: 60,
-
                 color: '#FFFF00',
-
                 thickness: 20
-
             },
 
             {
-
                 from: 60,
-
                 to: 70,
-
                 color: '#00FF00',
-
                 thickness: 20
-
             },
 
             {
-
                 from: 70,
-
                 to: 75,
-
                 color: '#FFFF00',
-
                 thickness: 20
-
             }, {
-
                 from: 75,
-
                 to: 80,
-
                 color: '#FF0000',
-
                 thickness: 20
-
             }]
-
         },
 
-
-
         series: [{
-
             name: 'Umidade',
-
             data: [50],
 
             tooltip: {
-
                 valueSuffix: '%'
-
             },
 
             dataLabels: {
-
                 format: 'Umidade%',
-
                 borderWidth: 0,
-
                 color: (
-
                     Highcharts.defaultOptions.title &&
-
                     Highcharts.defaultOptions.title.style &&
-
                     Highcharts.defaultOptions.title.style.color
-
                 ) || '#333333',
-
                 style: {
-
                     fontSize: '16px'
-
                 }
-
             },
 
             dial: {
-
                 radius: '70%',
-
                 backgroundColor: 'gray',
-
                 baseWidth: 12,
-
                 baseLength: '0%',
-
                 rearLength: '0%'
-
             },
 
             pivot: {
-
                 backgroundColor: 'gray',
-
                 radius: 6
-
             }
-
-
-
         }]
-
-
-
     });
-
-
-
-    // Add some life
-
-
 
     setInterval(() => {
 
         const chart = Highcharts.charts[0];
-
-        if (chart2 && !chart2.renderer.forExport) {
-
-            const point2 = chart2.series[0].points[0],
-
+        if (gaugeUmi && !gaugeUmi.renderer.forExport) {
+            const point2 = gaugeUmi.series[0].points[0],
                 inc = Math.round((Math.random() * 30) + 50);
-
-
-
 
             let newVal2 = point2.y + inc;
             console.log(newVal2, inc, point2.y)
+
             newVal2 = inc;
+
             var decimal2 = inc.toFixed(2)
             var kpiAtt = document.getElementsByClassName('.att')
+
             if (inc >= 60 && inc <= 70) {
-                kpi2.innerHTML = `<div class = "avisoCerto"> Umidade:${decimal2} </div>`
+                kpiUmi.innerHTML = `<div class = "avisoCerto"> Umidade:${decimal2} </div>`
                 analiseBomUmi = true
                 analiseMedioUmi = false
                 analiseRuimUmi = false
 
             } else if ((inc >= 55 && inc <= 59) || (inc >= 71 && inc <= 75)) {
-                kpi2.innerHTML = `<div class = "avisoMedio"> Umidade:${decimal2} </div>`
+                kpiUmi.innerHTML = `<div class = "avisoMedio"> Umidade:${decimal2} </div>`
                 analiseBomUmi = false
                 analiseMedioUmi = true
                 analiseRuimUmi = false
 
-
             } else if (inc < 55 || inc > 75) {
-                kpi2.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimal2} </div>`
+                kpiUmi.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimal2} </div>`
                 analiseBomUmi = false
                 analiseMedioUmi = false
                 analiseRuimUmi = true
             }
 
             if (analiseBomTemp && analiseBomUmi) {
-                resultado.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
-            } else if(analiseRuimTemp || analiseRuimUmi && (analiseMedioTemp || analiseMedioUmi)){
-                resultado.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+                aviso.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
+            } else if (analiseRuimTemp || analiseRuimUmi && (analiseMedioTemp || analiseMedioUmi)) {
+                aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
             } else if (analiseMedioTemp || analiseMedioUmi) {
-                resultado.innerHTML = `<div class = "avisoMedio"> Risco moderado! </div>`
+                aviso.innerHTML = `<div class = "avisoMedio"> Risco moderado! </div>`
             } else if (analiseRuimTemp || analiseRuimUmi) {
-                resultado.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+                aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
             }
 
             point2.update(newVal2);
-
         }
-
-
-
     }, 1000);
 
-
-
-    const ctx = document.getElementById('myChart');
-
-    new Chart(ctx, {
+    const ctx = document.getElementById('dadosHora');
+    dadosHora = new Chart(ctx, {
 
         type: 'line',
-
         data: {
-
             labels: ['18:00', '18:10', '18:20', '18:30', '18:40', '18:50', '19:00',],
-
             datasets: [{
-
                 label: 'Temperatura mais alta',
-
                 data: [27, 27, 27, 27, 27, 27, 27],
-
                 borderWidth: 1,
-
                 backgroundColor: 'red',
-
                 borderColor: 'red',
-
-                color: 'white'
             },
-
             {
-
                 label: 'Temperatura mais baixa',
-
                 data: [17, 17, 17, 17, 17, 17, 17],
-
                 borderWidth: 1,
-
                 backgroundColor: 'orange',
-
                 borderColor: 'orange',
-
-                color: 'white'
-
             },
-
             {
-
                 label: 'Umidade mais alta',
-
                 data: [65, 65, 65, 65, 65, 65, 65],
-
                 borderWidth: 1,
-
                 backgroundColor: 'blue',
-
                 borderColor: 'blue',
-
-                color: 'white'
-
             },
-
             {
-
                 label: 'Umidade mais baixa',
-
                 data: [45, 45, 45, 45, 45, 45, 45],
-
                 borderWidth: 1,
-
                 backgroundColor: 'lightblue',
-
                 borderColor: 'lightblue'
-
             }
-
             ]
-
         },
 
         options: {
-
             scales: {
-
                 y: {
-
                     beginAtZero: true
-
                 }
-
             }
-
         },
-
     });
 
-
-
-    const ctx2 = document.getElementById('myChart2');
-
-
-
-    new Chart(ctx2, {
+    const ctx2 = document.getElementById('semanaExtremos');
+    semanaExtremos = new Chart(ctx2, {
 
         type: 'bar',
-
         data: {
-
             labels: ['Dia 1', 'Dia 2', 'Dia 3', 'Dia 4', 'Dia 5', 'Dia 6', 'Dia 7'],
-
             datasets: [{
-
                 label: 'Temperatura mais alta',
-
                 data: [27, 27, 27, 27, 27, 27, 27],
-
                 borderWidth: 1,
-
                 backgroundColor: 'red'
-
             },
-
             {
-
                 label: 'Temperatura mais baixa',
-
                 data: [17, 17, 17, 17, 17, 17, 17],
-
                 borderWidth: 1,
-
                 backgroundColor: 'orange'
-
             },
-
             {
-
                 label: 'Umidade mais alta',
-
                 data: [65, 65, 65, 65, 65, 65, 65],
-
                 borderWidth: 1,
-
                 backgroundColor: 'blue'
-
             },
-
             {
-
                 label: 'Umidade mais baixa',
-
                 data: [45, 45, 45, 45, 45, 45, 45],
-
                 borderWidth: 1,
-
                 backgroundColor: 'lightblue'
-
             }
-
             ]
-
         },
-
         options: {
-
             scales: {
-
                 y: {
-
                     beginAtZero: true
-
                 }
-
             }
-
         }
-
     });
-
-
-
-
-
 </script>
