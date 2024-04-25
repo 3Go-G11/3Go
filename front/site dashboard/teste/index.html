@@ -2,7 +2,7 @@
 
 <html lang="en">
 
- 
+
 
 <head>
 
@@ -31,20 +31,16 @@
     <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
 
     <link
-
-      href=https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
-
-      rel="stylesheet" />
+        href=https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
+        rel="stylesheet" />
 
     <link
-
-      href=https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
-
-      rel="stylesheet" />
+        href=https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
+        rel="stylesheet" />
 
 </head>
 
- 
+
 
 <body>
 
@@ -52,11 +48,12 @@
 
         <nav class="lateral">
 
-            <span style="color: white;">Olá, Vini Jr<br><br>Bem vindo a 3Go analytics<br><br>Suas camaras: <br>1<br>2<br>3<br><br>Configurações<br>Minha conta<br>Preferências<br>Especificações<br><br>sair</span>
+            <span style="color: white;">Olá, Vini Jr<br><br>Bem vindo a 3Go analytics<br><br>Suas camaras:
+                <br>1<br>2<br>3<br><br>Configurações<br>Minha conta<br>Preferências<br>Especificações<br><br>sair</span>
 
         </nav>
 
- 
+
 
         <div class="content">
 
@@ -68,7 +65,7 @@
 
                 <div class="att two" id="resultado">Está tudo certo</div>
 
-   
+
 
             </div>
 
@@ -80,15 +77,15 @@
 
             </div>
 
-       
+
 
             <div class="alignDailyChart ultimate">
 
                 <canvas id="myChart"></canvas>
 
-           </div>
+            </div>
 
-           
+
 
             <div class="alignDailyChart">
 
@@ -100,20 +97,24 @@
 
     </div>
 
- 
+
 
 </body>
 
- 
+
 
 </html>
 
- 
+
 
 <script>
-    var analise1;
-    var analise2;
-   
+    var analiseBomTemp;
+    var analiseMedioTemp;
+    var analiseRuimTemp;
+    var analiseBomUmi;
+    var analiseMedioUmi;
+    var analiseRuimUmi;
+
     var chart;
 
     chart = Highcharts.chart('teste', {
@@ -140,7 +141,7 @@
 
         },
 
- 
+
 
         title: {
 
@@ -148,7 +149,7 @@
 
         },
 
- 
+
 
         pane: {
 
@@ -164,7 +165,7 @@
 
         },
 
- 
+
 
         // the value axis
 
@@ -258,7 +259,7 @@
 
         },
 
- 
+
 
         series: [{
 
@@ -318,15 +319,15 @@
 
             }
 
- 
+
 
         }]
 
- 
+
 
     });
 
- 
+
 
     // Add some life
 
@@ -338,44 +339,50 @@
 
             const point = chart.series[0].points[0],
 
-                inc = Math.round((Math.random() * 16 ) + 6 );
-                
+                inc = Math.round((Math.random() * 16) + 6);
 
- 
+
+
 
             let newVal = point.y + inc;
-            console.log(newVal, inc,  point.y )
-            newVal =  inc;
+            console.log(newVal, inc, point.y)
+            newVal = inc;
             var decimal = inc.toFixed(2)
             var kpiAtt = document.getElementsByClassName('.att')
             if (inc >= 10 && inc <= 18) {
                 kpi1.innerHTML = `<div class = "avisoCerto"> Temperatura:${decimal} </div>`
-                analise1 = true
-                
-            } else if ((inc >= 8 && inc <= 10) || (inc >= 18 && inc <= 20 )) {
+                analiseBomTemp = true
+                analiseMedioTemp = false
+                analiseRuimTemp = false
+
+            } else if ((inc >= 8 && inc <= 10) || (inc >= 18 && inc <= 20)) {
                 kpi1.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimal} </div>`
-                analise1 = false
-                
+                analiseBomTemp = false
+                analiseMedioTemp = true
+                analiseRuimTemp = false
 
-            } else if (inc <= 8  || inc > 20) {
+
+            } else if (inc <= 8 || inc > 20) {
                 kpi1.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimal} </div>`
-                analise1 = false
+                analiseBomTemp = false
+                analiseMedioTemp = false
+                analiseRuimTemp = true
             }
-          
 
- 
+
+
 
             point.update(newVal);
 
-           
+
 
         }
 
- 
+
 
     }, 1000);
 
- 
+
 
     var chart2;
 
@@ -403,7 +410,7 @@
 
         },
 
- 
+
 
         title: {
 
@@ -411,7 +418,7 @@
 
         },
 
- 
+
 
         pane: {
 
@@ -427,7 +434,7 @@
 
         },
 
- 
+
 
         // the value axis
 
@@ -521,7 +528,7 @@
 
         },
 
- 
+
 
         series: [{
 
@@ -581,19 +588,19 @@
 
             }
 
- 
+
 
         }]
 
- 
+
 
     });
 
- 
+
 
     // Add some life
 
- 
+
 
     setInterval(() => {
 
@@ -603,56 +610,57 @@
 
             const point2 = chart2.series[0].points[0],
 
-                inc = Math.round((Math.random() * 30 ) + 50 );
-                
+                inc = Math.round((Math.random() * 30) + 50);
 
- 
 
-                let newVal2 = point2.y + inc;
-                console.log(newVal2, inc,  point2.y )
-                newVal2 =  inc;
-                var decimal2 = inc.toFixed(2)
-                var kpiAtt = document.getElementsByClassName('.att')
-                if (inc >= 60 && inc <= 70) {
-                    kpi2.innerHTML = `<div class = "avisoCerto"> Umidade:${decimal2} </div>`
-                    analise2 = true
-                    
-                } else if ((inc >= 55 && inc <= 59) || (inc >=  71&& inc <= 75 )) {
-                    kpi2.innerHTML = `<div class = "avisoMedio"> Umidade:${decimal2} </div>`
-                    analise2 = false
-                    
-    
-                } else if (inc < 55  || inc > 75) {
-                    kpi2.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimal2} </div>`
-                    analise2 = false
-                }
 
-                if (analise2 && analise1) {
-        resultado.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
-    } else {
-        resultado.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
-    }
 
-            
-            
-            
-                
+            let newVal2 = point2.y + inc;
+            console.log(newVal2, inc, point2.y)
+            newVal2 = inc;
+            var decimal2 = inc.toFixed(2)
+            var kpiAtt = document.getElementsByClassName('.att')
+            if (inc >= 60 && inc <= 70) {
+                kpi2.innerHTML = `<div class = "avisoCerto"> Umidade:${decimal2} </div>`
+                analiseBomUmi = true
+                analiseMedioUmi = false
+                analiseRuimUmi = false
+
+            } else if ((inc >= 55 && inc <= 59) || (inc >= 71 && inc <= 75)) {
+                kpi2.innerHTML = `<div class = "avisoMedio"> Umidade:${decimal2} </div>`
+                analiseBomUmi = false
+                analiseMedioUmi = true
+                analiseRuimUmi = false
+
+
+            } else if (inc < 55 || inc > 75) {
+                kpi2.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimal2} </div>`
+                analiseBomUmi = false
+                analiseMedioUmi = false
+                analiseRuimUmi = true
+            }
+
+            if (analiseBomTemp && analiseBomUmi) {
+                resultado.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
+            } else if(analiseRuimTemp || analiseRuimUmi && (analiseMedioTemp || analiseMedioUmi)){
+                resultado.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+            } else if (analiseMedioTemp || analiseMedioUmi) {
+                resultado.innerHTML = `<div class = "avisoMedio"> Risco moderado! </div>`
+            } else if (analiseRuimTemp || analiseRuimUmi) {
+                resultado.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+            }
 
             point2.update(newVal2);
 
         }
 
- 
+
 
     }, 1000);
 
- 
+
 
     const ctx = document.getElementById('myChart');
-
-   
-
- 
 
     new Chart(ctx, {
 
@@ -674,7 +682,8 @@
 
                 borderColor: 'red',
 
-                color: 'white'            },
+                color: 'white'
+            },
 
             {
 
@@ -688,7 +697,7 @@
 
                 borderColor: 'orange',
 
-                color: 'white'  
+                color: 'white'
 
             },
 
@@ -704,7 +713,7 @@
 
                 borderColor: 'blue',
 
-                color: 'white'  
+                color: 'white'
 
             },
 
@@ -742,11 +751,11 @@
 
     });
 
- 
+
 
     const ctx2 = document.getElementById('myChart2');
 
- 
+
 
     new Chart(ctx2, {
 
