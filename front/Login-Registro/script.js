@@ -11,7 +11,6 @@ function cadastrarempresa(){
     var senhaEmpresa = inputSenha.value;
     var confirmEmpresa = inputConfirmarSenha.value;
     var indice_arroba = emailEmpresa.indexOf('@')
-
     var validate;
    
 
@@ -123,6 +122,7 @@ function cadastrarfunc(){
         validate = true;
         spanRealizado.innerHTML = `Cadastro Realizado`
         window.location.href = "./Login.html"
+        var loginFunc = true;
     }
 }
 
@@ -133,11 +133,10 @@ function entrar(){
     if(email == '@empresa' && senha == 'empresa123' || (email == '@func' && senha == 'func123')){
         spanEntrar.style.color = "#00FF00";
         spanEntrar.innerHTML=`Login realizado com sucesso`
+        window.location.href = "../site_dashboard/dashboard.html"
 
     } else {
         document.getElementById("spanEntrar").style.color = "#FF0000";
         spanEntrar.innerHTML=`Email ou Senha incorretos`
     }
-
-
 }

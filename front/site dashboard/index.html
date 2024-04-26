@@ -24,11 +24,37 @@
             rel="stylesheet" />
     </head>
     <body>
+        <div  class="mensagemDis" id="mensagem"><div class="sairModals" id="exit" onclick="closeModal()"><img src="https://www.freeiconspng.com/uploads/close-icon-39.png" alt="" class="exit"></div>     <div class="alignDailyChart">
+            <canvas id="semanaExtremos"></canvas>
+        </div> </div>
         <div class="principal">
 
             <nav class="lateral">
-                <span style="color: white;">Olá, Vini Jr<br><br>Bem vindo a 3Go analytics<br><br>Suas camaras:
-                    <br>1<br>2<br>3<br><br>Configurações<br>Minha conta<br>Preferências<br>Especificações<br><br>sair</span>
+                <div class="perfil">
+                    <img src="/assets/Sample_User_Icon.png" alt="" class="perfilImage">
+                    <p class="user">Olá, Vini Jr</p>
+                </div>
+                <p>Bem vindo a 3Go analytics</p>
+              <div class="navList">
+                <p class="tituloNav">Seus sensores</p>
+                <ul>
+                    <li><p>Sensor 1 - dht11</p></li>
+                    <li><p>Sensor 2 - dht11</p></li>
+                    <li><p>Sensor 3 - dht11</p></li>
+                    <li><p>Sensor 4 - dht11</p></li>
+                </ul>
+              </div>
+              <div class="navList">
+                <p class="tituloNav">Mais graficos</p>
+                <ul>
+                    <li onclick="openModal()"><p>Media diaria</p></li>
+                    <li><p>Media mensal</p></li>
+                </ul>
+        
+              </div>
+              <button class="btn analisar">Analisar agora</button>
+              <button class="btn sair">Sair</button>
+             
             </nav>
 
             <div class="content">
@@ -47,9 +73,7 @@
                     <canvas id="dadosHora"></canvas>
                 </div>
 
-                <div class="alignDailyChart">
-                    <canvas id="semanaExtremos"></canvas>
-                </div>
+            
 
             </div>
 
@@ -60,6 +84,17 @@
 
 
 <script>
+        function closeModal() {
+        mensagem.classList.remove('mensagem')
+        mensagem.classList.add('mensagemDis')
+
+    }
+    function openModal() {
+        mensagem.classList.remove('mensagemDis')
+mensagem.classList.add('mensagem')
+
+    }
+
     var analiseBomTemp;
     var analiseMedioTemp;
     var analiseRuimTemp;
