@@ -7,8 +7,8 @@ CREATE TABLE empresa (
   cnpj CHAR(14),
   nomeRepresentante VARCHAR(45),
   emailRepresentante VARCHAR(90),
-  telefone VARCHAR(45),
-  senha VARCHAR(45)); 
+  telefoneRepresentante VARCHAR(45),
+  senhaRepresentante VARCHAR(45)); 
   
 alter table empresa add constraint chkEmailEmpresa check (emailRepresentante like('%@%'));
   
@@ -47,7 +47,7 @@ CREATE TABLE dados(
   dht11Umidade DOUBLE,
   datahora DATETIME DEFAULT CURRENT_TIMESTAMP);
 
-INSERT INTO empresa (razaosocial, cnpj, nomeRepresentante, emailRepresentante, telefone, senha) 
+INSERT INTO empresa (razaosocial, cnpj, nomeRepresentante, emailRepresentante, telefoneRepresentante, senhaRepresentante) 
 VALUES ('Empresa ABC', '12345678901234', 'João Silva', 'joao@empresa.com', '123456789', 'senha123'),
        ('Empresa XYZ', '98765432109876', 'Maria Santos', 'maria@empresa.com', '987654321', 'senha456');
 
@@ -79,7 +79,7 @@ INSERT INTO dados (fkSensor, dht11Temperatura, dht11Umidade, datahora) VALUES
 (3, 23.7, 59.8, '2023-07-05 07:00:00'),
 (3, 26.1, 71.2, '2023-08-08 15:20:00');
        
-select concat('Usuário: ',emailRepresentante, ' ','Senha: ', senha) as LoginEmpresa from empresa;
+select concat('Usuário: ',emailRepresentante, ' ','Senha: ', senhaRepresentante) as LoginEmpresa from empresa;
 
 select empresa.razaosocial, empresa.nomeRepresentante as Representante, empresa.emailRepresentante,
  funcionario.nomeFunc as Funcionário, funcionario.emailFunc as emailFuncionário

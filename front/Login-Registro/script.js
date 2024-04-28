@@ -6,29 +6,29 @@ function cadastrarempresa(){
     var razao = inputRazao.value;
     var cnpj = inputCNPJ.value;
     var nomeRepresentante = inputRepresentante.value;
-    var emailEmpresa = inputEmail.value;
-    var telefoneEmpresa = inputTelefone.value;
-    var senhaEmpresa = inputSenha.value;
-    var confirmEmpresa = inputConfirmarSenha.value;
-    var indice_arroba = emailEmpresa.indexOf('@')
+    var emailRepresentante = inputEmail.value;
+    var telefoneRepresentante = inputTelefone.value;
+    var senhaRepresentante = inputSenha.value;
+    var confirmRepresentante = inputConfirmarSenha.value;
+    var indice_arroba = emailRepresentante.indexOf('@')
     var validate;
    
 
-    for (var i = 0; i < senhaEmpresa.length && upperValidate == false; i++) {
-        if (senhaEmpresa[i] == senhaEmpresa[i].toUpperCase()) {
+    for (var i = 0; i < senhaRepresentante.length && upperValidate == false; i++) {
+        if (senhaRepresentante[i] == senhaRepresentante[i].toUpperCase()) {
             upperValidate = true;
         }
     }
     
-    for (var i = 0; i < senhaEmpresa.length && lowerValidate == false ; i++) {
-        if (senhaEmpresa[i] == senhaEmpresa[i].toLowerCase()) {
+    for (var i = 0; i < senhaRepresentante.length && lowerValidate == false ; i++) {
+        if (senhaRepresentante[i] == senhaRepresentante[i].toLowerCase()) {
             lowerValidate = true;
         }
     }
 
     var validNumbers = '0123456789'
-    for (var i = 0; i < senhaEmpresa.length && numberValidate == false ; i++) {
-        if (validNumbers.indexOf(senhaEmpresa[i]) >= 0) {
+    for (var i = 0; i < senhaRepresentante.length && numberValidate == false ; i++) {
+        if (validNumbers.indexOf(senhaRepresentante[i]) >= 0) {
             numberValidate = true;
         }
     }
@@ -39,20 +39,20 @@ function cadastrarempresa(){
     } else{
         spanEmail.innerHTML=``
     }
-    if(senhaEmpresa.length < 8 || upperValidate == false || lowerValidate == false || numberValidate == false){
+    if(senhaRepresentante.length < 8 || upperValidate == false || lowerValidate == false || numberValidate == false){
         validate = false
         spanSenha.innerHTML=`Senha fraca, sua senha deve conter no minímo 8 digitos, 1 letra maiúscula, 1 letra minúscula e 1 número`
     } else{
         spanSenha.innerHTML=``
     } 
-    if(confirmEmpresa != senhaEmpresa){
+    if(confirmRepresentante != senhaRepresentante){
         validate = false
         spanConfirmarSenha.innerHTML=`A confirmação de senha não corresponde`
     } else {
         spanConfirmarSenha.innerHTML=``
     } 
     
-    if (indice_arroba >= 0 && senhaEmpresa.length >=8 && confirmEmpresa == senhaEmpresa && upperValidate == true && lowerValidate == true && numberValidate == true){
+    if (indice_arroba >= 0 && senhaRepresentante.length >=8 && confirmRepresentante == senhaRepresentante && upperValidate == true && lowerValidate == true && numberValidate == true){
         validate = true;
         spanRealizado.innerHTML = `Cadastro Realizado`
         window.location.href = "./Login.html"
