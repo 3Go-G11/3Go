@@ -435,8 +435,8 @@ mensagem.classList.add('mensagem')
                 label: 'Umidade mais baixa',
                 data: [45, 45, 45, 45, 45, 45, 45],
                 borderWidth: 1,
-                backgroundColor: 'lightblue',
-                borderColor: 'lightblue'
+                backgroundColor: 'purple',
+                borderColor: 'purple'
             }
             ]
         },
@@ -450,7 +450,30 @@ mensagem.classList.add('mensagem')
         },
     });
 
+    var valor1 = 0
+    var valor2 = 0
+    var valor3 = 0
+    var valor4 = 0
+    var valor5 = 0
+    var valor6 = 0
+    var valor7 = 0
+
+    setInterval(() => {
+   
+    console.log('oi')
+        
+        }
+    , 1000);
+
+    valor1 = Math.round((Math.random() * 70) + 1);
+    valor2 = Math.round((Math.random() * 70) + 1);
+    valor3 = Math.round((Math.random() * 70) + 1);
+    valor4 = Math.round((Math.random() * 70) + 1);
+    valor5 = Math.round((Math.random() * 70) + 1);
+    valor6 = Math.round((Math.random() * 70) + 1);
+    valor7 = Math.round((Math.random() * 70) + 1);
     const ctx2 = document.getElementById('semanaExtremos');
+   
     semanaExtremos = new Chart(ctx2, {
 
         type: 'bar',
@@ -458,27 +481,27 @@ mensagem.classList.add('mensagem')
             labels: ['Dia 1', 'Dia 2', 'Dia 3', 'Dia 4', 'Dia 5', 'Dia 6', 'Dia 7'],
             datasets: [{
                 label: 'Temperatura mais alta',
-                data: [27, 27, 27, 27, 27, 27, 27],
+                data: [valor1, valor2, valor3, valor4, valor5, valor6, valor7],
                 borderWidth: 1,
                 backgroundColor: 'red'
             },
             {
                 label: 'Temperatura mais baixa',
-                data: [17, 17, 17, 17, 17, 17, 17],
+                data: [valor3, valor1, valor4, valor6, valor7, valor2, valor5],
                 borderWidth: 1,
                 backgroundColor: 'orange'
             },
             {
                 label: 'Umidade mais alta',
-                data: [65, 65, 65, 65, 65, 65, 65],
+                data: [valor7, valor6, valor5, valor4, valor3, valor2, valor1],
                 borderWidth: 1,
                 backgroundColor: 'blue'
             },
             {
                 label: 'Umidade mais baixa',
-                data: [45, 45, 45, 45, 45, 45, 45],
+                data: [valor2, valor1, valor4, valor6, valor3, valor4, valor7],
                 borderWidth: 1,
-                backgroundColor: 'lightblue'
+                backgroundColor: 'purple'
             }
             ]
         },
