@@ -124,7 +124,6 @@ li {
     border-radius: 10px;
     border: none;
     font-weight: 600;
-    cursor: pointer;
 
 }
 .btn.sair {
@@ -164,7 +163,6 @@ li {
     height: 40px;
     background-color: #d4d4d4;
     border-radius: 100px;
-    cursor: pointer;
 }
 
 .content {
