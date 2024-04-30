@@ -103,7 +103,7 @@ body {
     justify-content: start;
     align-items: center;
     padding-top: 2rem ;
-    gap: 2rem;
+    gap: 1.2rem;
 
 }
 .lateral p {
@@ -450,5 +450,21 @@ gap: 1rem;
 }
 
 .btnMedia {
-    background-color: #3BB502;
+    width: 120px;
+    height: 40px;
+    background-color: #9AC9DB;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600 !important;
+
+    color: #000 !important
+    ; 
+    font-size: 14px !important;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btnMedia li{
+    color: black;
 }

@@ -32,7 +32,7 @@
             <nav class="lateral">
                 <div class="perfil">
                     <img src="/assets/Sample_User_Icon.png" alt="" class="perfilImage">
-                    <p class="user">Olá, Vini Jr</p>
+                    <p class="user">Olá, Usuario</p>
                 </div>
                 <p>Bem vindo a 3Go analytics</p>
               <div class="navList">
@@ -40,18 +40,17 @@
                 <ul>
                     <li><p>Sensor 1 - dht11</p></li>
                     <li><p>Sensor 2 - dht11</p></li>
-                    <li><p>Sensor 3 - dht11</p></li>
-                    <li><p>Sensor 4 - dht11</p></li>
+                    <li><p>Adicionar sensor</p></li>
                 </ul>
               </div>
               <div class="navList">
                 <p class="tituloNav">Mais graficos</p>
-                <ul>
-                    <li onclick="openModal()"><p class="btnMedia">Média Semanal </p></li>
-                    <li><p>Media mensal</p></li>
-                </ul>
         
               </div>
+          
+                <li onclick="openModalMensal()"><p class="btnMedia">Média Semanal </p></li>
+                <li  onclick="openModalMensal()"><p  class="btnMedia">Media mensal</p></li>
+            
               <button class="btn analisar">Analisar agora</button>
               <button class="btn sair">Sair</button>
              
@@ -89,7 +88,7 @@
         mensagem.classList.add('mensagemDis')
 
     }
-    function openModal() {
+    function openModalMensal() {
         mensagem.classList.remove('mensagemDis')
 mensagem.classList.add('mensagem')
 
