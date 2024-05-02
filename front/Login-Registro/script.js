@@ -33,6 +33,18 @@ function cadastrarempresa(){
         }
     }
 
+    if(cnpj.length > 14){
+        validate = false;
+        spanCNPJ.innerHTML = `O máximo de números permitido é 14 `
+    } else {
+        spanCNPJ.innerHTML = ``
+    }
+    if(telefoneRepresentante.length > 11){
+        validate = false;
+        spanTel.innerHTML = `O máximo de números permitido é 11`
+    } else {
+        spanTel.innerHTML = ``
+    }
     if(indice_arroba < 0){
         validate = false
         spanEmail.innerHTML=`Insira um email valido`
@@ -52,7 +64,7 @@ function cadastrarempresa(){
         spanConfirmarSenha.innerHTML=``
     } 
     
-    if (indice_arroba >= 0 && senhaRepresentante.length >=8 && confirmRepresentante == senhaRepresentante && upperValidate == true && lowerValidate == true && numberValidate == true){
+    if (indice_arroba >= 0 && senhaRepresentante.length >=8 && cnpj.length <= 14 && telefoneRepresentante.length <=11 && confirmRepresentante == senhaRepresentante && upperValidate == true && lowerValidate == true && numberValidate == true){
         validate = true;
         spanRealizado.innerHTML = `Cadastro Realizado`
         window.location.href = "./Login.html"

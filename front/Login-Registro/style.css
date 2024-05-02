@@ -84,10 +84,15 @@ span {
     gap: 6px;
 }
 
-#spanEmail, #spanSenha,  #spanConfirmarSenha {
+#spanEmail, #spanConfirmarSenha, #spanCNPJ, #spanTel {
     color: #FF0000;
-    margin-bottom: 10px;
 }
+
+#spanSenha{
+    color: #FF0000;
+    width: 500px;
+}
+
 
 #spanRealizado {
     color: #00FF00;
