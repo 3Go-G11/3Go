@@ -25,7 +25,7 @@ body {
 .mensagem {
     width: 70%;
     max-height: auto;
-    background-color: #cdcdcd;
+    background-color: #fff;
     display: flex;
     border-radius: 10px;
     justify-content: center;
@@ -165,7 +165,7 @@ li {
     border-radius: 100px;
 }
 
-.content {
+.content, .contentTwo {
 
     width: 70%;
 
@@ -466,4 +466,41 @@ gap: 1rem;
 }
 .btnMedia li{
     color: black;
+}
+.content.dis {
+    display: none;
+}
+.contentTwo.dis {
+    display: none;
+}
+.aviso {
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    background-color: #d4d4d4;
+}
+.alinhate {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.backmodal{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    background-color: #000000bf;
+    z-index: 5;
+}
+.backmodal.dis {
+    display: none;
 }

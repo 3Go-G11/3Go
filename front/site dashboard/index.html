@@ -24,6 +24,9 @@
             rel="stylesheet" />
     </head>
     <body>
+        <div class="backmodal dis" id="fundo"></div>
+
+        
         <div  class="mensagemDis" id="mensagem"><div class="sairModals" id="exit" onclick="closeModal()"><img src="https://www.freeiconspng.com/uploads/close-icon-39.png" alt="" class="exit"></div>     <div class="alignDailyChart">
             <canvas id="semanaExtremos"></canvas>
         </div> </div>
@@ -36,11 +39,15 @@
                 </div>
                 <p>Bem vindo a 3Go analytics</p>
               <div class="navList">
-                <p class="tituloNav">Seus sensores</p>
-                <ul>
-                    <li><p>Sensor 1 - dht11</p></li>
-                    <li><p>Sensor 2 - dht11</p></li>
-                    <li><p style="font-weight: 400;">+ Adicionar sensor +</p></li>
+                <p class="tituloNav">Suas câmaras</p>
+                <ul class="lista">
+                    <div class="alinhate" id="">
+                    <li onclick="modalCamara1()"><p>câmara 1</p></li>  <div id="avisoCam1" class="aviso"></div>
+                </div>
+                <div class="alinhate">
+                    <li onclick="modalCamara2()"><p>câmara 2</p></li> <div id="avisoCam2" class="aviso"></div>
+                </div>
+                    <li><p style="font-weight: 400;">+ Adicionar nova câmara +</p></li>
                 </ul>
               </div>
               <div class="navList">
@@ -56,7 +63,8 @@
              
             </nav>
 
-            <div class="content">
+            <div class="content" id="chartModal">
+                <p style="color: #fff; font-weight: 600; position: absolute; top: 10px; left: 100px;">Camara 1</p>
                 <div class="alignDailyChart">
                     <div class="att two" id="kpiTemp"></div>
                     <div class="att two" id="kpiUmi"></div>
@@ -75,22 +83,65 @@
             
 
             </div>
+            <div class="contentTwo dis" id="chartModalTwo">
+                <p style="color: #fff; font-weight: 600; position: absolute; top: 10px; left: 100px;">Camara 2</p>
+                <div class="alignDailyChart">
+                    <div class="att two" id="kpiTemp2"></div>
+                    <div class="att two" id="kpiUmi2"></div>
+                    <div class="att two" id="aviso2"></div>
+                </div>
+
+                <div class="alignDailyChart">
+                    <div id="gaugeTemp2" class="doubleChart"></div>
+                    <div id="gaugeUmi2" class="doubleChart"></div>
+                </div>
+
+                <div class="alignDailyChart ultimate">
+                    <canvas id="dadosHora2"></canvas>
+                </div>
+
+            
+
+            </div>
 
         </div>
+        
     </body>
 </html>
 
 
 
 <script>
+     var camara2 = document.getElementById('chartModalTwo')
+    var camara1 = document.getElementById('chartModal')
+    var fundo = document.getElementById('fundo')
         function closeModal() {
+
+            
         mensagem.classList.remove('mensagem')
         mensagem.classList.add('mensagemDis')
+        fundo.classList.toggle('dis')
+
+    }
+        function modalCamara1() {
+            
+            camara1.classList.toggle('dis')
+        camara2.classList.toggle('dis')
+
+
+    }
+        function modalCamara2() {
+           
+    
+    
+        camara1.classList.toggle('dis')
+        camara2.classList.toggle('dis')
 
     }
     function openModalMensal() {
         mensagem.classList.remove('mensagemDis')
 mensagem.classList.add('mensagem')
+fundo.classList.toggle('dis')
 
     }
 
@@ -100,10 +151,24 @@ mensagem.classList.add('mensagem')
     var analiseBomUmi;
     var analiseMedioUmi;
     var analiseRuimUmi;
+    var analiseBomTemp2;
+    var analiseMedioTemp2;
+    var analiseRuimTemp2;
+    var analiseBomUmi2;
+    var analiseMedioUmi2;
+    var analiseRuimUmi2;
     var gaugeTemp;
     var gaugeUmi;
+    var gaugeTemp2;
+    var gaugeUmi2;
     var dadosHora;
+    var dadosHora2;
     var semanaExtremos;
+    var semanaExtremos2
+    var avisoMedio1
+    var avisoFinal1
+    var avisoMedio2
+    var avisoFinal2
 
     gaugeTemp = Highcharts.chart('gaugeTemp', {
         chart: {
@@ -205,6 +270,31 @@ mensagem.classList.add('mensagem')
             }
         }]
     });
+    setInterval(() => {
+        if(avisoFinal1) {
+                avisoCam1.innerHTML = `<div class = "avisoAbaixo"> </div>`
+            }
+            else if (avisoMedio1) {
+                avisoCam1.innerHTML = `<div class = "avisoMedio"> </div>`
+
+            }
+            else {
+                avisoCam1.innerHTML = `<div class = "avisoCerto"> </div>`
+
+            }
+        if(avisoFinal2) {
+                avisoCam2.innerHTML = `<div class = "avisoAbaixo"> </div>`
+            }
+            else if (avisoMedio2) {
+                avisoCam2.innerHTML = `<div class = "avisoMedio"> </div>`
+
+            }
+            else {
+                avisoCam2.innerHTML = `<div class = "avisoCerto"> </div>`
+
+            }
+    }, 100)
+   
 
     setInterval(() => {
         const chart = Highcharts.charts[0];
@@ -212,10 +302,10 @@ mensagem.classList.add('mensagem')
             const point = gaugeTemp.series[0].points[0],
               inc = Math.round((Math.random() * 16) + 6);
 
-            let newVal = point.y + inc;
-            console.log(newVal, inc, point.y)
+            let newValTemp = point.y + inc;
+            console.log(newValTemp, inc, point.y)
             
-            newVal = inc;
+            newValTemp = inc;
 
             var decimal = inc.toFixed(2)
             var kpiAtt = document.getElementsByClassName('.att')
@@ -225,25 +315,37 @@ mensagem.classList.add('mensagem')
                 analiseBomTemp = true
                 analiseMedioTemp = false
                 analiseRuimTemp = false
+                analiseRuimTemp = false
+                avisoFinal1 = false
+                avisoMedio1 = false
+
 
             } else if ((inc >= 8 && inc <= 10) || (inc >= 18 && inc <= 20)) {
                 kpiTemp.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimal} </div>`
                 analiseBomTemp = false
                 analiseMedioTemp = true
                 analiseRuimTemp = false
+                avisoFinal1 = false
+                avisoMedio1 = true
 
             } else if (inc <= 8 || inc > 20) {
                 kpiTemp.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimal} </div>`
                 analiseBomTemp = false
                 analiseMedioTemp = false
                 analiseRuimTemp = true
+                avisoFinal1 = true
+                avisoMedio1 = false
             }
+            
 
-            point.update(newVal);
+            point.update(newValTemp);
         }
-    }, 1000);
 
-    gaugeUmi = Highcharts.chart('gaugeUmi', {
+    
+    }, 3000);
+
+
+        gaugeUmi = Highcharts.chart('gaugeUmi', {
         chart: {
             type: 'gauge',
             plotBackgroundColor: null,
@@ -363,10 +465,10 @@ mensagem.classList.add('mensagem')
             const point2 = gaugeUmi.series[0].points[0],
                 inc = Math.round((Math.random() * 30) + 50);
 
-            let newVal2 = point2.y + inc;
-            console.log(newVal2, inc, point2.y)
+            let newValUmi = point2.y + inc;
+            console.log(newValUmi, inc, point2.y)
 
-            newVal2 = inc;
+            newValUmi = inc;
 
             var decimal2 = inc.toFixed(2)
             var kpiAtt = document.getElementsByClassName('.att')
@@ -375,35 +477,49 @@ mensagem.classList.add('mensagem')
                 kpiUmi.innerHTML = `<div class = "avisoCerto"> Umidade:${decimal2} </div>`
                 analiseBomUmi = true
                 analiseMedioUmi = false
-                analiseRuimUmi = false
+                analiseRuimUmi = 
+                avisoFinal1 = false
+                avisoMedio1 = false
 
             } else if ((inc >= 55 && inc <= 59) || (inc >= 71 && inc <= 75)) {
                 kpiUmi.innerHTML = `<div class = "avisoMedio"> Umidade:${decimal2} </div>`
                 analiseBomUmi = false
                 analiseMedioUmi = true
                 analiseRuimUmi = false
+                avisoFinal1 = false
+                avisoMedio1 = true
 
             } else if (inc < 55 || inc > 75) {
                 kpiUmi.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimal2} </div>`
                 analiseBomUmi = false
                 analiseMedioUmi = false
                 analiseRuimUmi = true
+                avisoFinal1 = true
+                avisoMedio1 = false
             }
 
             if (analiseBomTemp && analiseBomUmi) {
                 aviso.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
+                avisoFinal1 = false
+                avisoMedio1 = false
             } else if (analiseRuimTemp || analiseRuimUmi && (analiseMedioTemp || analiseMedioUmi)) {
                 aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+                avisoFinal1 = true
+                avisoMedio1 = false
             } else if (analiseMedioTemp || analiseMedioUmi) {
                 aviso.innerHTML = `<div class = "avisoMedio"> Risco moderado! </div>`
+                avisoFinal1 = false
+                avisoMedio1 = true
             } else if (analiseRuimTemp || analiseRuimUmi) {
                 aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+                avisoFinal1 = true
+                avisoMedio1 = false
             }
 
-            point2.update(newVal2);
+            point2.update(newValUmi);
         }
-    }, 1000);
-
+    }, 3000);
+    
     const ctx = document.getElementById('dadosHora');
     dadosHora = new Chart(ctx, {
 
@@ -458,12 +574,7 @@ mensagem.classList.add('mensagem')
     var valor6 = 0
     var valor7 = 0
 
-    setInterval(() => {
-   
-    console.log('oi')
-        
-        }
-    , 1000);
+    
 
     valor1 = Math.round((Math.random() * 70) + 1);
     valor2 = Math.round((Math.random() * 70) + 1);
@@ -513,4 +624,376 @@ mensagem.classList.add('mensagem')
             }
         }
     });
+
+
+    gaugeTemp2 = Highcharts.chart('gaugeTemp2', {
+        chart: {
+            type: 'gauge',
+            plotBackgroundColor: null,
+            plotBackgroundImage: null,
+            plotBorderWidth: 0,
+            plotShadow: false,
+            height: '70%'
+        },
+
+        title: {
+            text: 'Temperatura'
+        },
+
+        pane: {
+            startAngle: -90,
+            endAngle: 90,
+            background: null,
+            center: ['50%', '75%'],
+            size: '120%'
+        },
+        yAxis: {
+            min: 6,
+            max: 22,
+            tickPixelInterval: 72,
+            tickPosition: 'inside',
+            tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+            tickLength: 20,
+            tickWidth: 2,
+            minorTickInterval: null,
+
+            labels: {
+                distance: 20,
+                style: {
+                    fontSize: '14px'
+                }
+            },
+
+            lineWidth: 0,
+
+            plotBands: [{
+                from: 6,
+                to: 8,
+                color: '#FF0000',
+                thickness: 20
+            }, {
+                from: 8,
+                to: 10,
+                color: '#FFFF00',
+                thickness: 20
+            },
+            {
+                from: 10,
+                to: 18,
+                color: '#00FF00',
+                thickness: 20
+            },
+            {
+                from: 18,
+                to: 20,
+                color: '#FFFF00',
+                thickness: 20
+            }, {
+                from: 20,
+                to: 22,
+                color: '#FF0000',
+                thickness: 20
+            }]
+        },
+        series: [{
+            name: 'Temperatura',
+            data: [6],
+            tooltip: {
+                valueSuffix: '°C'
+            },
+            dataLabels: {
+                format: 'Temperatura °C',
+                borderWidth: 0,
+                color: (
+                    Highcharts.defaultOptions.title &&
+                    Highcharts.defaultOptions.title.style &&
+                    Highcharts.defaultOptions.title.style.color
+                ) || '#333333',
+                style: {
+                    fontSize: '16px'
+                }
+            },
+            dial: {
+                radius: '70%',
+                backgroundColor: 'gray',
+                baseWidth: 12,
+                baseLength: '0%',
+                rearLength: '0%'
+            },
+            pivot: {
+                backgroundColor: 'gray',
+                radius: 6
+            }
+        }]
+    });
+
+    setInterval(() => {
+        const chart = Highcharts.charts[0];
+        if (gaugeTemp2 && !gaugeTemp2.renderer.forExport) {
+            const point = gaugeTemp2.series[0].points[0],
+              inc = Math.round((Math.random() * 16) + 6);
+
+            let newValTemp2 = point.y + inc;
+            console.log(newValTemp2, inc, point.y)
+            
+            newValTemp2 = inc;
+
+            var decimal = inc.toFixed(2)
+            var kpiAtt = document.getElementsByClassName('.att')
+            
+            if (inc >= 10 && inc <= 18) {
+                kpiTemp2.innerHTML = `<div class = "avisoCerto"> Temperatura:${decimal} </div>`
+                analiseBomTemp2 = true
+                analiseMedioTemp2 = false
+                analiseRuimTemp2 = false
+                avisoFinal2 = false
+                avisoMedio2 = false
+
+            } else if ((inc >= 8 && inc <= 10) || (inc >= 18 && inc <= 20)) {
+                kpiTemp2.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimal} </div>`
+                analiseBomTemp2 = false
+                analiseMedioTemp2 = true
+                analiseRuimTemp2 = false
+                avisoFinal2 = false
+                avisoMedio2 = true
+
+
+            } else if (inc <= 8 || inc > 20) {
+                kpiTemp2.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimal} </div>`
+                analiseBomTemp2 = false
+                analiseMedioTemp2 = false
+                analiseRuimTemp2 = true
+                avisoFinal2 = true
+                avisoMedio2 = false
+            }
+
+            point.update(newValTemp2);
+        }
+    }, 3000);
+
+    gaugeUmi2 = Highcharts.chart('gaugeUmi2', {
+        chart: {
+            type: 'gauge',
+            plotBackgroundColor: null,
+            plotBackgroundImage: null,
+            plotBorderWidth: 0,
+            plotShadow: false,
+            height: '70%'
+        },
+
+        title: {
+            text: 'Umidade'
+        },
+
+
+
+        pane: {
+            startAngle: -90,
+            endAngle: 90,
+            background: null,
+            center: ['50%', '75%'],
+            size: '120%'
+        },
+
+        yAxis: {
+            min: 50,
+            max: 80,
+            tickPixelInterval: 72,
+            tickPosition: 'inside',
+            tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+            tickLength: 20,
+            tickWidth: 2,
+            minorTickInterval: null,
+
+            labels: {
+                distance: 20,
+
+                style: {
+                    fontSize: '14px'
+                }
+
+            },
+
+            lineWidth: 0,
+
+            plotBands: [{
+                from: 50,
+                to: 55,
+                color: '#FF0000',
+                thickness: 20
+            }, {
+                from: 55,
+                to: 60,
+                color: '#FFFF00',
+                thickness: 20
+            },
+
+            {
+                from: 60,
+                to: 70,
+                color: '#00FF00',
+                thickness: 20
+            },
+
+            {
+                from: 70,
+                to: 75,
+                color: '#FFFF00',
+                thickness: 20
+            }, {
+                from: 75,
+                to: 80,
+                color: '#FF0000',
+                thickness: 20
+            }]
+        },
+
+        series: [{
+            name: 'Umidade',
+            data: [50],
+
+            tooltip: {
+                valueSuffix: '%'
+            },
+
+            dataLabels: {
+                format: 'Umidade%',
+                borderWidth: 0,
+                color: (
+                    Highcharts.defaultOptions.title &&
+                    Highcharts.defaultOptions.title.style &&
+                    Highcharts.defaultOptions.title.style.color
+                ) || '#333333',
+                style: {
+                    fontSize: '16px'
+                }
+            },
+
+            dial: {
+                radius: '70%',
+                backgroundColor: 'gray',
+                baseWidth: 12,
+                baseLength: '0%',
+                rearLength: '0%'
+            },
+
+            pivot: {
+                backgroundColor: 'gray',
+                radius: 6
+            }
+        }]
+    });
+
+    setInterval(() => {
+
+        const chart = Highcharts.charts[0];
+        if (gaugeUmi2 && !gaugeUmi2.renderer.forExport) {
+            const point2 = gaugeUmi2.series[0].points[0],
+                inc = Math.round((Math.random() * 30) + 50);
+
+            let newValUmi2 = point2.y + inc;
+            console.log(newValUmi2, inc, point2.y)
+
+            newValUmi2 = inc;
+
+            var decimal2 = inc.toFixed(2)
+            var kpiAtt = document.getElementsByClassName('.att')
+
+            if (inc >= 60 && inc <= 70) {
+                kpiUmi2.innerHTML = `<div class = "avisoCerto"> Umidade:${decimal2} </div>`
+                analiseBomUmi2 = true
+                analiseMedioUmi2 = false
+                analiseRuimUmi2 = false
+                avisoFinal2 = false
+                avisoMedio2 = false
+
+            } else if ((inc >= 55 && inc <= 59) || (inc >= 71 && inc <= 75)) {
+                kpiUmi2.innerHTML = `<div class = "avisoMedio"> Umidade:${decimal2} </div>`
+                analiseBomUmi2 = false
+                analiseMedioUmi2 = true
+                analiseRuimUmi2 = false
+                avisoFinal2 = false
+                avisoMedio2 = true
+
+            } else if (inc < 55 || inc > 75) {
+                kpiUmi2.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimal2} </div>`
+                analiseBomUmi2 = false
+                analiseMedioUmi2 = false
+                analiseRuimUmi2 = true
+                avisoFinal2 = true
+                avisoMedio2 = false
+            }
+
+            if (analiseBomTemp2 && analiseBomUmi2) {
+                aviso2.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
+
+                avisoFinal2 = false
+                avisoMedio2 = false
+            } else if (analiseRuimTemp2 || analiseRuimUmi2 && (analiseMedioTemp2 || analiseMedioUmi2)) {
+                aviso2.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+                avisoFinal2 = true
+                avisoMedio2 = false
+            } else if (analiseMedioTemp2 || analiseMedioUmi2) {
+                aviso2.innerHTML = `<div class = "avisoMedio"> Risco moderado! </div>`
+                avisoFinal2 = false
+                avisoMedio2 = true
+            } else if (analiseRuimTemp2 || analiseRuimUmi2) {
+                aviso2.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+                avisoFinal2 = true
+                avisoMedio2 = false
+            }
+
+            point2.update(newValUmi2);
+        }
+    }, 3000);
+
+    
+
+    const ctxtwo = document.getElementById('dadosHora2');
+    dadosHora = new Chart(ctxtwo, {
+
+        type: 'line',
+        data: {
+            labels: ['18:00', '18:10', '18:20', '18:30', '18:40', '18:50', '19:00',],
+            datasets: [{
+                label: 'Temperatura mais alta',
+                data: [27, 27, 27, 27, 27, 27, 27],
+                borderWidth: 1,
+                backgroundColor: 'red',
+                borderColor: 'red',
+            },
+            {
+                label: 'Temperatura mais baixa',
+                data: [17, 17, 17, 17, 17, 17, 17],
+                borderWidth: 1,
+                backgroundColor: 'orange',
+                borderColor: 'orange',
+            },
+            {
+                label: 'Umidade mais alta',
+                data: [65, 65, 65, 65, 65, 65, 65],
+                borderWidth: 1,
+                backgroundColor: 'blue',
+                borderColor: 'blue',
+            },
+            {
+                label: 'Umidade mais baixa',
+                data: [45, 45, 45, 45, 45, 45, 45],
+                borderWidth: 1,
+                backgroundColor: 'purple',
+                borderColor: 'purple'
+            }
+            ]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        },
+    });
+
+
 </script>
