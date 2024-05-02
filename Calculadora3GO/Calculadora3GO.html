@@ -20,16 +20,24 @@
 
         <p>Cotação do dia <label id="lbl_dia_cotacao"></label>:</p><input readonly class="textInput"
             id="ipt_cotacao"><br>
-        <p>Insira quanto você produz (kg): </p><input class="textInput" type="number" id="ipt_safraProd"
-            placeholder="Insira apenas numeros"><br>
-        <p>Perdas de safra por variação de temperatura (kg): </p><input class="textInput" type="text" id="ipt_perdaTemp"
-            placeholder="Insira apenas numeros"><br>
-        <p>Perdas de safra por variação de umidade (kg): </p>
+        <p>Insira quanto você produz: </p>
+        <p><select onchange="quantidade()" name="select" id="selectPeso">
+        <option value="Selecione">Selecione</option>
+        <option value="KG">Quilo (kg)</option>
+        <option value="T">Toneladas (T)</option>
+        </select>
+        <input class="textInput" type="number" id="ipt_safraProd"
+        placeholder="Insira apenas numeros"><br>
+        <span id="spanVT">Perda de safra por variação de temperatura</span>
+        <p id = "selecioneMensagem" >  </p><input class="textInput" type="text" id="ipt_perdaTemp"
+        placeholder="Insira apenas numeros"><br>
+        <span id="spanVU">Perda de safra por variação de umidade</span>
+        <p id = "selecioneMensagem2">  </p>
         </p><input class="textInput" type="text" id="ipt_perdaUmid" placeholder="Insira apenas numeros"><br>
         <p>Custo dos insumos (R$): </p><input class="textInput" type="number" id="ipt_insumo"
             placeholder="Insira apenas numeros"><br>
 
-        <button class="btn" onclick="calcular()">calcular</button>
+        <button class="btn" onclick="calcular()">Calcular</button>
         <div class="table" id='dados'>
             <script type="text/javascript"
                 src="https://www.cepea.esalq.usp.br/br/widgetproduto.js.php?fonte=arial&tamanho=10&largura=400px&corfundo=dbd6b2&cortexto=333333&corlinha=ede7bf&id_indicador%5B%5D=178"></script>
@@ -41,6 +49,7 @@
 
 </html>
 <script>
+
     function closeModal() {
         mensagem.classList.remove('mensagem')
         mensagem.classList.add('mensagemDis')
@@ -54,9 +63,7 @@
         var insumo = Number(ipt_insumo.value);
         mensagem.classList.remove('mensagemDis')
 
-        mensagem.classList.add('mensagem')
-
-
+        mensagem.classList.add('mensagem')      
 
         var bruto = (safra * cotacao).toFixed(2);
         var custoTemp = perdaTemperatura * cotacao;
@@ -71,17 +78,30 @@
         var textoGasto = gastoEconomico.toFixed(2);
         var final = (custoTotal - gastoEconomico).toFixed(2);
         var porcentagem = (gastoEconomico / custoTotal * 100).toFixed(0);
+        var selecaoPeso = document.getElementById('select');
 
+        if (selecaoPeso == "KG") {
+            selecioneMensagem.innerHTML += `Perdas de safra por variação de temperatura em quilos:`
+        } else {
+            selecioneMensagem.innerHTML += `Perdas de safra por variação de temperatura em toneladas:`
+        }
+
+        if (selecaoPeso == "KG") {
+            selecioneMensagem2.innerHTML += `Perdas de safra por variação de umidade em quilos:`
+        } else {
+            selecioneMensagem2.innerHTML += `Perdas de safra por variação de umidade em toneladas:`
+        }
 
         if (safra < perdaTemperatura || safra < perdaUmidade) {
-            mensagem.innerHTML = `<p>Você inseriu algum dado errado. Sua perda não pode ser maior que sua produção</p>`
+            mensagem.innerHTML = `<p>Você inseriu algum dado errado. Sua perda não pode ser maior do que a sua produção</p>`
         }
         else {
             mensagem.innerHTML =
                 mensagem.innerHTML =
-                ` <div class="sair" id="exit" onclick="closeModal()"></div> <p>  Você faturou <strong class ='ganho'> R$${bruto} </strong> brutos</p>
-        <p>Você teve <strong class ='perda'>R$${custoTotal} </strong> de despesas com problemas de temperatura, umidade e insumos</p>
-        <p> Com o controle de umidade e temperatura sua perda reduzirá <strong class ='ganho'> R$${final} </strong> gastando apenas <strong> R$${textoGasto} </strong> o equivalente a <strong class ='ganho'> ${porcentagem}%</strong> do valor inicial  </p>`
+                ` <div class="sair" id="exit" onclick="closeModal()"></div> <p>  Com base na cotação do trigo de hoje você faturou <strong class ='ganho'> R$${bruto} </strong> brutos e 
+        você teve <strong class ='perda'>R$${custoTotal} </strong> de despesas com problemas de temperatura, umidade e custos.</p>
+        <p> Com o controle de umidade e temperatura sua perda reduzirá em média <strong class ='ganho'> R$${final} </strong> gastando apenas <strong> R$${textoGasto} </strong> 
+        o equivalente a <strong class ='ganho'> ${porcentagem}%</strong> do valor inicial. </p>`
         }
 
     }
