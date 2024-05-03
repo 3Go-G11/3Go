@@ -76,8 +76,10 @@
                     <div id="gaugeUmi" class="doubleChart"></div>
                 </div>
 
-                <div class="alignDailyChart ultimate">
+                <div class="alignDailyChart ultimate" id="maiorGrafico">
                     <canvas id="dadosHora"></canvas>
+                    
+                  
                 </div>
 
             
@@ -294,13 +296,28 @@ fundo.classList.toggle('dis')
 
             }
     }, 100)
-   
+    var maiorNumeroTemp = 0
+    var menorNumeroTemp = 22
+    var menorUmid = 80
+    var maiorUmid = 0
 
     setInterval(() => {
         const chart = Highcharts.charts[0];
         if (gaugeTemp && !gaugeTemp.renderer.forExport) {
             const point = gaugeTemp.series[0].points[0],
               inc = Math.round((Math.random() * 16) + 6);
+          
+             if(inc > maiorNumeroTemp){
+                maiorNumeroTemp = inc
+                
+            
+             } 
+             if(inc < menorNumeroTemp){
+                menorNumeroTemp = inc
+                
+             } 
+    console.log(`maior `+ maiorNumeroTemp)
+    console.log(`menor `+ menorNumeroTemp)
 
             let newValTemp = point.y + inc;
             console.log(newValTemp, inc, point.y)
@@ -516,45 +533,47 @@ fundo.classList.toggle('dis')
                 avisoMedio1 = false
             }
 
+            if(inc > maiorUmid){
+                maiorUmid = inc
+                
+            
+             } 
+             if(inc < menorUmid){
+                menorUmid = inc
+                
+             } 
+    console.log(`maior `+ maiorUmid)
+    console.log(`menor `+ menorUmid)
+
             point2.update(newValUmi);
         }
     }, 3000);
-    
     const ctx = document.getElementById('dadosHora');
+   setInterval(() => {
+    console.log('menor umidade' + menorUmid)
+    dadosHora.destroy()
+
     dadosHora = new Chart(ctx, {
+        
 
         type: 'line',
         data: {
-            labels: ['18:00', '18:10', '18:20', '18:30', '18:40', '18:50', '19:00',],
+            labels: ['mais baixa', 'mais alta'],
             datasets: [{
-                label: 'Temperatura mais alta',
-                data: [27, 27, 27, 27, 27, 27, 27],
+                label: 'Temperatura',
+                data: [menorNumeroTemp, maiorNumeroTemp],
                 borderWidth: 1,
                 backgroundColor: 'red',
                 borderColor: 'red',
             },
             {
-                label: 'Temperatura mais baixa',
-                data: [17, 17, 17, 17, 17, 17, 17],
+                label: 'Umidade',
+                data: [menorUmid, maiorUmid],
                 borderWidth: 1,
                 backgroundColor: 'orange',
                 borderColor: 'orange',
-            },
-            {
-                label: 'Umidade mais alta',
-                data: [65, 65, 65, 65, 65, 65, 65],
-                borderWidth: 1,
-                backgroundColor: 'blue',
-                borderColor: 'blue',
-            },
-            {
-                label: 'Umidade mais baixa',
-                data: [45, 45, 45, 45, 45, 45, 45],
-                borderWidth: 1,
-                backgroundColor: 'purple',
-                borderColor: 'purple'
-            }
-            ]
+            
+        }]
         },
 
         options: {
@@ -565,6 +584,8 @@ fundo.classList.toggle('dis')
             }
         },
     });
+    // maiorGrafico.innerHTML = `<canvas id="dadosHora"></canvas>`
+   }, 3000)
 
     var valor1 = 0
     var valor2 = 0
