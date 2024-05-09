@@ -81,13 +81,13 @@
 }
 
 .navBar {
+    z-index: 1000;
     width: 100%;
     height: 70px;
     background-color: #1d1d1daf;
     position: fixed;
     display: flex;
     align-items: center;
-    z-index: 50;
     justify-content: center;
     color: #fff;
     font-size: 22px;
@@ -105,8 +105,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 4rem;
-    margin-left: 4rem;
+    gap: 6rem;
+    margin-left: 6rem;
     width: 60%;
     height: 100%;
     list-style: none;
@@ -464,4 +464,30 @@
     z-index: 5 ;
     justify-content: center;
     align-items: center;
+}
+.rodape {
+  background-color: #1d1d1d; 
+  width: 100%; 
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6rem;
+}
+.icon {
+    width: 60px;
+    height: 60px;
+}
+.contain1 {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+.alinhate {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
 }
