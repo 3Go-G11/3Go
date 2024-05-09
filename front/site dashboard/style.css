@@ -410,6 +410,26 @@ gap: 1rem;
    
 
 }
+.alignDailyChartAlt {
+
+    width: calc((182px*4) + 6rem);
+
+    height: auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2rem;
+
+   
+
+}
+.alinhacao {
+    display: flex;
+    gap: 1rem;
+}
+
 
 .alignDailyChart.ultimate {
 
@@ -478,6 +498,21 @@ gap: 1rem;
     height: 20px;
     border-radius: 100px;
     background-color: #d4d4d4;
+}
+.avisoInfo {
+    width: 30px;
+    height: 30px;
+    border-radius: 100px;
+    background-color: #d4d4d4;
+}
+.avisoInfo.green {
+    background-color: #3BB502;
+}
+.avisoInfo.ye {
+    background-color: #ffdd00;
+}
+.avisoInfo.red {
+    background-color: #b50202;
 }
 .alinhate {
     display: flex;

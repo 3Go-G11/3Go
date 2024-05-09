@@ -30,6 +30,17 @@
         <div  class="mensagemDis" id="mensagem"><div class="sairModals" id="exit" onclick="closeModal()"><img src="https://www.freeiconspng.com/uploads/close-icon-39.png" alt="" class="exit"></div>     <div class="alignDailyChart">
             <canvas id="semanaExtremos"></canvas>
         </div> </div>
+        <div  class="mensagemDis" id="info"><div class="sairModals" id="exit" onclick="closeModalDois()"><img src="https://www.freeiconspng.com/uploads/close-icon-39.png" alt="" class="exit"></div>     <div class="alignDailyChartAlt">
+            <p>O primeiro KPI, temperatura, fornece uma visão instantânea das condições térmicas, essencial para monitorar ambientes sensíveis.
+                O segundo KPI, umidade, destaca a quantidade de umidade presente no ambiente, crucial para preservar materiais sensíveis à umidade e para garantir o conforto em espaços habitados.
+                
+                A KPI de feedback é projetada para oferecer três mensagens distintas:
+<div class="alinhacao"> <div  class="avisoInfo green"></div> "Tudo certo": Esta mensagem é exibida quando tanto a temperatura quanto a umidade estão dentro dos parâmetros ideais, indicando que as condições ambientais estão ótimas.</div>
+<div class="alinhacao"><div class="avisoInfo ye"></div>"Risco moderado": Essa mensagem é acionada quando a temperatura ou a umidade estão ligeiramente abaixo ou acima do ideal, sugerindo uma situação que merece atenção, mas ainda não representa uma emergência.</div>
+<div class="alinhacao"><div class="avisoInfo red"></div>"Alerta": Esta mensagem é ativada quando tanto a temperatura quanto a umidade estão significativamente fora dos limites aceitáveis, indicando uma situação crítica que requer intervenção imediata para evitar danos ou desconforto.</div>
+temos também dashboard exibe um gráfico que destaca a temperatura e umidade mais alta e mais baixa registradas durante o dia. Este gráfico oferece uma visão visual das flutuações extremas nas condições ambientais, permitindo uma compreensão mais completa do intervalo de variação ao longo do tempo. Esses dados são essenciais para avaliar a amplitude das condições climáticas experimentadas e ajudam na identificação de padrões sazonais ou anomalias significativas.
+                </p>
+        </div> </div>
         <div class="principal">
 
             <nav class="lateral">
@@ -47,18 +58,19 @@
                 <div class="alinhate">
                     <li onclick="modalCamara2()"><p>câmara 2</p></li> <div id="avisoCam2" class="aviso"></div>
                 </div>
-                    <li><p style="font-weight: 400;">+ Adicionar nova câmara +</p></li>
+                
                 </ul>
               </div>
               <div class="navList">
+                <li  onclick="openModal()"><p  class="btnMedia">Especificaçôes</p></li><br>
                 <p class="tituloNav">Mais graficos</p>
         
               </div>
           
                 <li onclick="openModalMensal()"><p class="btnMedia">Média Semanal </p></li>
-                <li  onclick="openModalMensal()"><p  class="btnMedia">Media mensal</p></li>
+          
             
-              <button class="btn analisar">Analisar agora</button>
+              <br><button class="btn analisar">Analisar agora</button>
               <button class="btn sair">Sair</button>
              
             </nav>
@@ -111,8 +123,6 @@
     </body>
 </html>
 
-
-
 <script>
      var camara2 = document.getElementById('chartModalTwo')
     var camara1 = document.getElementById('chartModal')
@@ -122,6 +132,14 @@
             
         mensagem.classList.remove('mensagem')
         mensagem.classList.add('mensagemDis')
+        fundo.classList.toggle('dis')
+
+    }
+        function closeModalDois() {
+
+            
+        info.classList.remove('mensagem')
+        info.classList.add('mensagemDis')
         fundo.classList.toggle('dis')
 
     }
@@ -143,6 +161,12 @@
     function openModalMensal() {
         mensagem.classList.remove('mensagemDis')
 mensagem.classList.add('mensagem')
+fundo.classList.toggle('dis')
+
+    }
+    function openModal() {
+        info.classList.remove('mensagemDis')
+info.classList.add('mensagem')
 fundo.classList.toggle('dis')
 
     }
@@ -556,7 +580,7 @@ fundo.classList.toggle('dis')
     dadosHora = new Chart(ctx, {
         
 
-        type: 'line',
+        type: 'bar',
         data: {
             labels: ['mais baixa', 'mais alta'],
             datasets: [{
@@ -608,7 +632,7 @@ fundo.classList.toggle('dis')
    
     semanaExtremos = new Chart(ctx2, {
 
-        type: 'bar',
+        type: 'line',
         data: {
             labels: ['Dia 1', 'Dia 2', 'Dia 3', 'Dia 4', 'Dia 5', 'Dia 6', 'Dia 7'],
             datasets: [{

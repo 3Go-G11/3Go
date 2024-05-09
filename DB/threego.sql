@@ -8,7 +8,7 @@ CREATE TABLE empresa (
   nomeRepresentante VARCHAR(45) not null,
   emailRepresentante VARCHAR(90) not null,
 	constraint chkEmailRep check (emailRepresentante like('%@%')),
-  telefoneRepresentante VARCHAR(45) not null,
+  telefoneRepresentante CHAR(11) not null,
   senhaRepresentante VARCHAR(45) not null); 
   
 CREATE TABLE funcionario (
@@ -24,7 +24,7 @@ CREATE TABLE funcionario (
 
 CREATE TABLE sensor (
   idSensor INT PRIMARY KEY AUTO_INCREMENT,
-  nomeSensor VARCHAR(45));
+  nomeSensor VARCHAR(45) not null);
 
 CREATE TABLE camaras (
   idCamara INT auto_increment,

@@ -142,7 +142,7 @@ function entrar(){
     var email = inputEmail.value;
     var senha = inputSenha.value;
 
-    if(email == '@empresa' && senha == 'empresa123' || (email == '@func' && senha == 'func123')){
+    if(email == '@3GO' && senha == '12345678Go' || (email == '@func' && senha == 'func123')){
         spanEntrar.style.color = "#00FF00";
         spanEntrar.innerHTML=`Login realizado com sucesso`
         window.location.href = "../site_dashboard/dashboard.html"
