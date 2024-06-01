@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/cad-login.css">
+    <script src="./js/sessao.js"></script>
     <title>3GO - Cadastro Empresa</title>
 </head>
 <body class="allOfCode">
@@ -13,6 +14,8 @@
             <div class="inputContainer">
                 <span>Razão Social:</span>
                 <input id="inputRazao" type="text" placeholder="Razão Social" maxlength="45">
+                <span>Nome fantasia:</span>
+                <input id="inputNome" type="text" placeholder="Razão Social" maxlength="45">
                 <span>CNPJ:</span>
                 <input id="inputCNPJ" type="number" placeholder="Insira Apenas Números" maxlength="14">
                 <span id="spanCNPJ"></span>
@@ -32,7 +35,7 @@
                 <span id="spanConfirmarSenha"></span>
             </div>
             <div class="btnContainer">
-                <button class="btn" onclick="cadastrarempresa()">Cadastrar Empresa</button><br>
+                <button class="btn" onclick="cadastrarEmpresa()">Cadastrar Empresa</button><br>
                 <a href="CadastroFunc.html">
                     <button class="btn">Ir Para Funcionario</button>
                 </a> 
@@ -41,129 +44,71 @@
         </div>
 
 
-        <!-- <div class="login">
-            <div class="alerta_erro">
-              <div class="card_erro" id="cardErro">
-                <span id="mensagem_erro"></span>
-              </div>
-            </div>
-            <div class="container">
-              <div class="card card-cadastro">
-                <h2>Bem-vindo!</h2>
-                <div class="formulario">
-                  <div class="campo">
-                    <span>Empresa:</span>
-                    <select name="empresas" id="listaEmpresas">
-                      <option selected>Selecione uma empresa</option>
-                    </select>
-                  </div>
-                  <div class="campo">
-                    <span>Nome:</span>
-                    <span id="valiNome" style="display: none;">Nome deve conter mais de 1 digito</span>
-                    <input id="nome_input" type="text" placeholder="Seu nome" />
-                  </div>
-                  <div class="campo">
-                    <span>CPF</span>
-                    <span id="valiCPF" style="display: none;">CPF deve conter 11 digitos</span>
-                    <input id="cpf_input" type="password" placeholder="Seu cpf" />
-                  </div>
-                  <div class="campo">
-                    <span>E-mail:</span>
-                    <span id="valiEmail" style="display: none;">Email deve conter @</span>
-                    <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
-                  </div>
-                  <div class="campo">
-                    <span>Senha:</span>
-                    <span id="valiSenha" style="display: none;">Senha tem que ter mais de 6 digitos</span>
-                    <input id="senha_input" type="password" placeholder="******" />
-                  </div>
-                  <div class="campo">
-                    <span>Confirmação da Senha:</span>
-                    <span id="valiConfirm" style="display: none;">Confirmação de senha deve ser igual a Senha</span>
-                    <input id="confirmacao_senha_input" type="password" placeholder="******" />
-                  </div>
-                  <button class="botao" onclick="cadastrar()">Cadastrar</button>
-                </div>
-                <div id="div_aguardar" class="loading-div">
-                  <img src="./assets/circle-loading.gif" id="loading-gif" />
-                </div>
-        
-                <div id="div_erros_login"></div>
-              </div>
-            </div>
-          </div>
-         -->
 </body> 
 </html>
-<script src="script.js"></script>
 <script>
-    function cadastrar() {
+    function cadastrarEmpresa() {
     aguardar();
 
     //Recupere o valor da nova input pelo nome do id
     // Agora vá para o método fetch logo abaixo
-    var nomeVar = nome_input.value;
-    var emailVar = email_input.value;
-    var senhaVar = senha_input.value;
-    var confirmarSenhaVar = confirmacao_senha_input.value;
-    var empresaVar = listaEmpresas.value
-    var cpfVar = cpf_input.value;
+    var razaoSocial = inputRazao.value;
+    var nomeFantasia = inputNome.value;
+    var cnpj = inputCNPJ.value;
+    var telefone = inputTelefone.value;
+    var email = inputEmail.value
+    var senha = inputSenha.value;
+  
 
-    if (
-      nomeVar == "" &&
-      emailVar == "" &&
-      senhaVar == "" &&
-      confirmarSenhaVar == "" &&
-      empresaVar == "" &&
-      cpfVar == ""
-    ) {
-      cardErro.style.display = "block";
-      mensagem_erro.innerHTML =
-        "Todos os campos em branco";
-      finalizarAguardar();
-      return false;
-    } else {
-      setInterval(sumirMensagem, 5000);
-    }
+    // if (
+    //   nomeVar == "" &&
+    //   emailVar == "" &&
+    //   senhaVar == "" &&
+    //   confirmarSenhaVar == "" &&
+    //   empresaVar == "" &&
+    //   cpfVar == ""
+    // ) {
+    //   cardErro.style.display = "block";
+    //   mensagem_erro.innerHTML =
+    //     "Todos os campos em branco";
+    //   finalizarAguardar();
+    //   return false;
+    // } else {
+    //   setInterval(sumirMensagem, 5000);
+    // }
 
     // Enviando o valor da nova input
-    fetch("/usuarios/cadastrar", {
+    fetch("/empresas/cadastrar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // crie um atributo que recebe o valor recuperado aqui
-        // Agora vá para o arquivo routes/usuario.js
-        nomeServer: nomeVar,
-        emailServer: emailVar,
-        senhaServer: senhaVar,
-        empresaServer: empresaVar,
-        cpfServer: cpfVar
+        nomeFantasiaVar: nomeFantasia,
+        razaoSocialVar: razaoSocial,
+        telefoneVar: telefone,
+        cnpjVar: cnpj,
+        emailVar: email,
+        senhaVar: senha
       }),
     })
       .then(function (resposta) {
         console.log("resposta: ", resposta);
 
         if (resposta.ok) {
-          cardErro.style.display = "block";
-
-          mensagem_erro.innerHTML =
-            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
-
+         
+       console.log('foi')
           setTimeout(() => {
-            window.location = "login.html";
+            window.location = "CadastroFunc.html";
           }, "2000");
 
-          limparFormulario();
-          finalizarAguardar();
         } else {
           throw "Houve um erro ao tentar realizar o cadastro!";
         }
       })
       .catch(function (resposta) {
         console.log(`#ERRO: ${resposta}`);
-        finalizarAguardar();
+    
       });
 
     return false;

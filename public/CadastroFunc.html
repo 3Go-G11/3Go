@@ -4,120 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/cad-login.css">
+    <script src="./js/sessao.js"></script>
     <title>3GO - Cadastro Funcionario</title>
 </head>
-<body class="allOfCode">
+<body class="allOfCode" onload="listar()">
     <div class="containIncrement" ></div> 
         <div class="containPrincipal">
             <h1>Cadastrar Funcionario</h1>
             <div class="inputContainer">
+              <span>Qual a sua empresa?</span>
+              <select id="listaEmpresas"></select>
                 <span>Nome:</span>
-                <input id="inputNomeFunc" type="text" placeholder="Nome do Funcionario" maxlength="45">
+                <input id="inputNome" type="text" placeholder="Nome do Funcionario" maxlength="45">
                 <span>E-mail:</span>
-                <input id="inputEmailFunc" type="text" placeholder="E-mail do Funcionario" maxlength="90">
+                <input id="inputEmail" type="text" placeholder="E-mail do Funcionario" maxlength="90">
+                <span>Cargo:</span>
+                <select id="cargos">
+                  <option value="Diretor">Diretor</option>
+                  <option value="Gerente">Gerente</option>
+                  <option value="CEO">CEO</option>
+                </select>
                 <span id="spanEmail"></span>
                 <span>Senha</span>
-                <input id="inputSenhaFunc" type="password" placeholder="Senha" maxlength="45">
+                <input id="inputSenha" type="password" placeholder="Senha" maxlength="45">
                 <span id="spanSenha"></span>
                 <span>Confirmar Senha</span>
-                <input id="inputConfirmFunc" type="password" placeholder="Confirmar Senha" maxlength="45">
+                <input id="inputConfirm" type="password" placeholder="Confirmar Senha" maxlength="45">
                 <span id="spanConfirmarSenha"></span>
             </div>
             <div class="btnContainer">
-                <button class="btn" onclick="cadastrarfunc()">Cadastrar Funcionario</button><br>
-                <a href="CadastroEmp.html">
-                    <button class="btn">Ir Para Empresa</button>
+                <button class="btn" onclick="cadastrar()">Cadastrar Funcionario</button><br>
+                <a class="btn" href="CadastroEmp.html">
+                  Ir Para Empresa
                 </a>
             </div>
             <spans id="spanRealizado"></span>
         </div>
-
-        <!-- <div class="login">
-            <div class="alerta_erro">
-              <div class="card_erro" id="cardErro">
-                <span id="mensagem_erro"></span>
-              </div>
-            </div>
-            <div class="container">
-              <div class="card card-cadastro">
-                <h2>Bem-vindo!</h2>
-                <div class="formulario">
-                  <div class="campo">
-                    <span>Empresa:</span>
-                    <select name="empresas" id="listaEmpresas">
-                      <option selected>Selecione uma empresa</option>
-                    </select>
-                  </div>
-                  <div class="campo">
-                    <span>Nome:</span>
-                    <span id="valiNome" style="display: none;">Nome deve conter mais de 1 digito</span>
-                    <input id="nome_input" type="text" placeholder="Seu nome" />
-                  </div>
-                  <div class="campo">
-                    <span>CPF</span>
-                    <span id="valiCPF" style="display: none;">CPF deve conter 11 digitos</span>
-                    <input id="cpf_input" type="password" placeholder="Seu cpf" />
-                  </div>
-                  <div class="campo">
-                    <span>E-mail:</span>
-                    <span id="valiEmail" style="display: none;">Email deve conter @</span>
-                    <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
-                  </div>
-                  <div class="campo">
-                    <span>Senha:</span>
-                    <span id="valiSenha" style="display: none;">Senha tem que ter mais de 6 digitos</span>
-                    <input id="senha_input" type="password" placeholder="******" />
-                  </div>
-                  <div class="campo">
-                    <span>Confirmação da Senha:</span>
-                    <span id="valiConfirm" style="display: none;">Confirmação de senha deve ser igual a Senha</span>
-                    <input id="confirmacao_senha_input" type="password" placeholder="******" />
-                  </div>
-                  <button class="botao" onclick="cadastrar()">Cadastrar</button>
-                </div>
-                <div id="div_aguardar" class="loading-div">
-                  <img src="./assets/circle-loading.gif" id="loading-gif" />
-                </div>
-        
-                <div id="div_erros_login"></div>
-              </div>
-            </div>
-          </div> -->
+ 
         
 </body> 
 </html>
-<script src="script.js">
 </script>
 
 <script>
     function cadastrar() {
-    aguardar();
 
     //Recupere o valor da nova input pelo nome do id
     // Agora vá para o método fetch logo abaixo
-    var nomeVar = nome_input.value;
-    var emailVar = email_input.value;
-    var senhaVar = senha_input.value;
-    var confirmarSenhaVar = confirmacao_senha_input.value;
+    var nomeVar = inputNome.value;
+    var cargo = cargos.value;
+    var emailVar = inputEmail.value;
+    var senhaVar = inputSenha.value;
+    var confirmarSenhaVar = inputConfirm.value;
     var empresaVar = listaEmpresas.value
-    var cpfVar = cpf_input.value;
+    
 
-    if (
-      nomeVar == "" &&
-      emailVar == "" &&
-      senhaVar == "" &&
-      confirmarSenhaVar == "" &&
-      empresaVar == "" &&
-      cpfVar == ""
-    ) {
-      cardErro.style.display = "block";
-      mensagem_erro.innerHTML =
-        "Todos os campos em branco";
-      finalizarAguardar();
-      return false;
-    } else {
-      setInterval(sumirMensagem, 5000);
-    }
+    // if (
+    //   nomeVar == "" &&
+    //   emailVar == "" &&
+    //   senhaVar == "" &&
+    //   confirmarSenhaVar == "" &&
+    //   empresaVar == "" &&
+    //   cpfVar == ""
+    // ) {
+    //   cardErro.style.display = "block";
+    //   mensagem_erro.innerHTML =
+    //     "Todos os campos em branco";
+    //   finalizarAguardar();
+    //   return false;
+    // } else {
+    //   setInterval(sumirMensagem, 5000);
+    // }
 
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
@@ -126,36 +83,32 @@
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        // crie um atributo que recebe o valor recuperado aqui
-        // Agora vá para o arquivo routes/usuario.js
         nomeServer: nomeVar,
         emailServer: emailVar,
+        cargoServer: cargo,
         senhaServer: senhaVar,
         empresaServer: empresaVar,
-        cpfServer: cpfVar
       }),
     })
       .then(function (resposta) {
         console.log("resposta: ", resposta);
 
         if (resposta.ok) {
-          cardErro.style.display = "block";
+          // cardErro.style.display = "block";
 
-          mensagem_erro.innerHTML =
-            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+          console.log( "Cadastro realizado com sucesso! Redirecionando para tela de Login...")
+           ;
 
           setTimeout(() => {
             window.location = "login.html";
           }, "2000");
 
-          limparFormulario();
-          finalizarAguardar();
         } else {
           throw "Houve um erro ao tentar realizar o cadastro!";
         }
       })
       .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
+
         finalizarAguardar();
       });
 
@@ -169,7 +122,8 @@
       .then(function (resposta) {
         resposta.json().then((empresas) => {
           empresas.forEach((empresa) => {
-            listaEmpresas.innerHTML += `<option value='${empresa.id}'>${empresa.cnpj}</option>`;
+            console.log(empresa)
+            listaEmpresas.innerHTML += `<option value='${empresa.idEmpresa}'>${empresa.nomeFantasia}</option>`;
           });
         });
       })

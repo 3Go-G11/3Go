@@ -3,7 +3,6 @@ var medidaModel = require("../models/medidaModel");
 function buscarDadosAtuais(req, res) {
     var idCamara = req.params.idCamara;
     var fkEmpresa = req.params.fkEmpresa;
-    console.log(`Recuperando as ultimas ${limite_linhas} medidas`);
 
     medidaModel.buscarUltimasMedidas(idCamara, fkEmpresa).then(function (resultado) {
         if (resultado.length > 0) {

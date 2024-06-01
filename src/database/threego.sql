@@ -1,5 +1,6 @@
-CREATE DATABASE threego2;
-USE threego2;
+CREATE DATABASE Treego;
+USE Treego;
+
 
 CREATE TABLE empresa (
   idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
@@ -8,19 +9,15 @@ CREATE TABLE empresa (
   cnpj CHAR(14) not null,
   telefone CHAR(11) not null,
   email VARCHAR(90) not null,
-	constraint chkEmailEmp check (email like('%@%')),
   senha VARCHAR(45) not null); 
-  
 CREATE TABLE funcionario (
-  idFunc INT,
+  idFunc INT auto_increment,
   fkEmpresa INT,
   CONSTRAINT fkFuncionarioEmpresa FOREIGN KEY (fkEmpresa)
     REFERENCES empresa (idEmpresa),
   CONSTRAINT pkComposta PRIMARY KEY (idFunc, fkEmpresa),
   nome VARCHAR(45) not null,
-  telefone char(11) not null,
   email VARCHAR(90) not null,
-  	constraint chkEmailFunc check (email like('%@%')),
   senha VARCHAR(45) not null,
   cargo VARCHAR(45) not null );
 
@@ -55,10 +52,10 @@ INSERT INTO empresa (razaosocial, nomeFantasia, cnpj, telefone, email, senha)
 VALUES ('Empresa ABC', 'Antonia Bombons', '12345678901234', '123456789', 'joao@empresa.com',  'senha123'),
        ('Empresa XYZ', 'Xaropes Yamamomo', '98765432109876', '987654321', 'maria@empresa.com', 'senha456');
 
-INSERT INTO funcionario (idFunc, fkEmpresa, nome, telefone, email, senha, cargo) 
-VALUES (1, 1, 'Pedro', '966554433', 'pedro@empresaabc.com', 'senhafunc123', 'CEO'),
-       (2, 1, 'Ana', '988997722', 'ana@empresaabc.com', 'senhafunc456', 'Diretor'),
-       (3, 2, 'Carlos', '997984554', 'carlos@empresaxyz.com', 'senhafunc789','Gerente');
+INSERT INTO funcionario (idFunc, fkEmpresa, nome, email, senha, cargo) 
+VALUES (1, 1, 'Pedro','pedro@empresaabc.com', 'senhafunc123', 'CEO'),
+       (2, 1, 'Ana','ana@empresaabc.com', 'senhafunc456', 'Diretor'),
+       (3, 2, 'Carlos', 'carlos@empresaxyz.com', 'senhafunc789','Gerente');
 
 INSERT INTO sensor (nome, media_temperatura, media_umidade) 
 VALUES ('Sensor A', 14, 65),
@@ -69,6 +66,7 @@ INSERT INTO camaras (fkEmpresa, fkSensor)
 VALUES (1, 1),
        (1, 2),
        (2, 3);
+
 
 /* INSERT INTO dados (fkSensor, dht11Temperatura, dht11Umidade) 
 VALUES (1, 25.5, 60.2),
@@ -136,5 +134,6 @@ select nome,
  join camaras on camaras.fkSensor = idSensor
  join empresa on camaras.fkEmpresa = idEmpresa
  where dht11Umidade > media_umidade and empresa.razaosocial = 'Empresa ABC';  -- Mostra os registros de temperatura acima da média
-																	   -- de uma empresa específica.   
-describe dados;                    
+									select * from empresa;					  -- de uma empresa específica.   
+describe dados;    
+  SELECT idFunc, nome, f.email, fkEmpresa, cargo, nomeFantasia as nomeEmpresa FROM funcionario as f join empresa on idEmpresa = fkEmpresa;                

@@ -6,7 +6,7 @@ function buscarDadosAtuais(idCamara, fkEmpresa) {
                         FROM dados 
                         JOIN sensor ON sensor.idSensor = dados.fkSensor
                         JOIN camaras ON camaras.fkSensor = sensor.idSensor;
-                        WHERE idCamara = ${idCamara} AND fkEmpresa = ${fkEmpresa}`;
+                        WHERE idCamara = ${idCamara} AND fkEmpresa = ${fkEmpresa};`;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }

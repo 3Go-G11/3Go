@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/cad-login.css">
+    <script src="./js/sessao.js"></script>
     <title>3GO - Login</title>
 </head>
 <body class="allOfCode">
@@ -20,57 +21,28 @@
             <span id="spanEntrar"></span>
         </div>
 
-        <!-- <div class="login">
-            <div class="alerta_erro">
-                <div class="card_erro" id="cardErro">
-                    <span id="mensagem_erro"></span>
-                </div>
-            </div>
-            <div class="container">
-                <div class="card card-login">
-                    <h2>Olá de volta!</h2>
-                    <div class="formulario">
-                        <div class="campo">
-                            <span>E-mail:</span>
-                            <input id="email_input" type="text" placeholder="Login">
-                        </div>
-                        <div class="campo">
-                            <span>Senha:</span>
-                            <input id="senha_input" type="password" placeholder="******">
-                        </div>
-                        <button class="botao" onclick="entrar()">Entrar</button>
-                    </div>
-    
-                    <div id="div_aguardar" class="loading-div">
-                        <img src="./assets/circle-loading.gif" id="loading-gif">
-                    </div>
-    
-                    <div id="div_erros_login"></div>
-                </div>
-            </div>
-        </div> -->
+      
 </body> 
 </html>
-<script src="script.js">
 </script>
 
 <script>
     
     function entrar() {
-        aguardar();
+        // aguardar();
 
-        var emailVar = email_input.value;
-        var senhaVar = senha_input.value;
+        var emailVar = inputEmail.value;
+        var senhaVar = inputSenha.value;
 
-        if (emailVar == "" || senhaVar == "") {
-            cardErro.style.display = "block"
-            mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
-            finalizarAguardar();
-            return false;
-        }
-        else {
-            setInterval(sumirMensagem, 5000)
-        }
+        // if (emailVar == "" || senhaVar == "") {
+        //     cardErro.style.display = "block"
+        //     mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
+        //     finalizarAguardar();
+        //     return false;
+        // }
+        // else {
+        //     setInterval(sumirMensagem, 5000)
+        // }
 
         console.log("FORM LOGIN: ", emailVar);
         console.log("FORM SENHA: ", senhaVar);
@@ -89,17 +61,19 @@
 
             if (resposta.ok) {
                 console.log(resposta);
-
                 resposta.json().then(json => {
                     console.log(json);
                     console.log(JSON.stringify(json));
-                    sessionStorage.EMAIL_USUARIO = json.email;
-                    sessionStorage.NOME_USUARIO = json.nome;
-                    sessionStorage.ID_USUARIO = json.id;
-                    sessionStorage.AQUARIOS = JSON.stringify(json.aquarios)
+                    sessionStorage.EMAIL_FUNCIONARIO = json.email;
+                    sessionStorage.NOME_FUNCIONARIO = json.nome;
+                    sessionStorage.ID_FUNCIONARIO = json.idFunc;
+                    sessionStorage.CARGO_FUNCIONARIO = json.cargo;
+                    sessionStorage.EMPRESA_FUNCIONARIO = json.empresa;
+    
 
                     setTimeout(function () {
-                        window.location = "./dashboard/cards.html";
+                        window.location = "./CadastroEmp.html";
+                        console.log('estou aqui')
                     }, 1000); // apenas para exibir o loading
 
                 });
@@ -121,8 +95,8 @@
         return false;
     }
 
-    function sumirMensagem() {
-        cardErro.style.display = "none"
-    }
+    // function sumirMensagem() {
+    //     cardErro.style.display = "none"
+    // }
 </script>
 
