@@ -414,6 +414,10 @@ canvas {
   padding: 0;
 }
 
+.btn {
+  cursor: pointer;
+}
+
 .btn-logout {
   margin: 0;
   padding: 0;

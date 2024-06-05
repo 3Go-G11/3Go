@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,27 +8,29 @@
     <script src="./js/sessao.js"></script>
     <title>3GO - Login</title>
 </head>
-<body class="allOfCode">
-    <div class="containIncrement" ></div> 
-        <div class="containPrincipal">
-            <h1>Entrar</h1>
-            <div class="inputContainer">
-                <span>E-mail</span>
-                <input id="inputEmail" type="text" placeholder="E-mail" maxlength="90">
-                <span>Senha</span>
-                <input id="inputSenha" type="password" placeholder="Senha" maxlength="45">
-            </div><br>
-            <button class="btn" onclick="entrar()">Entrar</button><br>
-            <span id="spanEntrar"></span>
-        </div>
 
-      
-</body> 
+<body class="allOfCode">
+    <div class="containIncrement"></div>
+    <div class="containPrincipal">
+        <h1>Entrar</h1>
+        <div class="inputContainer">
+            <span>E-mail</span>
+            <input id="inputEmail" type="text" placeholder="E-mail" maxlength="90">
+            <span>Senha</span>
+            <input id="inputSenha" type="password" placeholder="Senha" maxlength="45">
+        </div><br>
+        <button class="btn" onclick="entrar()">Entrar</button><br>
+        <span id="spanEntrar"></span>
+    </div>
+
+
+</body>
+
 </html>
 </script>
 
 <script>
-    
+
     function entrar() {
         // aguardar();
 
@@ -44,9 +47,6 @@
         //     setInterval(sumirMensagem, 5000)
         // }
 
-        console.log("FORM LOGIN: ", emailVar);
-        console.log("FORM SENHA: ", senhaVar);
-
         fetch("/usuarios/autenticar", {
             method: "POST",
             headers: {
@@ -60,43 +60,42 @@
             console.log("ESTOU NO THEN DO entrar()!")
 
             if (resposta.ok) {
-                console.log(resposta);
+                console.log("entrei aqui no if", resposta.ok);
+
                 resposta.json().then(json => {
-                    console.log(json);
-                    console.log(JSON.stringify(json));
+                    console.log("NAO CHEGUEI AQUI'")
+                    console.log("JSON", JSON.stringify(json));
+
+                    console.log("teste", json.email,
+                        "json.nome", json.nome,
+                        "json.idFunc", json.idFunc,
+                        "json.cargo", json.cargo,
+                        "json.empresa", json.empresa,
+                        "json.fkEmpresa", json.fkEmpresa)
+
                     sessionStorage.EMAIL_FUNCIONARIO = json.email;
                     sessionStorage.NOME_FUNCIONARIO = json.nome;
                     sessionStorage.ID_FUNCIONARIO = json.idFunc;
                     sessionStorage.CARGO_FUNCIONARIO = json.cargo;
                     sessionStorage.EMPRESA_FUNCIONARIO = json.empresa;
-    
+                    sessionStorage.FK_EMPRESA = json.fkEmpresa;
 
                     setTimeout(function () {
-                        window.location = "./CadastroEmp.html";
+                        window.location = "../dashboard/camaras.html";
                         console.log('estou aqui')
                     }, 1000); // apenas para exibir o loading
-
                 });
-
             } else {
-
                 console.log("Houve um erro ao tentar realizar o login!");
-
                 resposta.text().then(texto => {
                     console.error(texto);
                     finalizarAguardar(texto);
                 });
             }
-
         }).catch(function (erro) {
             console.log(erro);
         })
 
         return false;
     }
-
-    // function sumirMensagem() {
-    //     cardErro.style.display = "none"
-    // }
 </script>
-

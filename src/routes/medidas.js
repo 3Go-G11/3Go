@@ -3,7 +3,7 @@ var router = express.Router();
 
 var medidaController = require("../controllers/medidaController");
 
-router.get("/buscarDadosAtuais/:idCamara", function (req, res) {
+router.post("/buscarDadosAtuais", function (req, res) {
     medidaController.buscarDadosAtuais(req, res);
 });
 

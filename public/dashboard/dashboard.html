@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="PT-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=], initial-scale=1.0" />
     <title>Dashboard</title>
 
     <script src=https://code.highcharts.com/stock/highstock.js></script>
@@ -73,7 +72,7 @@
             <div class="perfil">
                 <img src="https://img.myloview.com.br/posters/user-icon-vector-people-icon-profile-vector-icon-person-illustration-business-user-icon-users-group-symbol-male-user-symbol-700-223068883.jpg"
                     alt="" class="perfilImage">
-                <p class="user">Olá, Usuario</p>
+                <p id="user" class="user"></p>
             </div>
             <p>Bem vindo a 3Go analytics</p>
             <div class="navList">
@@ -85,12 +84,12 @@
                         </li>
                         <div id="avisoCam1" class="aviso"></div>
                     </div>
-                    <div class="alinhate">
+                    <!-- <div class="alinhate">
                         <li onclick="modalCamara2()">
                             <p>câmara 2</p>
                         </li>
                         <div id="avisoCam2" class="aviso"></div>
-                    </div>
+                    </div> -->
 
                 </ul>
             </div>
@@ -107,7 +106,7 @@
             </li>
 
 
-            <br><button id="btnAnalisar" onclick="atualizarGrafico()" class="btn analisar">Analisar agora</button>
+            <br><button id="btnAnalisar" onclick="atualizarGraficos()" class="btn">Analisar agora</button>
             <button class="btn sair">Sair</button>
 
         </nav>
@@ -127,34 +126,8 @@
 
             <div class="alignDailyChart ultimate" id="maiorGrafico">
                 <canvas id="dadosHora"></canvas>
-
-
             </div>
-
-
-
         </div>
-        <div class="contentTwo dis" id="chartModalTwo">
-            <p style="color: #fff; font-weight: 600; position: absolute; top: 10px; left: 100px;">Camara 2</p>
-            <div class="alignDailyChart">
-                <div class="att two" id="kpiTemp2"></div>
-                <div class="att two" id="kpiUmi2"></div>
-                <div class="att two" id="aviso2"></div>
-            </div>
-
-            <div class="alignDailyChart">
-                <div id="gaugeTemp2" class="doubleChart"></div>
-                <div id="gaugeUmi2" class="doubleChart"></div>
-            </div>
-
-            <div class="alignDailyChart ultimate">
-                <canvas id="dadosHora2"></canvas>
-            </div>
-
-
-
-        </div>
-
     </div>
 
 </body>
@@ -162,99 +135,62 @@
 </html>
 
 <script>
-    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    var nomeFunc = sessionStorage.NOME_FUNCIONARIO;
+
+    var user = document.getElementById('user');
+    user.innerHTML = `Olá, ${nomeFunc}`;
+
+    var fkEmpresa = sessionStorage.FK_EMPRESA;
+    console.log("fkEmpresa", fkEmpresa);
+
     let proximaAtualizacao;
-    window.onload = exibirAquariosDoUsuario();
 
-    function exibirAquariosDoUsuario() {
-        var aquarios = JSON.parse(sessionStorage.AQUARIOS);
-        aquarios.forEach(item => {
-            document.getElementById("btnAquario").innerHTML += `
-            <button class="btn-chart" onclick="exibirAquario(${item.id})" id="btnAquario${item.id}">${item.descricao}</button>
-            `
-
-            document.getElementById("graficos").innerHTML += `
-                <div id="grafico${item.id}" class="display-none">
-                    <h3 class="tituloGraficos">
-                        <span id="tituloAquario${item.id}">${item.descricao}</span>
-                    </h3>
-                    <div class="graph">
-                        <canvas id="myChartCanvas${item.id}"></canvas>
-                    </div>
-                    <div class="label-captura">
-                        <p id="avisoCaptura${item.id}" style="color: white"></p>
-                    </div>
-                </div>
-            `
-
-            obterDadosGrafico(item.id)
-        });
-
-        if (aquarios.length > 0) {
-            exibirAquario(aquarios[0].id)
-        }
-    }
-
-    function alterarTitulo(idAquario) {
-        var tituloAquario = document.getElementById(`tituloAquario${idAquario}`)
-        var descricao = JSON.parse(sessionStorage.AQUARIOS).find(item => item.id == idAquario).descricao;
-        tituloAquario.innerHTML = "Últimas medidas de Temperatura e Umidade do <span style='color: #e6005a'>" + descricao + "</span>"
-    }
-
-    function exibirAquario(idAquario) {
-        let todosOsGraficos = JSON.parse(sessionStorage.AQUARIOS);
-
-        for (i = 0; i < todosOsGraficos.length; i++) {
-            // exibindo - ou não - o gráfico
-            if (todosOsGraficos[i].id != idAquario) {
-                let elementoAtual = document.getElementById(`grafico${todosOsGraficos[i].id}`)
-                if (elementoAtual.classList.contains("display-block")) {
-                    elementoAtual.classList.remove("display-block")
-                }
-                elementoAtual.classList.add("display-none")
-
-                // alterando estilo do botão
-                let btnAtual = document.getElementById(`btnAquario${todosOsGraficos[i].id}`)
-                if (btnAtual.classList.contains("btn-pink")) {
-                    btnAtual.classList.remove("btn-pink")
-                }
-                btnAtual.classList.add("btn-white")
-            }
-        }
-
-        // exibindo - ou não - o gráfico
-        let graficoExibir = document.getElementById(`grafico${idAquario}`)
-        graficoExibir.classList.remove("display-none")
-        graficoExibir.classList.add("display-block")
-
-        // alterando estilo do botão
-        let btnExibir = document.getElementById(`btnAquario${idAquario}`)
-        btnExibir.classList.remove("btn-white")
-        btnExibir.classList.add("btn-pink")
-    }
-
-    function obterDadosGauge(idCamara) {
-        fetch(`/medidas/buscarDadosAtuais/${idCamara}`, { cache: 'no-store' }).then(function (response) {
-            if (response.ok) {
-                response.json().then(function (resposta) {
-                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-
-                    plotarGauges(resposta);
+    var tempAtual;
+    var umiAtual;
+    
+    
+    function obterDadosGauge() {
+        fetch(`/medidas/buscarDadosAtuais/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fkEmpresaServer: fkEmpresa
+            })
+        }).then(function (resultado) {
+            if (resultado.ok) {
+                resultado.json().then(function (resultado) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resultado)}`);
+                    plotarGauges(resultado);
 
                 });
             } else {
+                console.log('foreign: ' + fkEmpresa);
                 console.error('Nenhum dado encontrado ou erro na API');
             }
         })
             .catch(function (error) {
                 console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
             });
+
     }
+    obterDadosGauge();
+
+
+    var analiseBomTemp;
+    var analiseMedioTemp;
+    var analiseRuimTemp;
+    var analiseBomUmi;
+    var analiseMedioUmi;
+    var analiseRuimUmi;
+    var avisoFinal;
+    var avisoMedio;
 
 
     function plotarGauges(resposta) {
-        var tempAtual = resposta.temperatura
-        var umiAtual = resposta.umidade
+        tempAtual = resposta.temperatura
+        umiAtual = resposta.umidade
 
         for (var i = 0; i < resposta.length; i++) {
             tempAtual = (resposta[0].temperatura);
@@ -312,7 +248,7 @@
                     color: '#FFFF00',
                     thickness: 20
                 },
-                { 
+                {
                     from: 10,
                     to: 18,
                     color: '#00FF00',
@@ -332,7 +268,7 @@
             },
             series: [{
                 name: 'Temperatura',
-                data: tempAtual,
+                data: [tempAtual],
                 tooltip: {
                     valueSuffix: '°C'
                 },
@@ -441,7 +377,7 @@
 
             series: [{
                 name: 'Umidade',
-                data: umiAtual,
+                data: [umiAtual],
 
                 tooltip: {
                     valueSuffix: '%'
@@ -475,16 +411,98 @@
             }]
         });
 
+        var decimalTemp = tempAtual.toFixed(2)
+        var decimalUmi = umiAtual.toFixed(2)
+
+        if (tempAtual >= 10 && tempAtual <= 18) {
+            kpiTemp.innerHTML = `<div class = "avisoCerto"> Temperatura:${decimalTemp} </div>`
+            analiseBomTemp = true
+            analiseMedioTemp = false
+            analiseRuimTemp = false
+            avisoFinal = false
+            avisoMedio = false
+
+        } else if ((tempAtual >= 8 && tempAtual <= 10) || (tempAtual >= 18 && tempAtual <= 20)) {
+            kpiTemp.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimalTemp} </div>`
+            analiseBomTemp = false
+            analiseMedioTemp = true
+            analiseRuimTemp = false
+            avisoFinal = false
+            avisoMedio = true
+
+
+        } else if (tempAtual <= 8 || tempAtual > 20) {
+            kpiTemp.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimalTemp} </div>`
+            analiseBomTemp = false
+            analiseMedioTemp = false
+            analiseRuimTemp = true
+            avisoFinal = true
+            avisoMedio = false
+        }
+
+        if (umiAtual >= 60 && umiAtual <= 70) {
+            kpiUmi.innerHTML = `<div class = "avisoCerto"> Umidade:${decimalUmi} </div>`
+            analiseBomUmi = true
+            analiseMedioUmi = false
+            analiseRuimUmi = false
+            avisoFinal = false
+            avisoMedio = false
+
+        } else if ((umiAtual >= 55 && umiAtual <= 59) || (umiAtual >= 71 && umiAtual <= 75)) {
+            kpiUmi.innerHTML = `<div class = "avisoMedio"> Umidade:${decimalUmi} </div>`
+            analiseBomUmi = false
+            analiseMedioUmi = true
+            analiseRuimUmi = false
+            avisoFinal = false
+            avisoMedio = true
+
+        } else if (umiAtual < 55 || umiAtual > 75) {
+            kpiUmi.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimalUmi} </div>`
+            analiseBomUmi = false
+            analiseMedioUmi = false
+            analiseRuimUmi = true
+            avisoFinal = true
+            avisoMedio = false
+        }
+
+        if (analiseBomTemp && analiseBomUmi) {
+            aviso.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
+            avisoFinal = false
+            avisoMedio = false
+        } else if (analiseRuimTemp || analiseRuimUmi && (analiseMedioTemp || analiseMedioUmi)) {
+            aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+            avisoFinal = true
+            avisoMedio = false
+        } else if (analiseMedioTemp || analiseMedioUmi) {
+            aviso.innerHTML = `<div class = "avisoMedio1"> Risco moderado! </div>`
+            avisoFinal = false
+            avisoMedio = true
+        } else if (analiseRuimTemp || analiseRuimUmi) {
+            aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
+            avisoFinal = true
+            avisoMedio = false
+        }
 
         setTimeout(() => atualizarGrafico(resposta, idCamara, gaugeTemp, gaugeUmi), 600000);
 
-        if(resposta.umiAtual < 60 || resposta.umiAtual > 70  || resposta.tempAtual < 10 || resposta.tempAtual > 18){
+        if (resposta.umiAtual < 60 || resposta.umiAtual > 70 || resposta.tempAtual < 10 || resposta.tempAtual > 18) {
             atualizarGrafico(idCamara, dados, gaugeTemp, gaugeUmi);
         }
-       
+
     }
 
     function atualizarGraficos(resposta, idCamara, gaugeTemp, gaugeUmi) {
+
+        fetch(`/medidas/buscarDadosAtuais/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fkEmpresa
+            })
+        })
+
         fetch(`/medidas/buscarDadosAtuais/${idCamara}`, { cache: 'no-store' }).then(function (response) {
             if (response.ok) {
                 response.json().then(function (resposta) {
@@ -495,717 +513,22 @@
                         gaugeUmi.update();
                     }
                 });
-            } 
+            }
         })
-            
-
     }
-</script>
-
-<script>
-    var camara2 = document.getElementById('chartModalTwo')
-    var camara1 = document.getElementById('chartModal')
-    var fundo = document.getElementById('fundo')
-    function closeModal() {
 
 
-        mensagem.classList.remove('mensagem')
-        mensagem.classList.add('mensagemDis')
-        fundo.classList.toggle('dis')
-
-    }
     function closeModalDois() {
-
-
         info.classList.remove('mensagem')
         info.classList.add('mensagemDis')
         fundo.classList.toggle('dis')
 
     }
-    function modalCamara1() {
 
-        camara1.classList.toggle('dis')
-        camara2.classList.toggle('dis')
-
-
-    }
-    function modalCamara2() {
-
-
-
-        camara1.classList.toggle('dis')
-        camara2.classList.toggle('dis')
-
-    }
-    function openModalMensal() {
-        mensagem.classList.remove('mensagemDis')
-        mensagem.classList.add('mensagem')
-        fundo.classList.toggle('dis')
-
-    }
     function openModal() {
         info.classList.remove('mensagemDis')
         info.classList.add('mensagem')
         fundo.classList.toggle('dis')
 
     }
-
-    var analiseBomTemp;
-    var analiseMedioTemp;
-    var analiseRuimTemp;
-    var analiseBomUmi;
-    var analiseMedioUmi;
-    var analiseRuimUmi;
-    var analiseBomTemp2;
-    var analiseMedioTemp2;
-    var analiseRuimTemp2;
-    var analiseBomUmi2;
-    var analiseMedioUmi2;
-    var analiseRuimUmi2;
-    var gaugeTemp;
-    var gaugeUmi;
-    var gaugeTemp2;
-    var gaugeUmi2;
-    var dadosHora;
-    var dadosHora2;
-    var semanaExtremos;
-    var semanaExtremos2
-    var avisoMedio1
-    var avisoFinal1
-    var avisoMedio2
-    var avisoFinal2
-
-    setInterval(() => {
-        if (avisoFinal1) {
-            avisoCam1.innerHTML = `<div class = "avisoAbaixo"> </div>`
-        }
-        else if (avisoMedio1) {
-            avisoCam1.innerHTML = `<div class = "avisoMedio"> </div>`
-
-        }
-        else {
-            avisoCam1.innerHTML = `<div class = "avisoCerto"> </div>`
-
-        }
-        if (avisoFinal2) {
-            avisoCam2.innerHTML = `<div class = "avisoAbaixo"> </div>`
-        }
-        else if (avisoMedio2) {
-            avisoCam2.innerHTML = `<div class = "avisoMedio"> </div>`
-
-        }
-        else {
-            avisoCam2.innerHTML = `<div class = "avisoCerto"> </div>`
-
-        }
-    }, 100)
-    var maiorNumeroTemp = 0
-    var menorNumeroTemp = 22
-    var menorUmid = 80
-    var maiorUmid = 0
-
-    setInterval(() => {
-        const chart = Highcharts.charts[0];
-        if (gaugeTemp && !gaugeTemp.renderer.forExport) {
-            const point = gaugeTemp.series[0].points[0],
-                inc = Math.round((Math.random() * 16) + 6);
-
-            if (inc > maiorNumeroTemp) {
-                maiorNumeroTemp = inc
-
-
-            }
-            if (inc < menorNumeroTemp) {
-                menorNumeroTemp = inc
-
-            }
-            console.log(`maior ` + maiorNumeroTemp)
-            console.log(`menor ` + menorNumeroTemp)
-
-            let newValTemp = point.y + inc;
-            console.log(newValTemp, inc, point.y)
-
-            newValTemp = inc;
-
-            var decimal = inc.toFixed(2)
-            var kpiAtt = document.getElementsByClassName('.att')
-
-            if (inc >= 10 && inc <= 18) {
-                kpiTemp.innerHTML = `<div class = "avisoCerto"> Temperatura:${decimal} </div>`
-                analiseBomTemp = true
-                analiseMedioTemp = false
-                analiseRuimTemp = false
-                analiseRuimTemp = false
-                avisoFinal1 = false
-                avisoMedio1 = false
-
-
-            } else if ((inc >= 8 && inc <= 10) || (inc >= 18 && inc <= 20)) {
-                kpiTemp.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimal} </div>`
-                analiseBomTemp = false
-                analiseMedioTemp = true
-                analiseRuimTemp = false
-                avisoFinal1 = false
-                avisoMedio1 = true
-
-            } else if (inc <= 8 || inc > 20) {
-                kpiTemp.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimal} </div>`
-                analiseBomTemp = false
-                analiseMedioTemp = false
-                analiseRuimTemp = true
-                avisoFinal1 = true
-                avisoMedio1 = false
-            }
-
-
-            point.update(newValTemp);
-        }
-
-
-    }, 3000);
-
-
-
-    setInterval(() => {
-
-        const chart = Highcharts.charts[0];
-        if (gaugeUmi && !gaugeUmi.renderer.forExport) {
-            const point2 = gaugeUmi.series[0].points[0],
-                inc = Math.round((Math.random() * 30) + 50);
-
-            let newValUmi = point2.y + inc;
-            console.log(newValUmi, inc, point2.y)
-
-            newValUmi = inc;
-
-            var decimal2 = inc.toFixed(2)
-            var kpiAtt = document.getElementsByClassName('.att')
-
-            if (inc >= 60 && inc <= 70) {
-                kpiUmi.innerHTML = `<div class = "avisoCerto"> Umidade:${decimal2} </div>`
-                analiseBomUmi = true
-                analiseMedioUmi = false
-                analiseRuimUmi =
-                    avisoFinal1 = false
-                avisoMedio1 = false
-
-            } else if ((inc >= 55 && inc <= 59) || (inc >= 71 && inc <= 75)) {
-                kpiUmi.innerHTML = `<div class = "avisoMedio"> Umidade:${decimal2} </div>`
-                analiseBomUmi = false
-                analiseMedioUmi = true
-                analiseRuimUmi = false
-                avisoFinal1 = false
-                avisoMedio1 = true
-
-            } else if (inc < 55 || inc > 75) {
-                kpiUmi.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimal2} </div>`
-                analiseBomUmi = false
-                analiseMedioUmi = false
-                analiseRuimUmi = true
-                avisoFinal1 = true
-                avisoMedio1 = false
-            }
-
-            if (analiseBomTemp && analiseBomUmi) {
-                aviso.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
-                avisoFinal1 = false
-                avisoMedio1 = false
-            } else if (analiseRuimTemp || analiseRuimUmi && (analiseMedioTemp || analiseMedioUmi)) {
-                aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
-                avisoFinal1 = true
-                avisoMedio1 = false
-            } else if (analiseMedioTemp || analiseMedioUmi) {
-                aviso.innerHTML = `<div class = "avisoMedio"> Risco moderado! </div>`
-                avisoFinal1 = false
-                avisoMedio1 = true
-            } else if (analiseRuimTemp || analiseRuimUmi) {
-                aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
-                avisoFinal1 = true
-                avisoMedio1 = false
-            }
-
-            if (inc > maiorUmid) {
-                maiorUmid = inc
-
-
-            }
-            if (inc < menorUmid) {
-                menorUmid = inc
-
-            }
-            console.log(`maior ` + maiorUmid)
-            console.log(`menor ` + menorUmid)
-
-            point2.update(newValUmi);
-        }
-    }, 3000);
-    const ctx = document.getElementById('dadosHora');
-    setInterval(() => {
-        console.log('menor umidade' + menorUmid)
-        dadosHora.destroy()
-
-        dadosHora = new Chart(ctx, {
-
-
-            type: 'bar',
-            data: {
-                labels: ['mais baixa', 'mais alta'],
-                datasets: [{
-                    label: 'Temperatura',
-                    data: [menorNumeroTemp, maiorNumeroTemp],
-                    borderWidth: 1,
-                    backgroundColor: 'red',
-                    borderColor: 'red',
-                },
-                {
-                    label: 'Umidade',
-                    data: [menorUmid, maiorUmid],
-                    borderWidth: 1,
-                    backgroundColor: 'orange',
-                    borderColor: 'orange',
-
-                }]
-            },
-
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            },
-        });
-        // maiorGrafico.innerHTML = `<canvas id="dadosHora"></canvas>`
-    }, 3000)
-
-    var valor1 = 0
-    var valor2 = 0
-    var valor3 = 0
-    var valor4 = 0
-    var valor5 = 0
-    var valor6 = 0
-    var valor7 = 0
-
-
-
-    valor1 = Math.round((Math.random() * 70) + 1);
-    valor2 = Math.round((Math.random() * 70) + 1);
-    valor3 = Math.round((Math.random() * 70) + 1);
-    valor4 = Math.round((Math.random() * 70) + 1);
-    valor5 = Math.round((Math.random() * 70) + 1);
-    valor6 = Math.round((Math.random() * 70) + 1);
-    valor7 = Math.round((Math.random() * 70) + 1);
-    const ctx2 = document.getElementById('semanaExtremos');
-
-    semanaExtremos = new Chart(ctx2, {
-
-        type: 'line',
-        data: {
-            labels: ['Dia 1', 'Dia 2', 'Dia 3', 'Dia 4', 'Dia 5', 'Dia 6', 'Dia 7'],
-            datasets: [{
-                label: 'Temperatura mais alta',
-                data: [valor1, valor2, valor3, valor4, valor5, valor6, valor7],
-                borderWidth: 1,
-                backgroundColor: 'red'
-            },
-            {
-                label: 'Temperatura mais baixa',
-                data: [valor3, valor1, valor4, valor6, valor7, valor2, valor5],
-                borderWidth: 1,
-                backgroundColor: 'orange'
-            },
-            {
-                label: 'Umidade mais alta',
-                data: [valor7, valor6, valor5, valor4, valor3, valor2, valor1],
-                borderWidth: 1,
-                backgroundColor: 'blue'
-            },
-            {
-                label: 'Umidade mais baixa',
-                data: [valor2, valor1, valor4, valor6, valor3, valor4, valor7],
-                borderWidth: 1,
-                backgroundColor: 'purple'
-            }
-            ]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-
-    gaugeTemp2 = Highcharts.chart('gaugeTemp2', {
-        chart: {
-            type: 'gauge',
-            plotBackgroundColor: null,
-            plotBackgroundImage: null,
-            plotBorderWidth: 0,
-            plotShadow: false,
-            height: '70%'
-        },
-
-        title: {
-            text: 'Temperatura'
-        },
-
-        pane: {
-            startAngle: -90,
-            endAngle: 90,
-            background: null,
-            center: ['50%', '75%'],
-            size: '120%'
-        },
-        yAxis: {
-            min: 6,
-            max: 22,
-            tickPixelInterval: 72,
-            tickPosition: 'inside',
-            tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
-            tickLength: 20,
-            tickWidth: 2,
-            minorTickInterval: null,
-
-            labels: {
-                distance: 20,
-                style: {
-                    fontSize: '14px'
-                }
-            },
-
-            lineWidth: 0,
-
-            plotBands: [{
-                from: 6,
-                to: 8,
-                color: '#FF0000',
-                thickness: 20
-            }, {
-                from: 8,
-                to: 10,
-                color: '#FFFF00',
-                thickness: 20
-            },
-            {
-                from: 10,
-                to: 18,
-                color: '#00FF00',
-                thickness: 20
-            },
-            {
-                from: 18,
-                to: 20,
-                color: '#FFFF00',
-                thickness: 20
-            }, {
-                from: 20,
-                to: 22,
-                color: '#FF0000',
-                thickness: 20
-            }]
-        },
-        series: [{
-            name: 'Temperatura',
-            data: [6],
-            tooltip: {
-                valueSuffix: '°C'
-            },
-            dataLabels: {
-                format: 'Temperatura °C',
-                borderWidth: 0,
-                color: (
-                    Highcharts.defaultOptions.title &&
-                    Highcharts.defaultOptions.title.style &&
-                    Highcharts.defaultOptions.title.style.color
-                ) || '#333333',
-                style: {
-                    fontSize: '16px'
-                }
-            },
-            dial: {
-                radius: '70%',
-                backgroundColor: 'gray',
-                baseWidth: 12,
-                baseLength: '0%',
-                rearLength: '0%'
-            },
-            pivot: {
-                backgroundColor: 'gray',
-                radius: 6
-            }
-        }]
-    });
-
-    setInterval(() => {
-        const chart = Highcharts.charts[0];
-        if (gaugeTemp2 && !gaugeTemp2.renderer.forExport) {
-            const point = gaugeTemp2.series[0].points[0],
-                inc = Math.round((Math.random() * 16) + 6);
-
-            let newValTemp2 = point.y + inc;
-            console.log(newValTemp2, inc, point.y)
-
-            newValTemp2 = inc;
-
-            var decimal = inc.toFixed(2)
-            var kpiAtt = document.getElementsByClassName('.att')
-
-            if (inc >= 10 && inc <= 18) {
-                kpiTemp2.innerHTML = `<div class = "avisoCerto"> Temperatura:${decimal} </div>`
-                analiseBomTemp2 = true
-                analiseMedioTemp2 = false
-                analiseRuimTemp2 = false
-                avisoFinal2 = false
-                avisoMedio2 = false
-
-            } else if ((inc >= 8 && inc <= 10) || (inc >= 18 && inc <= 20)) {
-                kpiTemp2.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimal} </div>`
-                analiseBomTemp2 = false
-                analiseMedioTemp2 = true
-                analiseRuimTemp2 = false
-                avisoFinal2 = false
-                avisoMedio2 = true
-
-
-            } else if (inc <= 8 || inc > 20) {
-                kpiTemp2.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimal} </div>`
-                analiseBomTemp2 = false
-                analiseMedioTemp2 = false
-                analiseRuimTemp2 = true
-                avisoFinal2 = true
-                avisoMedio2 = false
-            }
-
-            point.update(newValTemp2);
-        }
-    }, 3000);
-
-    gaugeUmi2 = Highcharts.chart('gaugeUmi2', {
-        chart: {
-            type: 'gauge',
-            plotBackgroundColor: null,
-            plotBackgroundImage: null,
-            plotBorderWidth: 0,
-            plotShadow: false,
-            height: '70%'
-        },
-
-        title: {
-            text: 'Umidade'
-        },
-
-
-
-        pane: {
-            startAngle: -90,
-            endAngle: 90,
-            background: null,
-            center: ['50%', '75%'],
-            size: '120%'
-        },
-
-        yAxis: {
-            min: 50,
-            max: 80,
-            tickPixelInterval: 72,
-            tickPosition: 'inside',
-            tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
-            tickLength: 20,
-            tickWidth: 2,
-            minorTickInterval: null,
-
-            labels: {
-                distance: 20,
-
-                style: {
-                    fontSize: '14px'
-                }
-
-            },
-
-            lineWidth: 0,
-
-            plotBands: [{
-                from: 50,
-                to: 55,
-                color: '#FF0000',
-                thickness: 20
-            }, {
-                from: 55,
-                to: 60,
-                color: '#FFFF00',
-                thickness: 20
-            },
-
-            {
-                from: 60,
-                to: 70,
-                color: '#00FF00',
-                thickness: 20
-            },
-
-            {
-                from: 70,
-                to: 75,
-                color: '#FFFF00',
-                thickness: 20
-            }, {
-                from: 75,
-                to: 80,
-                color: '#FF0000',
-                thickness: 20
-            }]
-        },
-
-        series: [{
-            name: 'Umidade',
-            data: [50],
-
-            tooltip: {
-                valueSuffix: '%'
-            },
-
-            dataLabels: {
-                format: 'Umidade%',
-                borderWidth: 0,
-                color: (
-                    Highcharts.defaultOptions.title &&
-                    Highcharts.defaultOptions.title.style &&
-                    Highcharts.defaultOptions.title.style.color
-                ) || '#333333',
-                style: {
-                    fontSize: '16px'
-                }
-            },
-
-            dial: {
-                radius: '70%',
-                backgroundColor: 'gray',
-                baseWidth: 12,
-                baseLength: '0%',
-                rearLength: '0%'
-            },
-
-            pivot: {
-                backgroundColor: 'gray',
-                radius: 6
-            }
-        }]
-    });
-
-    setInterval(() => {
-
-        const chart = Highcharts.charts[0];
-        if (gaugeUmi2 && !gaugeUmi2.renderer.forExport) {
-            const point2 = gaugeUmi2.series[0].points[0],
-                inc = Math.round((Math.random() * 30) + 50);
-
-            let newValUmi2 = point2.y + inc;
-            console.log(newValUmi2, inc, point2.y)
-
-            newValUmi2 = inc;
-
-            var decimal2 = inc.toFixed(2)
-            var kpiAtt = document.getElementsByClassName('.att')
-
-            if (inc >= 60 && inc <= 70) {
-                kpiUmi2.innerHTML = `<div class = "avisoCerto"> Umidade:${decimal2} </div>`
-                analiseBomUmi2 = true
-                analiseMedioUmi2 = false
-                analiseRuimUmi2 = false
-                avisoFinal2 = false
-                avisoMedio2 = false
-
-            } else if ((inc >= 55 && inc <= 59) || (inc >= 71 && inc <= 75)) {
-                kpiUmi2.innerHTML = `<div class = "avisoMedio"> Umidade:${decimal2} </div>`
-                analiseBomUmi2 = false
-                analiseMedioUmi2 = true
-                analiseRuimUmi2 = false
-                avisoFinal2 = false
-                avisoMedio2 = true
-
-            } else if (inc < 55 || inc > 75) {
-                kpiUmi2.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimal2} </div>`
-                analiseBomUmi2 = false
-                analiseMedioUmi2 = false
-                analiseRuimUmi2 = true
-                avisoFinal2 = true
-                avisoMedio2 = false
-            }
-
-            if (analiseBomTemp2 && analiseBomUmi2) {
-                aviso2.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
-
-                avisoFinal2 = false
-                avisoMedio2 = false
-            } else if (analiseRuimTemp2 || analiseRuimUmi2 && (analiseMedioTemp2 || analiseMedioUmi2)) {
-                aviso2.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
-                avisoFinal2 = true
-                avisoMedio2 = false
-            } else if (analiseMedioTemp2 || analiseMedioUmi2) {
-                aviso2.innerHTML = `<div class = "avisoMedio"> Risco moderado! </div>`
-                avisoFinal2 = false
-                avisoMedio2 = true
-            } else if (analiseRuimTemp2 || analiseRuimUmi2) {
-                aviso2.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
-                avisoFinal2 = true
-                avisoMedio2 = false
-            }
-
-            point2.update(newValUmi2);
-        }
-    }, 3000);
-
-
-
-    const ctxtwo = document.getElementById('dadosHora2');
-    dadosHora = new Chart(ctxtwo, {
-
-        type: 'line',
-        data: {
-            labels: ['18:00', '18:10', '18:20', '18:30', '18:40', '18:50', '19:00',],
-            datasets: [{
-                label: 'Temperatura mais alta',
-                data: [27, 27, 27, 27, 27, 27, 27],
-                borderWidth: 1,
-                backgroundColor: 'red',
-                borderColor: 'red',
-            },
-            {
-                label: 'Temperatura mais baixa',
-                data: [17, 17, 17, 17, 17, 17, 17],
-                borderWidth: 1,
-                backgroundColor: 'orange',
-                borderColor: 'orange',
-            },
-            {
-                label: 'Umidade mais alta',
-                data: [65, 65, 65, 65, 65, 65, 65],
-                borderWidth: 1,
-                backgroundColor: 'blue',
-                borderColor: 'blue',
-            },
-            {
-                label: 'Umidade mais baixa',
-                data: [45, 45, 45, 45, 45, 45, 45],
-                borderWidth: 1,
-                backgroundColor: 'purple',
-                borderColor: 'purple'
-            }
-            ]
-        },
-
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        },
-    });
-
-
 </script>

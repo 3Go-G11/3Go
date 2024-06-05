@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <script src=https://code.highcharts.com/stock/highstock.js></script>
+    <script src=https://code.highcharts.com/stock/highcharts-more.js></script>
+    <script src=https://cdn.jsdelivr.net/npm/chart.js></script>
+
+    <link rel="stylesheet" href="camaras.css">
+    <link rel="preconnect" href=https://fonts.googleapis.com />
+    <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
+    <link rel="preconnect" href=https://fonts.googleapis.com />
+    <link rel="preconnect" href=https://fonts.gstatic.com crossorigin />
+    <link
+        href=https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
+        rel="stylesheet" />
+    <link
+        href=https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap
+        rel="stylesheet" />
+</head>
+
+<body>
+    <div class="backmodal dis" id="fundo"></div>
+    <div class="mensagemDis" id="mensagem">
+        <div class="sairModals" id="exit" onclick="closeModal()"><img
+                src="https://www.freeiconspng.com/uploads/close-icon-39.png" alt="" class="exit"></div>
+        <div class="alignDailyChart">
+            <canvas id="semanaExtremos"></canvas>
+        </div>
+    </div>
+    <div class="mensagemDis" id="info">
+        <div class="sairModals" id="exit" onclick="closeModalDois()"><img
+                src="https://www.freeiconspng.com/uploads/close-icon-39.png" alt="" class="exit"></div>
+        <div class="alignDailyChartAlt">
+            <p>O primeiro KPI, temperatura, fornece uma visão instantânea das condições térmicas, essencial para
+                monitorar ambientes sensíveis.
+                O segundo KPI, umidade, destaca a quantidade de umidade presente no ambiente, crucial para preservar
+                materiais sensíveis à umidade e para garantir o conforto em espaços habitados.
+
+                A KPI de feedback é projetada para oferecer três mensagens distintas:
+            <div class="alinhacao">
+                <div class="avisoInfo green"></div> "Tudo certo": Esta mensagem é exibida quando tanto a temperatura
+                quanto a umidade estão dentro dos parâmetros ideais, indicando que as condições ambientais estão ótimas.
+            </div>
+            <div class="alinhacao">
+                <div class="avisoInfo ye"></div>"Risco moderado": Essa mensagem é acionada quando a temperatura ou a
+                umidade estão ligeiramente abaixo ou acima do ideal, sugerindo uma situação que merece atenção, mas
+                ainda não representa uma emergência.
+            </div>
+            <div class="alinhacao">
+                <div class="avisoInfo red"></div>"Alerta": Esta mensagem é ativada quando tanto a temperatura quanto a
+                umidade estão significativamente fora dos limites aceitáveis, indicando uma situação crítica que requer
+                intervenção imediata para evitar danos ou desconforto.
+            </div>
+            temos também dashboard exibe um gráfico que destaca a temperatura e umidade mais alta e mais baixa
+            registradas durante o dia. Este gráfico oferece uma visão visual das flutuações extremas nas condições
+            ambientais, permitindo uma compreensão mais completa do intervalo de variação ao longo do tempo. Esses dados
+            são essenciais para avaliar a amplitude das condições climáticas experimentadas e ajudam na identificação de
+            padrões sazonais ou anomalias significativas.
+            </p>
+        </div>
+    </div>
+    <div class="principal">
+
+        <nav class="lateral">
+            <div class="perfil">
+                <img src="https://img.myloview.com.br/posters/user-icon-vector-people-icon-profile-vector-icon-person-illustration-business-user-icon-users-group-symbol-male-user-symbol-700-223068883.jpg"
+                    alt="" class="perfilImage">
+                <p id="user" class="user"></p>
+            </div>
+            <p>Bem vindo a 3Go analytics</p>
+            <div class="navList">
+                <li onclick="openModal()">
+                    <p class="btnMedia">Especificaçôes</p>
+                </li><br>
+                <p class="tituloNav">Mais graficos</p>
+
+            </div>
+
+            <li onclick="openModalMensal()">
+                <p class="btnMedia">Média Semanal </p>
+            </li>
+
+
+            <br><button id="btnAnalisar" onclick="atualizarGraficos()" class="btn">Analisar agora</button>
+            <button onclick="" class="btn">Voltar</button>
+            <button class="btn sair">Sair</button>
+
+        </nav>
+
+        <div id="divCamaras">teste</div>
+
+
+</body>
+
+</html>
+
+<script>
+    var nomeFunc = sessionStorage.NOME_FUNCIONARIO;
+
+    var user = document.getElementById('user');
+    user.innerHTML = `Olá, ${nomeFunc}`;
+
+    var fkEmpresa = sessionStorage.FK_EMPRESA;
+    console.log(fkEmpresa)
+
+    obterDadosCamara();
+    function obterDadosCamara() {
+        fetch(`/medidas/buscarDadosAtuais`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fkEmpresaServer: fkEmpresa
+            })
+        }).then(function (resultado) {
+            if (resultado.ok) {
+                resultado.json().then(function (resultado) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resultado)}`);
+                    exibirCamaras(resultado);
+                });
+            } else {
+                console.log('foreign: ' + fkEmpresa);
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+    }
+
+    var listaCamaras = []
+    function exibirCamaras(resposta) {
+        var camaras = document.getElementsByClassName("camara");
+        console.log(resposta)
+
+        for (var i = 0; i < resposta.length; i++) {
+            var camaraAtual = resposta[i].idCamara;
+
+            if (listaCamaras.indexOf(camaraAtual) == -1) {
+                listaCamaras.push(camaraAtual)
+                document.getElementById("divCamaras").innerHTML += `
+                <button id="button_camara${camaraAtual}" onclick="ativarCamara(this)">camara ${camaraAtual}</button>
+                `
+            }
+
+        }
+    }
+
+    var texto = "";
+
+
+    function ativarCamara(camara) {
+        var indiceCamara = camara.id[camara.id.length - 1];
+
+        texto = ` <div class="content" id="camara${indiceCamara}">
+            <p style="color: #fff; font-weight: 600; position: absolute; top: 10px; left: 100px;">Camara ${indiceCamara}</p>
+            <div class="alignDailyChart">
+                <div class="att two" id="kpiTemp"></div>
+                <div class="att two" id="kpiUmi"></div>
+                <div class="att two" id="aviso"></div>
+                </div>
+                
+                <div class="alignDailyChart">
+                    <div id="gaugeTemp" class="doubleChart"></div>
+                    <div id="gaugeUmi" class="doubleChart"></div>
+                    </div>
+                    
+                    <div class="alignDailyChart ultimate" id="maiorGrafico">
+                        <canvas id="dadosHora"></canvas>
+                        </div>
+                        </div>
+                        `
+        divCamaras.innerHTML = texto;
+        pegarCamara(indiceCamara)
+    }
+
+    function pegarCamara(indice) {
+        var comando = `${fkEmpresa} AND idCamara = ${indice}`;
+        fetch(`/medidas/buscarDadosAtuais`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fkEmpresaServer: comando
+            })
+        }).then(function (resultado) {
+            if (resultado.ok) {
+                resultado.json().then(function (resultado) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resultado)}`);
+                    exibirCamaras(resultado);
+
+                });
+            } else {
+                console.log('foreign: ' + fkEmpresa);
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+
+    }
+</script>
