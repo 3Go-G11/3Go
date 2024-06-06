@@ -540,3 +540,34 @@ gap: 1rem;
 .backmodal.dis {
     display: none;
 }
+
+.grid-container {
+    display: flex;
+    padding: 50px;
+    gap: 20px;
+}
+
+.gridItem {
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    background-color: #1d1d1d;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 10px;
+}
+
+.green{
+    background-color: green;
+}
+
+.red{
+    background-color: red;
+}
+
+.yellow{
+    background-color: yellow;
+}

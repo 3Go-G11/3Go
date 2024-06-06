@@ -6,7 +6,14 @@ function buscarDadosAtuais(req, res) {
 
     medidaModel.buscarDadosAtuais(fkEmpresa).then(function (resultado) {
         if (resultado.length > 0) {
-            res.status(200).json(resultado);
+            
+            // res.status(200).json(resultado);
+            res.json({
+                idCamara: resultadoAutenticar[0].idCamara,
+                temperatura: resultadoAutenticar[0].temperatura,
+                umidade: resultadoAutenticar[0].umidade,
+             
+            })
         } else {
             res.status(204).send("Nenhum resultado encontrado!")
         }
