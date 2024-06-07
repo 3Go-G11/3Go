@@ -19,13 +19,13 @@
                 <span>CNPJ:</span>
                 <input id="inputCNPJ" type="number" placeholder="Insira Apenas Números" maxlength="14">
                 <span id="spanCNPJ"></span>
-                <span>Nome do Representante:</span>
-                <input id="inputRepresentante" type="text" placeholder="Nome do Representante" maxlength="45">
-                <span>E-mail do Representante:</span>
+                <!-- <span>Nome do Representante:</span>
+                <input id="inputRepresentante" type="text" placeholder="Nome do Representante" maxlength="45"> -->
+                <span>E-mail:</span>
                 <input id="inputEmail" type="text" placeholder="E-mail do Representante" maxlength="90">
                 <span id="spanEmail"></span>
-                <span>Telefone do Representante:</span>
-                <input id="inputTelefone" type="number" placeholder="Insira Apenas Números" maxlength="45">
+                <span>Telefone:</span>
+                <input id="inputTelefone" type="number" placeholder="Insira Apenas Números" maxlength="11">
                 <span id="spanTel"></span>
                 <span>Senha:</span>
                 <input id="inputSenha" type="password" placeholder="Senha" maxlength="45">
@@ -40,9 +40,10 @@
                     <button class="btn">Ir Para Funcionario</button>
                 </a> 
             </div>
+            <div id="cardErro"></div>
+            <div id="mensagem_erro"></div>
             <span id="spanRealizado"></span>
         </div>
-
 
 </body> 
 </html>
@@ -52,30 +53,71 @@
 
     //Recupere o valor da nova input pelo nome do id
     // Agora vá para o método fetch logo abaixo
-    var razaoSocial = inputRazao.value;
-    var nomeFantasia = inputNome.value;
-    var cnpj = inputCNPJ.value;
-    var telefone = inputTelefone.value;
-    var email = inputEmail.value
-    var senha = inputSenha.value;
-  
+    var razaoSocialVar = inputRazao.value;
+    var nomeFantasiaVar = inputNome.value;
+    var cnpjVar = Number (inputCNPJ.value);
+    var telefoneVar = Number (inputTelefone.value);
+    var emailVar = inputEmail.value
+    var senhaVar = inputSenha.value;
+    var senhaConfVar = inputConfirmarSenha.value;
+    mensagem_erro.innerHTML = " ";
 
-    // if (
-    //   nomeVar == "" &&
-    //   emailVar == "" &&
-    //   senhaVar == "" &&
-    //   confirmarSenhaVar == "" &&
-    //   empresaVar == "" &&
-    //   cpfVar == ""
-    // ) {
-    //   cardErro.style.display = "block";
-    //   mensagem_erro.innerHTML =
-    //     "Todos os campos em branco";
-    //   finalizarAguardar();
-    //   return false;
-    // } else {
-    //   setInterval(sumirMensagem, 5000);
-    // }
+    if (
+      razaoSocialVar == "" ||
+      nomeFantasiaVar == "" ||
+      cnpjVar == 0 ||
+      telefoneVar == 0 ||
+      emailVar == "" ||
+      senhaVar == "" ||
+      senhaConfVar == ""
+     ) {
+       cardErro.style.display = "block";
+       mensagem_erro.innerHTML = "Insira valores em todos os campos para prosseguir!";
+       finalizarAguardar();
+       return false;
+
+     } else if (
+      cnpjVar.length <14 
+     ) {
+       cardErro.style.display = "block";
+       mensagem_erro.innerHTML = "Seu CNPJ precisa ter 14 digitos!";
+       finalizarAguardar();
+       return false;
+
+     } else if (emailVar.indexOf("@") >=0) {
+       cardErro.style.display = "block";
+       mensagem_erro.innerHTML = "Insira @ no seu email!";
+       finalizarAguardar();
+       return false;
+
+     } else if (
+      telefoneVar.length < 11 
+     ) {
+       cardErro.style.display = "block";
+       mensagem_erro.innerHTML = "Seu telefone precisa ter 11 digitos!";
+       finalizarAguardar();
+       return false;
+
+     } else if (
+      senhaVar.length <=7 
+     ) {
+       cardErro.style.display = "block";
+       mensagem_erro.innerHTML = "Sua senha precisa ter 8 ou mais digitos!";
+       finalizarAguardar();
+       return false;
+
+     } else if (
+      senhaVar =! senhaConfVar
+     ) {
+       cardErro.style.display = "block";
+       mensagem_erro.innerHTML = "Sua senha precisa ser igual a confirmação da senha!";
+       finalizarAguardar();
+       return false;
+
+     } else {
+    
+    setInterval(sumirMensagem, 5000);
+    
 
     // Enviando o valor da nova input
     fetch("/empresas/cadastrar", {
@@ -113,7 +155,7 @@
 
     return false;
   }
-
+} 
   function listar() {
     fetch("/empresas/listar", {
       method: "GET",
