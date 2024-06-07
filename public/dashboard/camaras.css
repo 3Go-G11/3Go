@@ -7,7 +7,30 @@
     font-family:  "Roboto", sans-serif;
 
 }
-
+.voltar {
+    width: 75px;
+    height: 75px;
+    border-radius: 100px;
+    background-color: #242424;
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    cursor: pointer;
+}
+.grid-container.dis {
+    display: none;
+}
+.dashDis {
+    display: none;
+}
+.dash {
+    display: flex;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background-color: #434343;
+    top: 45%;
+    left: 62%;
+}
 body {
 
     display: flex;

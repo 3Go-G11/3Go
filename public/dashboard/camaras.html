@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-
     <script src=https://code.highcharts.com/stock/highstock.js></script>
     <script src=https://code.highcharts.com/stock/highcharts-more.js></script>
     <script src=https://cdn.jsdelivr.net/npm/chart.js></script>
@@ -24,6 +23,7 @@
 </head>
 
 <body>
+    <div class="voltar" id="voltar" onclick="modalDash()"></div>
     <div class="backmodal dis" id="fundo"></div>
     <!-- <div class="mensagemDis" id="msg">
         <div class="sairModals" id="exit" onclick="closeModalDois()"><img
@@ -93,7 +93,7 @@
         </nav>
 
         <div id="grid-container" class="grid-container">
-            <div id="testedados"></div>
+            <div class="dashDis" id="dash"></div>
         </div>
 
 
@@ -103,6 +103,10 @@
 </html>
 
 <script>
+    function modalDash() {
+        dash.classList.remove('dash')
+        dash.classList.add('dashDis')
+    }
     var msg = document.getElementById('msg')
     var nomeFunc = sessionStorage.NOME_FUNCIONARIO;
     var user = document.getElementById('user');
@@ -135,11 +139,12 @@
             });
     }
     var listaCamaras = []
+
     function exibirCamaras(resposta) {
         var camaras = document.getElementsByClassName("camara");
         for (var i = 0; i < resposta.length; i++) {
             var camaraAtual = resposta[i].idCamara;
-            console.log("teste temperatura misera" + resposta[i].temperatura)
+            console.log("camara atual" + camaraAtual)
 
             if (listaCamaras.indexOf(camaraAtual) == -1) {
                 listaCamaras.push(camaraAtual)
@@ -148,65 +153,55 @@
                     analiseBomTemp = true
                     analiseMedioTemp = false
                     analiseRuimTemp = false
-                    analiseRuimTemp = false
-                    avisoFinal = false
-                    avisoMedio = false
                 } else if ((resposta[i].temperatura >= 8 && resposta[i].temperatura <= 10) || (resposta[i].temperatura >= 18 && resposta[i].temperatura <= 20)) {
                     analiseBomTemp = false
                     analiseMedioTemp = true
                     analiseRuimTemp = false
-                    avisoFinal = false
-                    avisoMedio = true
-
                 } else if (resposta[i].temperatura <= 8 || resposta[i].temperatura > 20) {
                     analiseBomTemp = false
                     analiseMedioTemp = false
                     analiseRuimTemp = true
-                    avisoFinal = true
-                    avisoMedio = false
                 }
-
-                if (umidadeCam >= 60 && umidadeCam <= 70) {
+                if (resposta[i].umidade >= 60 && resposta[i].umidade <= 70) {
                     analiseBomUmi = true
                     analiseMedioUmi = false
-                    analiseRuimUmi =
-                        avisoFinal = false
-                    avisoMedio = false
+                    analiseRuimUmi = false
                 } else if ((resposta[i].umidade >= 55 && resposta[i].umidade <= 59) || (resposta[i].umidade >= 71 && resposta[i].umidade <= 75)) {
                     analiseBomUmi = false
                     analiseMedioUmi = true
                     analiseRuimUmi = false
-                    avisoFinal = false
-                    avisoMedio = true
                 } else if (resposta[i].umidade < 55 || resposta[i].umidade > 75) {
                     analiseBomUmi = false
                     analiseMedioUmi = false
                     analiseRuimUmi = true
-                    avisoFinal = true
-                    avisoMedio = false
                 }
+
+
 
                 if (analiseBomTemp == true && analiseBomUmi == true) {
                     document.getElementById("grid-container").innerHTML += `
-                    <div id="gridItem${camaraAtual}" class="gridItem green" onclick="ativarCamara(this)">Camara ${camaraAtual}</div>
+                    <div id="gridItem${listaCamaras[i]}" class="gridItem green" onclick="ativarCamara(this)">Camara ${listaCamaras[i]}</div>
                     `
-                } else if (analiseRuimTemp == true || analiseRuimUmi == true && (analiseMedioTemp == true || analiseMedioUmi == true)) {
+                } else if ((analiseRuimTemp == true || analiseRuimUmi == true) &&
+                    (analiseMedioTemp == true || analiseMedioUmi == true)) {
                     document.getElementById("grid-container").innerHTML += `
-                    <div id="gridItem${camaraAtual}" class="gridItem red" onclick="ativarCamara(this)">Camara ${camaraAtual}</div>
-                    `
-                } else if (analiseMedioTemp == true || analiseMedioUmi == true) {
-                    document.getElementById("grid-container").innerHTML += `
-                    <div id="gridItem${camaraAtual}" class="gridItem green yellow" onclick="ativarCamara(this)">Camara ${camaraAtual}</div>
+                    <div id="gridItem${listaCamaras[i]}" class="gridItem red" onclick="ativarCamara(this)">Camara ${listaCamaras[i]}</div>
                     `
                 } else if (analiseRuimTemp == true || analiseRuimUmi == true) {
                     document.getElementById("grid-container").innerHTML += `
-                    <div id="gridItem${camaraAtual}" class="gridItem red" onclick="ativarCamara(this)">Camara ${camaraAtual}</div>
+                    <div id="gridItem${listaCamaras[i]}" class="gridItem red" onclick="ativarCamara(this)">Camara ${listaCamaras[i]}</div>
+                    `
+                } else if (analiseMedioTemp == true || analiseMedioUmi == true) {
+                    document.getElementById("grid-container").innerHTML += `
+                    <div id="gridItem${listaCamaras[i]}" class="gridItem green yellow" onclick="ativarCamara(this)">Camara ${listaCamaras[i]}</div>
                     `
                 }
             }
         }
 
     }
+
+
     function closeModalDois() {
 
         msg.classList.remove('mensagemDis')
@@ -232,25 +227,16 @@
         }).then(function (resultado) {
             if (resultado.ok) {
                 resultado.json().then(function (resposta) {
-                    respostaPegar = resposta
                     console.log(`Dados recebidos pegar camara: ${JSON.stringify(resposta)}`);
                     temperaturaCam = resposta[0].temperatura
                     umidadeCam = resposta[0].umidade
-                    // exibirCamaras(resultado);
-                    // plotarGauges(resultado)
-
                 });
-            } else {
-                console.log('foreign: ' + fkEmpresa);
-                console.error('Nenhum dado encontrado ou erro na API');
             }
         })
             .catch(function (error) {
                 console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
             });
-
     }
-
 
     var analiseBomTemp;
     var analiseMedioTemp;
@@ -262,10 +248,12 @@
     var avisoMedio;
     var testemisera = temperaturaCam;
     function ativarCamara(camara) {
+        dash.classList.remove('dashDis')
+        dash.classList.add('dash')
         var indiceCamara = camara.id[camara.id.length - 1];
         console.log("teste pegar: " + respostaPegar)
         texto = ` <div class="content" id="camara${indiceCamara}">
-            <p style="color: #fff; font-weight: 600; position: absolute; top: 10px; left: 100px;">Camara ${indiceCamara}</p>
+            <p style="color: #fff; font-weight: 600; position: absolute; top: -30px; left: 10px;">Camara ${indiceCamara}</p>
             <div class="alignDailyChart">
                 <div class="att two" id="kpiTemp">${temperaturaCam}</div>
                 <div class="att two" id="kpiUmi">${umidadeCam}</div>
@@ -282,7 +270,7 @@
                         </div>
                         </div>
                         `
-        document.getElementById("grid-container").innerHTML = texto;
+        document.getElementById("dash").innerHTML = texto;
         pegarCamara(indiceCamara)
 
 
@@ -359,312 +347,233 @@
                 avisoFinal = true
                 avisoMedio = false
             }
+
+            plotarGauges()
         }, 50);
     }
 
 
 
-    function plotarGauges(resultado) {
-        tempAtual = resposta.temperatura
-        umiAtual = resposta.umidade
+    function plotarGauges() {
+        setTimeout(() => {
+            var tempAtual = temperaturaCam
+            var umiAtual = umidadeCam
 
-        for (var i = 0; i < resposta.length; i++) {
-            tempAtual = (resposta[0].temperatura);
-            umiAtual = (resposta[0].umidade);
-        }
+            var gaugeTemp = Highcharts.chart('gaugeTemp', {
+                chart: {
+                    type: 'gauge',
+                    plotBackgroundColor: null,
+                    plotBackgroundImage: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false,
+                    height: '70%'
+                },
 
-        var gaugeTemp = Highcharts.chart('gaugeTemp', {
-            chart: {
-                type: 'gauge',
-                plotBackgroundColor: null,
-                plotBackgroundImage: null,
-                plotBorderWidth: 0,
-                plotShadow: false,
-                height: '70%'
-            },
+                title: {
+                    text: 'Temperatura'
+                },
 
-            title: {
-                text: 'Temperatura'
-            },
+                pane: {
+                    startAngle: -90,
+                    endAngle: 90,
+                    background: null,
+                    center: ['50%', '75%'],
+                    size: '120%'
+                },
+                yAxis: {
+                    min: 6,
+                    max: 22,
+                    tickPixelInterval: 72,
+                    tickPosition: 'inside',
+                    tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+                    tickLength: 20,
+                    tickWidth: 2,
+                    minorTickInterval: null,
 
-            pane: {
-                startAngle: -90,
-                endAngle: 90,
-                background: null,
-                center: ['50%', '75%'],
-                size: '120%'
-            },
-            yAxis: {
-                min: 6,
-                max: 22,
-                tickPixelInterval: 72,
-                tickPosition: 'inside',
-                tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
-                tickLength: 20,
-                tickWidth: 2,
-                minorTickInterval: null,
+                    labels: {
+                        distance: 20,
+                        style: {
+                            fontSize: '14px'
+                        }
+                    },
 
-                labels: {
-                    distance: 20,
-                    style: {
-                        fontSize: '14px'
+                    lineWidth: 0,
+
+                    plotBands: [{
+                        from: 6,
+                        to: 8,
+                        color: '#FF0000',
+                        thickness: 20
+                    }, {
+                        from: 8,
+                        to: 10,
+                        color: '#FFFF00',
+                        thickness: 20
+                    },
+                    {
+                        from: 10,
+                        to: 18,
+                        color: '#00FF00',
+                        thickness: 20
+                    },
+                    {
+                        from: 18,
+                        to: 20,
+                        color: '#FFFF00',
+                        thickness: 20
+                    }, {
+                        from: 20,
+                        to: 22,
+                        color: '#FF0000',
+                        thickness: 20
+                    }]
+                },
+                series: [{
+                    name: 'Temperatura',
+                    data: [tempAtual],
+                    tooltip: {
+                        valueSuffix: '°C'
+                    },
+                    dataLabels: {
+                        format: 'Temperatura °C',
+                        borderWidth: 0,
+                        color: (
+                            Highcharts.defaultOptions.title &&
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || '#333333',
+                        style: {
+                            fontSize: '16px'
+                        }
+                    },
+                    dial: {
+                        radius: '70%',
+                        backgroundColor: 'gray',
+                        baseWidth: 12,
+                        baseLength: '0%',
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: 'gray',
+                        radius: 6
                     }
-                },
-
-                lineWidth: 0,
-
-                plotBands: [{
-                    from: 6,
-                    to: 8,
-                    color: '#FF0000',
-                    thickness: 20
-                }, {
-                    from: 8,
-                    to: 10,
-                    color: '#FFFF00',
-                    thickness: 20
-                },
-                {
-                    from: 10,
-                    to: 18,
-                    color: '#00FF00',
-                    thickness: 20
-                },
-                {
-                    from: 18,
-                    to: 20,
-                    color: '#FFFF00',
-                    thickness: 20
-                }, {
-                    from: 20,
-                    to: 22,
-                    color: '#FF0000',
-                    thickness: 20
                 }]
-            },
-            series: [{
-                name: 'Temperatura',
-                data: [tempAtual],
-                tooltip: {
-                    valueSuffix: '°C'
+            });
+
+            var gaugeUmi = Highcharts.chart('gaugeUmi', {
+                chart: {
+                    type: 'gauge',
+                    plotBackgroundColor: null,
+                    plotBackgroundImage: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false,
+                    height: '70%'
                 },
-                dataLabels: {
-                    format: 'Temperatura °C',
-                    borderWidth: 0,
-                    color: (
-                        Highcharts.defaultOptions.title &&
-                        Highcharts.defaultOptions.title.style &&
-                        Highcharts.defaultOptions.title.style.color
-                    ) || '#333333',
-                    style: {
-                        fontSize: '16px'
+
+                title: {
+                    text: 'Umidade'
+                },
+
+
+
+                pane: {
+                    startAngle: -90,
+                    endAngle: 90,
+                    background: null,
+                    center: ['50%', '75%'],
+                    size: '120%'
+                },
+
+                yAxis: {
+                    min: 50,
+                    max: 80,
+                    tickPixelInterval: 72,
+                    tickPosition: 'inside',
+                    tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+                    tickLength: 20,
+                    tickWidth: 2,
+                    minorTickInterval: null,
+
+                    labels: {
+                        distance: 20,
+
+                        style: {
+                            fontSize: '14px'
+                        }
+
+                    },
+
+                    lineWidth: 0,
+
+                    plotBands: [{
+                        from: 50,
+                        to: 55,
+                        color: '#FF0000',
+                        thickness: 20
+                    }, {
+                        from: 55,
+                        to: 60,
+                        color: '#FFFF00',
+                        thickness: 20
+                    },
+
+                    {
+                        from: 60,
+                        to: 70,
+                        color: '#00FF00',
+                        thickness: 20
+                    },
+
+                    {
+                        from: 70,
+                        to: 75,
+                        color: '#FFFF00',
+                        thickness: 20
+                    }, {
+                        from: 75,
+                        to: 80,
+                        color: '#FF0000',
+                        thickness: 20
+                    }]
+                },
+
+                series: [{
+                    name: 'Umidade',
+                    data: [umiAtual],
+
+                    tooltip: {
+                        valueSuffix: '%'
+                    },
+
+                    dataLabels: {
+                        format: 'Umidade%',
+                        borderWidth: 0,
+                        color: (
+                            Highcharts.defaultOptions.title &&
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || '#333333',
+                        style: {
+                            fontSize: '16px'
+                        }
+                    },
+
+                    dial: {
+                        radius: '70%',
+                        backgroundColor: 'gray',
+                        baseWidth: 12,
+                        baseLength: '0%',
+                        rearLength: '0%'
+                    },
+
+                    pivot: {
+                        backgroundColor: 'gray',
+                        radius: 6
                     }
-                },
-                dial: {
-                    radius: '70%',
-                    backgroundColor: 'gray',
-                    baseWidth: 12,
-                    baseLength: '0%',
-                    rearLength: '0%'
-                },
-                pivot: {
-                    backgroundColor: 'gray',
-                    radius: 6
-                }
-            }]
-        });
-
-        var gaugeUmi = Highcharts.chart('gaugeUmi', {
-            chart: {
-                type: 'gauge',
-                plotBackgroundColor: null,
-                plotBackgroundImage: null,
-                plotBorderWidth: 0,
-                plotShadow: false,
-                height: '70%'
-            },
-
-            title: {
-                text: 'Umidade'
-            },
-
-
-
-            pane: {
-                startAngle: -90,
-                endAngle: 90,
-                background: null,
-                center: ['50%', '75%'],
-                size: '120%'
-            },
-
-            yAxis: {
-                min: 50,
-                max: 80,
-                tickPixelInterval: 72,
-                tickPosition: 'inside',
-                tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
-                tickLength: 20,
-                tickWidth: 2,
-                minorTickInterval: null,
-
-                labels: {
-                    distance: 20,
-
-                    style: {
-                        fontSize: '14px'
-                    }
-
-                },
-
-                lineWidth: 0,
-
-                plotBands: [{
-                    from: 50,
-                    to: 55,
-                    color: '#FF0000',
-                    thickness: 20
-                }, {
-                    from: 55,
-                    to: 60,
-                    color: '#FFFF00',
-                    thickness: 20
-                },
-
-                {
-                    from: 60,
-                    to: 70,
-                    color: '#00FF00',
-                    thickness: 20
-                },
-
-                {
-                    from: 70,
-                    to: 75,
-                    color: '#FFFF00',
-                    thickness: 20
-                }, {
-                    from: 75,
-                    to: 80,
-                    color: '#FF0000',
-                    thickness: 20
                 }]
-            },
+            });
 
-            series: [{
-                name: 'Umidade',
-                data: [umiAtual],
-
-                tooltip: {
-                    valueSuffix: '%'
-                },
-
-                dataLabels: {
-                    format: 'Umidade%',
-                    borderWidth: 0,
-                    color: (
-                        Highcharts.defaultOptions.title &&
-                        Highcharts.defaultOptions.title.style &&
-                        Highcharts.defaultOptions.title.style.color
-                    ) || '#333333',
-                    style: {
-                        fontSize: '16px'
-                    }
-                },
-
-                dial: {
-                    radius: '70%',
-                    backgroundColor: 'gray',
-                    baseWidth: 12,
-                    baseLength: '0%',
-                    rearLength: '0%'
-                },
-
-                pivot: {
-                    backgroundColor: 'gray',
-                    radius: 6
-                }
-            }]
-        });
-
-        var decimalTemp = tempAtual.toFixed(2)
-        var decimalUmi = umiAtual.toFixed(2)
-
-        if (tempAtual >= 10 && tempAtual <= 18) {
-            kpiTemp.innerHTML = `<div class = "avisoCerto"> Temperatura:${decimalTemp} </div>`
-            analiseBomTemp = true
-            analiseMedioTemp = false
-            analiseRuimTemp = false
-            avisoFinal = false
-            avisoMedio = false
-
-        } else if ((tempAtual >= 8 && tempAtual <= 10) || (tempAtual >= 18 && tempAtual <= 20)) {
-            kpiTemp.innerHTML = `<div class = "avisoMedio"> Temperatura:${decimalTemp} </div>`
-            analiseBomTemp = false
-            analiseMedioTemp = true
-            analiseRuimTemp = false
-            avisoFinal = false
-            avisoMedio = true
-
-
-        } else if (tempAtual <= 8 || tempAtual > 20) {
-            kpiTemp.innerHTML = `<div class = "avisoAbaixo"> Temperatura:${decimalTemp} </div>`
-            analiseBomTemp = false
-            analiseMedioTemp = false
-            analiseRuimTemp = true
-            avisoFinal = true
-            avisoMedio = false
-        }
-
-        if (umiAtual >= 60 && umiAtual <= 70) {
-            kpiUmi.innerHTML = `<div class = "avisoCerto"> Umidade:${decimalUmi} </div>`
-            analiseBomUmi = true
-            analiseMedioUmi = false
-            analiseRuimUmi = false
-            avisoFinal = false
-            avisoMedio = false
-
-        } else if ((umiAtual >= 55 && umiAtual <= 59) || (umiAtual >= 71 && umiAtual <= 75)) {
-            kpiUmi.innerHTML = `<div class = "avisoMedio"> Umidade:${decimalUmi} </div>`
-            analiseBomUmi = false
-            analiseMedioUmi = true
-            analiseRuimUmi = false
-            avisoFinal = false
-            avisoMedio = true
-
-        } else if (umiAtual < 55 || umiAtual > 75) {
-            kpiUmi.innerHTML = `<div class = "avisoAbaixo"> Umidade:${decimalUmi} </div>`
-            analiseBomUmi = false
-            analiseMedioUmi = false
-            analiseRuimUmi = true
-            avisoFinal = true
-            avisoMedio = false
-        }
-
-        if (analiseBomTemp && analiseBomUmi) {
-            aviso.innerHTML = `<div class = "avisoCerto"> Tudo certo por aqui</div>`
-            avisoFinal = false
-            avisoMedio = false
-        } else if (analiseRuimTemp || analiseRuimUmi && (analiseMedioTemp || analiseMedioUmi)) {
-            aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
-            avisoFinal = true
-            avisoMedio = false
-        } else if (analiseMedioTemp || analiseMedioUmi) {
-            aviso.innerHTML = `<div class = "avisoMedio1"> Risco moderado! </div>`
-            avisoFinal = false
-            avisoMedio = true
-        } else if (analiseRuimTemp || analiseRuimUmi) {
-            aviso.innerHTML = `<div class = "avisoAbaixo"> ALERTA!! </div>`
-            avisoFinal = true
-            avisoMedio = false
-        }
-
-        setTimeout(() => atualizarGrafico(resposta, idCamara, gaugeTemp, gaugeUmi), 600000);
-
-        if (resposta.umiAtual < 60 || resposta.umiAtual > 70 || resposta.tempAtual < 10 || resposta.tempAtual > 18) {
-            atualizarGrafico(idCamara, dados, gaugeTemp, gaugeUmi);
-        }
-
+        }, 50);
     }
 
 
@@ -683,4 +592,7 @@
         fundo.classList.toggle('dis')
 
     }
+    setInterval(() => {
+        obterDadosCamara()
+    }, 2000)
 </script>
