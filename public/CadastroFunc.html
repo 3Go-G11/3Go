@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="./css/cad-login.css">
     <script src="./js/sessao.js"></script>
     <title>3GO - Cadastro Funcionario</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="allOfCode" onload="listar()">
     <div class="containIncrement" ></div> 
@@ -59,23 +60,45 @@
     var empresaVar = listaEmpresas.value
     
 
-    // if (
-    //   nomeVar == "" &&
-    //   emailVar == "" &&
-    //   senhaVar == "" &&
-    //   confirmarSenhaVar == "" &&
-    //   empresaVar == "" &&
-    //   cpfVar == ""
-    // ) {
-    //   cardErro.style.display = "block";
-    //   mensagem_erro.innerHTML =
-    //     "Todos os campos em branco";
-    //   finalizarAguardar();
-    //   return false;
-    // } else {
-    //   setInterval(sumirMensagem, 5000);
-    // }
+    if (
+      nomeVar == "" ||
+      emailVar == "" ||
+      senhaVar == "" ||
+      confirmarSenhaVar == "" ||
+      empresaVar == "" ||
+      cargo == ""
+    ) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "Nenhum campo pode estar vazio",
+});
+      finalizarAguardar();
+      return false;
+    } else if(emailVar.indexOf('@') == -1) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "O e-mail deve conter um @",
+});
 
+    } else if(senhaVar != confirmarSenhaVar) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "A input confirmar senha tem que ser exatamante igual a senha",
+});
+    } else if(senhaVar.length < 8) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "A senha tem que ter 8 ou mais caracteres",
+});
+    }
+    
+    else {
+      setInterval(sumirMensagem, 5000);
+      
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
       method: "POST",
@@ -113,6 +136,8 @@
       });
 
     return false;
+    }
+
   }
 
   function listar() {

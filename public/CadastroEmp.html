@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="./css/cad-login.css">
     <script src="./js/sessao.js"></script>
     <title>3GO - Cadastro Empresa</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body class="allOfCode">
     <div class="containIncrement" ></div> 
@@ -36,8 +38,8 @@
             </div>
             <div class="btnContainer">
                 <button class="btn" onclick="cadastrarEmpresa()">Cadastrar Empresa</button><br>
-                <a href="CadastroFunc.html">
-                    <button class="btn">Ir Para Funcionario</button>
+                <a href="CadastroFunc.html" class="btn">
+                 Ir Para Funcionario
                 </a> 
             </div>
             <div id="cardErro"></div>
@@ -55,8 +57,8 @@
     // Agora vá para o método fetch logo abaixo
     var razaoSocialVar = inputRazao.value;
     var nomeFantasiaVar = inputNome.value;
-    var cnpjVar = Number (inputCNPJ.value);
-    var telefoneVar = Number (inputTelefone.value);
+    var cnpjVar = inputCNPJ.value;
+    var telefoneVar = inputTelefone.value;
     var emailVar = inputEmail.value
     var senhaVar = inputSenha.value;
     var senhaConfVar = inputConfirmarSenha.value;
@@ -65,58 +67,53 @@
     if (
       razaoSocialVar == "" ||
       nomeFantasiaVar == "" ||
-      cnpjVar == 0 ||
-      telefoneVar == 0 ||
+      cnpjVar == "" ||
       emailVar == "" ||
+      telefoneVar == "" ||
       senhaVar == "" ||
       senhaConfVar == ""
-     ) {
-       cardErro.style.display = "block";
-       mensagem_erro.innerHTML = "Insira valores em todos os campos para prosseguir!";
-       finalizarAguardar();
-       return false;
+    ) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "Nenhum campo pode estar vazio",
+});
+      finalizarAguardar();
+      return false;
+    } else if(emailVar.indexOf('@') == -1) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "O e-mail deve conter um @",
+});
 
-     } else if (
-      cnpjVar.length <14 
-     ) {
-       cardErro.style.display = "block";
-       mensagem_erro.innerHTML = "Seu CNPJ precisa ter 14 digitos!";
-       finalizarAguardar();
-       return false;
-
-     } else if (emailVar.indexOf("@") >=0) {
-       cardErro.style.display = "block";
-       mensagem_erro.innerHTML = "Insira @ no seu email!";
-       finalizarAguardar();
-       return false;
-
-     } else if (
-      telefoneVar.length < 11 
-     ) {
-       cardErro.style.display = "block";
-       mensagem_erro.innerHTML = "Seu telefone precisa ter 11 digitos!";
-       finalizarAguardar();
-       return false;
-
-     } else if (
-      senhaVar.length <=7 
-     ) {
-       cardErro.style.display = "block";
-       mensagem_erro.innerHTML = "Sua senha precisa ter 8 ou mais digitos!";
-       finalizarAguardar();
-       return false;
-
-     } else if (
-      senhaVar =! senhaConfVar
-     ) {
-       cardErro.style.display = "block";
-       mensagem_erro.innerHTML = "Sua senha precisa ser igual a confirmação da senha!";
-       finalizarAguardar();
-       return false;
-
-     } else {
+    } else if(senhaVar != senhaConfVar) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "A input confirmar senha tem que ser exatamante igual a senha",
+});
+    } else if(senhaVar.length < 8) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "A senha tem que ter 8 ou mais caracteres",
+});
+    } else if(telefoneVar.length != 11) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "o telefone precisa conter 11 números",
+});
+    } else if(cnpjVar.length != 14) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "O cnpj precisa conter 14 caracteres",
+});
+    } else {
     
-    setInterval(sumirMensagem, 5000);
+    setInterval(sumirMensagem, 3000);
     
 
     // Enviando o valor da nova input
@@ -126,12 +123,12 @@
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        nomeFantasiaVar: nomeFantasia,
-        razaoSocialVar: razaoSocial,
-        telefoneVar: telefone,
-        cnpjVar: cnpj,
-        emailVar: email,
-        senhaVar: senha
+        nomeFantasiaVar: nomeFantasiaVar,
+        razaoSocialVar: razaoSocialVar,
+        telefoneVar: telefoneVar,
+        cnpjVar: cnpjVar,
+        emailVar: emailVar,
+        senhaVar: senhaVar
       }),
     })
       .then(function (resposta) {
