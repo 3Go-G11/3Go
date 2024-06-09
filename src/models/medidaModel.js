@@ -18,6 +18,20 @@ function buscarDadosAtuais(fkEmpresa) {
     return database.executar(instrucaoSql);
 }
 
+function buscarMaiorDado(id) {
+
+    var instrucaoSql = ` SELECT 
+    MAX(dht11Temperatura) AS maiorTemperatura,
+    MIN(dht11Umidade) AS menorUmidade
+FROM 
+    dados where fkSensor = 3
+group by 
+    datahora >= (SELECT DATE_SUB(NOW(), INTERVAL 1 DAY));
+}
+`;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql); }
+   
 module.exports = {
     buscarDadosAtuais
 }

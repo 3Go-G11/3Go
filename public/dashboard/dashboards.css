@@ -563,9 +563,38 @@ gap: 1rem;
 .backmodal.dis {
     display: none;
 }
-
-.grid-container {
+.gridItem {
+    background-color: #1d1d1d;
     display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.voltar.dis {
+    display: none;
+}
+.indicador {
+    width: 25px;
+    height: 25px;
+    border-radius: 100px;
+    background-color: #b50202;
+}
+.indicador.bom {
+    width: 25px;
+    height: 25px;
+    border-radius: 100px;
+    background-color: #3BB502;
+
+}
+.indicador.medio {
+    width: 25px;
+    height: 25px;
+    border-radius: 100px;
+    background-color: #ffdd00;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 150px 150px 150px 150px 150px;
+    grid-template-rows: 100px 100px 100px 100px 100px 100px;
     padding: 50px;
     gap: 20px;
 }
@@ -581,6 +610,7 @@ gap: 1rem;
     color: #fff;
     font-family: 'Roboto', sans-serif;
     border-radius: 10px;
+    height: 80%;
 }
 
 .green{

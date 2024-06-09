@@ -23,7 +23,7 @@
 </head>
 
 <body>
-    <div class="voltar" id="voltar" onclick="modalDash()"></div>
+    <div class="voltar dis" id="voltar" onclick="modalDash()"></div>
     <div class="backmodal dis" id="fundo"></div>
     <!-- <div class="mensagemDis" id="msg">
         <div class="sairModals" id="exit" onclick="closeModalDois()"><img
@@ -93,6 +93,7 @@
         </nav>
 
         <div id="grid-container" class="grid-container">
+          
             <div class="dashDis" id="dash"></div>
         </div>
 
@@ -106,6 +107,8 @@
     function modalDash() {
         dash.classList.remove('dash')
         dash.classList.add('dashDis')
+        voltar.classList.toggle('dis')
+
     }
     var msg = document.getElementById('msg')
     var nomeFunc = sessionStorage.NOME_FUNCIONARIO;
@@ -180,26 +183,31 @@
 
                 if (analiseBomTemp == true && analiseBomUmi == true) {
                     document.getElementById("grid-container").innerHTML += `
-                    <div id="gridItem${listaCamaras[i]}" class="gridItem green" onclick="ativarCamara(this)">Camara ${listaCamaras[i]}</div>
+            <div id="gridItem${listaCamaras[i]}" class="gridItem" onclick="ativarCamara(this)">Camara  ${listaCamaras[i]} <div class="indicador bom"></div></div>
+                  
                     `
                 } else if ((analiseRuimTemp == true || analiseRuimUmi == true) &&
                     (analiseMedioTemp == true || analiseMedioUmi == true)) {
                     document.getElementById("grid-container").innerHTML += `
-                    <div id="gridItem${listaCamaras[i]}" class="gridItem red" onclick="ativarCamara(this)">Camara ${listaCamaras[i]}</div>
+            <div id="gridItem${listaCamaras[i]}" class="gridItem" onclick="ativarCamara(this)">Camara  ${listaCamaras[i]} <div class="indicador"></div></div>
+
                     `
                 } else if (analiseRuimTemp == true || analiseRuimUmi == true) {
                     document.getElementById("grid-container").innerHTML += `
-                    <div id="gridItem${listaCamaras[i]}" class="gridItem red" onclick="ativarCamara(this)">Camara ${listaCamaras[i]}</div>
+            <div id="gridItem${listaCamaras[i]}" class="gridItem" onclick="ativarCamara(this)">Camara  ${listaCamaras[i]} <div class="indicador"></div></div>
+
                     `
                 } else if (analiseMedioTemp == true || analiseMedioUmi == true) {
                     document.getElementById("grid-container").innerHTML += `
-                    <div id="gridItem${listaCamaras[i]}" class="gridItem green yellow" onclick="ativarCamara(this)">Camara ${listaCamaras[i]}</div>
+            <div id="gridItem${listaCamaras[i]}" class="gridItem" onclick="ativarCamara(this)">Camara  ${listaCamaras[i]} <div class="indicador medio"></div></div>
+
                     `
                 }
             }
         }
 
     }
+    
 
 
     function closeModalDois() {
@@ -250,6 +258,8 @@
     function ativarCamara(camara) {
         dash.classList.remove('dashDis')
         dash.classList.add('dash')
+        voltar.classList.toggle('dis')
+        
         var indiceCamara = camara.id[camara.id.length - 1];
         console.log("teste pegar: " + respostaPegar)
         texto = ` <div class="content" id="camara${indiceCamara}">
