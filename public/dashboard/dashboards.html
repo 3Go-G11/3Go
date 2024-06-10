@@ -93,7 +93,7 @@
         </nav>
 
         <div id="grid-container" class="grid-container">
-          
+
             <div class="dashDis" id="dash"></div>
         </div>
 
@@ -104,19 +104,26 @@
 </html>
 
 <script>
-    function modalDash() {
-        dash.classList.remove('dash')
-        dash.classList.add('dashDis')
-        voltar.classList.toggle('dis')
-
-    }
     var msg = document.getElementById('msg')
     var nomeFunc = sessionStorage.NOME_FUNCIONARIO;
     var user = document.getElementById('user');
     user.innerHTML = `Olá, ${nomeFunc}`;
     var fkEmpresa = sessionStorage.FK_EMPRESA;
-
+    var analiseBomTemp;
+    var analiseMedioTemp;
+    var analiseRuimTemp;
+    var analiseBomUmi;
+    var analiseMedioUmi;
+    var analiseRuimUmi;
+    var avisoFinal;
+    var avisoMedio;
+    var temperaturaCam;
+    var umidadeCam;
+    var listaCamaras = []
+    var texto = "";
+    var extremosDia = []
     obterDadosCamara();
+
     function obterDadosCamara() {
         fetch(`/medidas/buscarDadosAtuais`, {
             method: "POST",
@@ -141,13 +148,11 @@
                 console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
             });
     }
-    var listaCamaras = []
 
     function exibirCamaras(resposta) {
         var camaras = document.getElementsByClassName("camara");
         for (var i = 0; i < resposta.length; i++) {
             var camaraAtual = resposta[i].idCamara;
-            console.log("camara atual" + camaraAtual)
 
             if (listaCamaras.indexOf(camaraAtual) == -1) {
                 listaCamaras.push(camaraAtual)
@@ -207,21 +212,7 @@
         }
 
     }
-    
 
-
-    function closeModalDois() {
-
-        msg.classList.remove('mensagemDis')
-        msg.classList.add('mensagem')
-        fundo.classList.toggle('dis')
-
-    }
-    var respostaPegar = []
-    var temperaturaCam;
-    var umidadeCam;
-
-    var texto = "";
     function pegarCamara(indice) {
         var comando = `${fkEmpresa} AND idCamara = ${indice}`;
         fetch(`/medidas/buscarDadosAtuais`, {
@@ -246,22 +237,36 @@
             });
     }
 
-    var analiseBomTemp;
-    var analiseMedioTemp;
-    var analiseRuimTemp;
-    var analiseBomUmi;
-    var analiseMedioUmi;
-    var analiseRuimUmi;
-    var avisoFinal;
-    var avisoMedio;
-    var testemisera = temperaturaCam;
+    function pegarCamaraDia(indice) {
+        var idCamara = indice;
+        fetch(`/medidas/buscarDadosDia`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fkEmpresaServer2: fkEmpresa,
+                idCamaraServer: idCamara
+            })
+        }).then(function (resultado) {
+            if (resultado.ok) {
+                resultado.json().then(function (resposta) {
+                    console.log(`Dados recebidos pegar camara dia: ${JSON.stringify(resposta)}`);
+                    extremosDia = resposta
+                });
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+    }
+
     function ativarCamara(camara) {
         dash.classList.remove('dashDis')
         dash.classList.add('dash')
         voltar.classList.toggle('dis')
-        
+
         var indiceCamara = camara.id[camara.id.length - 1];
-        console.log("teste pegar: " + respostaPegar)
         texto = ` <div class="content" id="camara${indiceCamara}">
             <p style="color: #fff; font-weight: 600; position: absolute; top: -30px; left: 10px;">Camara ${indiceCamara}</p>
             <div class="alignDailyChart">
@@ -281,8 +286,9 @@
                         </div>
                         `
         document.getElementById("dash").innerHTML = texto;
-        pegarCamara(indiceCamara)
 
+        pegarCamara(indiceCamara)
+        pegarCamaraDia(indiceCamara)
 
         setTimeout(() => {
             kpiTemp.innerHTML = temperaturaCam
@@ -359,10 +365,9 @@
             }
 
             plotarGauges()
+            plotarGraficosDia()
         }, 50);
     }
-
-
 
     function plotarGauges() {
         setTimeout(() => {
@@ -586,6 +591,54 @@
         }, 50);
     }
 
+    function plotarGraficosDia() {
+
+
+        const ctx = document.getElementById('dadosHora');
+        var maxTemp = extremosDia[0].maiorTemperatura;
+        var minTemp = extremosDia[0].menorTemperatura;
+        var maxUmi = extremosDia[0].maiorUmidade;
+        var minUmi = extremosDia[0].menorUmidade;
+
+        dadosHora = new Chart(ctx, {
+
+
+            type: 'bar',
+            data: {
+                labels: ['MaxTemp', 'MinTemp', 'MaxUmi', 'MinUmi'],
+                datasets: [{
+                    label: 'Temperatura',
+                    data: [maxTemp, minTemp, maxUmi, minUmi],
+                    borderWidth: 1,
+                    backgroundColor: 'red',
+                    borderColor: 'red',
+                }]
+            },
+
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+        });
+    }
+
+    function modalDash() {
+        dash.classList.remove('dash')
+        dash.classList.add('dashDis')
+        voltar.classList.toggle('dis')
+
+    }
+
+    function closeModalDois() {
+
+        msg.classList.remove('mensagemDis')
+        msg.classList.add('mensagem')
+        fundo.classList.toggle('dis')
+
+    }
 
     function openModal() {
         msg.classList.remove('mensagemDis')
@@ -602,6 +655,7 @@
         fundo.classList.toggle('dis')
 
     }
+
     setInterval(() => {
         obterDadosCamara()
     }, 2000)
