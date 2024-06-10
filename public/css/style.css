@@ -465,3 +465,47 @@
     justify-content: center;
     align-items: center;
 }
+
+footer {
+    background-color: black;
+    color: #fff;
+    padding: 30px 0;
+  }
+  
+  .rodape + .rodape2 {
+    margin-top: 60px; 
+  }
+
+  .rodape {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .rodape2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .rodape2 .rodape-item2 {
+    margin: 0 5px; 
+  }
+  .rodape-item, .rodape-item2 {
+    display: flex;
+    align-items: center;
+    flex: 1;   
+    justify-content: center; 
+    margin: 0 10px;
+  }
+  
+  .footer-icon {
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .rodape-item p, .rodape-item2 p {
+    margin: 0;
+  }
