@@ -23,7 +23,7 @@
 </head>
 
 <body>
-    <div class="voltar dis" id="voltar" onclick="modalDash()"></div>
+    <div class="voltar dis" id="voltar" onclick="modalDash()"><div class="voltarIcon"></div></div>
     <div class="backmodal dis" id="fundo"></div>
     <!-- <div class="mensagemDis" id="msg">
         <div class="sairModals" id="exit" onclick="closeModalDois()"><img
@@ -77,17 +77,11 @@
                 <li onclick="openModal()">
                     <p class="btnMedia">Especificaçôes</p>
                 </li><br>
-                <p class="tituloNav">Mais graficos</p>
+                
 
             </div>
 
-            <li onclick="openModalMensal()">
-                <p class="btnMedia">Média Semanal </p>
-            </li>
-
-
-            <br><button id="btnAnalisar" onclick="atualizarGraficos()" class="btn">Analisar agora</button>
-            <button onclick="" class="btn">Voltar</button>
+            
             <button class="btn sair">Sair</button>
 
         </nav>
@@ -235,6 +229,7 @@
             .catch(function (error) {
                 console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
             });
+        pegarCamaraDia(indice)
     }
 
     function pegarCamaraDia(indice) {
@@ -250,6 +245,7 @@
             })
         }).then(function (resultado) {
             if (resultado.ok) {
+                console.log("resultado" + resultado)
                 resultado.json().then(function (resposta) {
                     console.log(`Dados recebidos pegar camara dia: ${JSON.stringify(resposta)}`);
                     extremosDia = resposta
@@ -288,7 +284,6 @@
         document.getElementById("dash").innerHTML = texto;
 
         pegarCamara(indiceCamara)
-        pegarCamaraDia(indiceCamara)
 
         setTimeout(() => {
             kpiTemp.innerHTML = temperaturaCam
@@ -593,7 +588,6 @@
 
     function plotarGraficosDia() {
 
-
         const ctx = document.getElementById('dadosHora');
         var maxTemp = extremosDia[0].maiorTemperatura;
         var minTemp = extremosDia[0].menorTemperatura;
@@ -601,29 +595,60 @@
         var minUmi = extremosDia[0].menorUmidade;
 
         dadosHora = new Chart(ctx, {
-
-
             type: 'bar',
             data: {
-                labels: ['MaxTemp', 'MinTemp', 'MaxUmi', 'MinUmi'],
-                datasets: [{
-                    label: 'Temperatura',
-                    data: [maxTemp, minTemp, maxUmi, minUmi],
-                    borderWidth: 1,
-                    backgroundColor: 'red',
-                    borderColor: 'red',
-                }]
+                labels: ['Extremos diarios'],
+                datasets: [
+                    {
+                        label: 'Temperatura Maxima',
+                        data: [maxTemp], 
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Temperatura Minima', 
+                        data: [minTemp], 
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Umidade Maxima', 
+                        data: [maxUmi], 
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Umidade Minima',
+                        data: [minUmi], 
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
             },
-
             options: {
                 scales: {
                     y: {
                         beginAtZero: true
                     }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top', 
+                    },
+                    title: {
+                        display: true,
+                        text: 'Dados dos Extremos do Dia', 
+                    }
                 }
-            },
+            }
         });
     }
+
 
     function modalDash() {
         dash.classList.remove('dash')

@@ -18,7 +18,7 @@ function buscarDadosAtuais(req, res) {
 function buscarDadosDia(req, res) {
     var fkEmpresa = req.body.fkEmpresaServer2;
     var idCamara = req.body.idCamaraServer
-    medidaModel.buscarDadosDia(fkEmpresa, idCamara).then(function (resultado) {
+    medidaModel.buscarDadosDia(idCamara, fkEmpresa).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);    
         } else {

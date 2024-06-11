@@ -149,7 +149,7 @@
 .contDois {
     width: 36%;
     height: 100%;
-    background-image: url('https://github.com/3Go-G11/3Go/blob/main/assets/contMain.png?raw=true');
+    background-image: url('../assets/contMain.png');
     background-repeat: no-repeat;
     animation-name:  contMainAnimation ;
     animation-duration: 30s;
@@ -310,7 +310,7 @@
     animation-direction: alternate;
 }
 .parallax.one {
-    background-image: url('https://github.com/3Go-G11/3Go/blob/main/assets/parallax1.png?raw=true');
+    background-image: url('../assets/parallax1.png');
 }
 .parallax.two {
     background-image: url('https://cdn.pixabay.com/photo/2021/06/23/12/47/wheat-6358659_960_720.jpg');
