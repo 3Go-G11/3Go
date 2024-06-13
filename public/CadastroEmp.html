@@ -80,6 +80,12 @@
 });
       finalizarAguardar();
       return false;
+    } else if(cnpjVar.length != 14) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "O cnpj precisa conter 14 caracteres",
+});
     } else if(emailVar.indexOf('@') == -1) {
       Swal.fire({
   icon: "error",
@@ -87,6 +93,12 @@
   text: "O e-mail deve conter um @",
 });
 
+    } else if(telefoneVar.length != 11) {
+      Swal.fire({
+  icon: "error",
+  title: "Cuidado",
+  text: "o telefone precisa conter 11 números",
+});
     } else if(senhaVar != senhaConfVar) {
       Swal.fire({
   icon: "error",
@@ -98,18 +110,6 @@
   icon: "error",
   title: "Cuidado",
   text: "A senha tem que ter 8 ou mais caracteres",
-});
-    } else if(telefoneVar.length != 11) {
-      Swal.fire({
-  icon: "error",
-  title: "Cuidado",
-  text: "o telefone precisa conter 11 números",
-});
-    } else if(cnpjVar.length != 14) {
-      Swal.fire({
-  icon: "error",
-  title: "Cuidado",
-  text: "O cnpj precisa conter 14 caracteres",
 });
     } else {
     
