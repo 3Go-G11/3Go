@@ -82,7 +82,7 @@
             </div>
 
             
-            <button class="btn sair">Sair</button>
+            <button class="btn sair" onclick="sair()">Sair</button>
 
         </nav>
 
@@ -116,7 +116,13 @@
     var listaCamaras = []
     var texto = "";
     var extremosDia = []
+    var indiceFunction;
+    var indice;
     obterDadosCamara();
+        function sair() {
+            window.location = '../index.html';
+            sessionStorage.clear()
+        }
 
     function obterDadosCamara() {
         fetch(`/medidas/buscarDadosAtuais`, {
@@ -207,8 +213,10 @@
 
     }
 
-    function pegarCamara(indice) {
-        var comando = `${fkEmpresa} AND idCamara = ${indice}`;
+    
+
+    function pegarCamara() {
+        var comando = `${fkEmpresa} AND idCamara = ${indiceFunction}`;
         fetch(`/medidas/buscarDadosAtuais`, {
             method: "POST",
             headers: {
@@ -223,17 +231,17 @@
                     console.log(`Dados recebidos pegar camara: ${JSON.stringify(resposta)}`);
                     temperaturaCam = resposta[0].temperatura
                     umidadeCam = resposta[0].umidade
-                });
+                }); 
+                plotarGauges();
             }
         })
             .catch(function (error) {
                 console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
             });
-        pegarCamaraDia(indice)
     }
 
-    function pegarCamaraDia(indice) {
-        var idCamara = indice;
+    function pegarCamaraDia() {
+        var idCamara = indiceFunction;
         fetch(`/medidas/buscarDadosDia`, {
             method: "POST",
             headers: {
@@ -245,10 +253,10 @@
             })
         }).then(function (resultado) {
             if (resultado.ok) {
-                console.log("resultado" + resultado)
                 resultado.json().then(function (resposta) {
                     console.log(`Dados recebidos pegar camara dia: ${JSON.stringify(resposta)}`);
-                    extremosDia = resposta
+                    plotarGraficosDia()
+                    extremosDia = resposta 
                 });
             }
         })
@@ -282,8 +290,10 @@
                         </div>
                         `
         document.getElementById("dash").innerHTML = texto;
+        indiceFunction = indiceCamara
 
-        pegarCamara(indiceCamara)
+        pegarCamara()
+        pegarCamaraDia()
 
         setTimeout(() => {
             kpiTemp.innerHTML = temperaturaCam
@@ -366,8 +376,8 @@
 
     function plotarGauges() {
         setTimeout(() => {
-            var tempAtual = temperaturaCam
-            var umiAtual = umidadeCam
+            var tempAtual = temperaturaCam;
+            var umiAtual = umidadeCam;
 
             var gaugeTemp = Highcharts.chart('gaugeTemp', {
                 chart: {
@@ -585,16 +595,17 @@
 
         }, 50);
     }
-
+    
     function plotarGraficosDia() {
-
+        setTimeout(() =>{
+            
         const ctx = document.getElementById('dadosHora');
         var maxTemp = extremosDia[0].maiorTemperatura;
         var minTemp = extremosDia[0].menorTemperatura;
         var maxUmi = extremosDia[0].maiorUmidade;
         var minUmi = extremosDia[0].menorUmidade;
 
-        dadosHora = new Chart(ctx, {
+        var dadosHora = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ['Extremos diarios'],
@@ -647,7 +658,19 @@
                 }
             }
         });
+      
+    }, 50)
     }
+
+    setInterval(() => {
+        var graf = document.getElementById('dash')
+        pegarCamara(indiceFunction)
+        pegarCamaraDia(indiceFunction)
+       maiorGrafico.innerHTML = ` <canvas id="dadosHora"></canvas>`
+
+  
+
+    }, 10000)
 
 
     function modalDash() {
@@ -683,5 +706,5 @@
 
     setInterval(() => {
         obterDadosCamara()
-    }, 2000)
+    }, 10000)
 </script>

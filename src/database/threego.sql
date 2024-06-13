@@ -1,6 +1,5 @@
-CREATE DATABASE Treego;
-USE Treego;
-
+CREATE DATABASE threego;
+USE threego;
 
 CREATE TABLE empresa (
   idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
@@ -10,6 +9,7 @@ CREATE TABLE empresa (
   telefone CHAR(11) not null,
   email VARCHAR(90) not null,
   senha VARCHAR(45) not null); 
+
 CREATE TABLE funcionario (
   idFunc INT auto_increment,
   fkEmpresa INT,
@@ -42,8 +42,8 @@ CREATE TABLE dados(
   CONSTRAINT fkSensorDados FOREIGN KEY (fkSensor)
     REFERENCES sensor (idSensor),
   CONSTRAINT pkCompostaDados PRIMARY KEY (idDados, fkSensor),
-  dht11Temperatura DOUBLE,
-  dht11Umidade DOUBLE,
+  dht11Temperatura FLOAT,
+  dht11Umidade FLOAT,
   datahora DATETIME DEFAULT CURRENT_TIMESTAMP);
 
 INSERT INTO empresa (razaosocial, nomeFantasia, cnpj, telefone, email, senha) 
@@ -117,4 +117,3 @@ FROM
 GROUP BY
     datahora >= (SELECT DATE_SUB(NOW(), INTERVAL 1 DAY));
 */
-
