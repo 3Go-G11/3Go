@@ -23,14 +23,10 @@
 </head>
 
 <body>
-    <div class="voltar dis" id="voltar" onclick="modalDash()"><div class="voltarIcon"></div></div>
+    <div class="voltar dis" id="voltar" onclick="modalDash()">
+        <div class="voltarIcon"></div>
+    </div>
     <div class="backmodal dis" id="fundo"></div>
-    <!-- <div class="mensagemDis" id="msg">
-        <div class="sairModals" id="exit" onclick="closeModalDois()"><img
-                src="https://www.freeiconspng.com/uploads/close-icon-39.png" alt="" class="exit"></div>
-        <div class="alignDailyChart">
-            <canvas id="semanaExtremos"></canvas>
-        </div> -->
     </div>
     <div class="mensagemDis" id="msg">
         <div class="sairModals" id="exit" onclick="closeModal()"><img
@@ -77,18 +73,19 @@
                 <li onclick="openModal()">
                     <p class="btnMedia">Especificaçôes</p>
                 </li><br>
-                
+
 
             </div>
 
-            
+
             <button class="btn sair" onclick="sair()">Sair</button>
 
         </nav>
+        <div class="rightContain">
 
-        <div id="grid-container" class="grid-container">
-
-            <div class="dashDis" id="dash"></div>
+            <div id="grid-container" class="grid-container">
+            </div>
+            <div class="dash" id="dash"></div>
         </div>
 
 
@@ -119,10 +116,10 @@
     var indiceFunction;
     var indice;
     obterDadosCamara();
-        function sair() {
-            window.location = '../index.html';
-            sessionStorage.clear()
-        }
+    function sair() {
+        window.location = '../index.html';
+        sessionStorage.clear()
+    }
 
     function obterDadosCamara() {
         fetch(`/medidas/buscarDadosAtuais`, {
@@ -150,70 +147,67 @@
     }
 
     function exibirCamaras(resposta) {
-        var camaras = document.getElementsByClassName("camara");
+        document.getElementById("grid-container").innerHTML = ""
         for (var i = 0; i < resposta.length; i++) {
             var camaraAtual = resposta[i].idCamara;
 
             if (listaCamaras.indexOf(camaraAtual) == -1) {
                 listaCamaras.push(camaraAtual)
+            }
 
-                if (resposta[i].temperatura >= 10 && resposta[i].temperatura <= 18) {
-                    analiseBomTemp = true
-                    analiseMedioTemp = false
-                    analiseRuimTemp = false
-                } else if ((resposta[i].temperatura >= 8 && resposta[i].temperatura <= 10) || (resposta[i].temperatura >= 18 && resposta[i].temperatura <= 20)) {
-                    analiseBomTemp = false
-                    analiseMedioTemp = true
-                    analiseRuimTemp = false
-                } else if (resposta[i].temperatura <= 8 || resposta[i].temperatura > 20) {
-                    analiseBomTemp = false
-                    analiseMedioTemp = false
-                    analiseRuimTemp = true
-                }
-                if (resposta[i].umidade >= 60 && resposta[i].umidade <= 70) {
-                    analiseBomUmi = true
-                    analiseMedioUmi = false
-                    analiseRuimUmi = false
-                } else if ((resposta[i].umidade >= 55 && resposta[i].umidade <= 59) || (resposta[i].umidade >= 71 && resposta[i].umidade <= 75)) {
-                    analiseBomUmi = false
-                    analiseMedioUmi = true
-                    analiseRuimUmi = false
-                } else if (resposta[i].umidade < 55 || resposta[i].umidade > 75) {
-                    analiseBomUmi = false
-                    analiseMedioUmi = false
-                    analiseRuimUmi = true
-                }
+            if (resposta[i].temperatura >= 10 && resposta[i].temperatura <= 18) {
+                analiseBomTemp = true
+                analiseMedioTemp = false
+                analiseRuimTemp = false
+            } else if ((resposta[i].temperatura >= 8 && resposta[i].temperatura <= 10) || (resposta[i].temperatura >= 18 && resposta[i].temperatura <= 20)) {
+                analiseBomTemp = false
+                analiseMedioTemp = true
+                analiseRuimTemp = false
+            } else if (resposta[i].temperatura <= 8 || resposta[i].temperatura > 20) {
+                analiseBomTemp = false
+                analiseMedioTemp = false
+                analiseRuimTemp = true
+            }
+            if (resposta[i].umidade >= 60 && resposta[i].umidade <= 70) {
+                analiseBomUmi = true
+                analiseMedioUmi = false
+                analiseRuimUmi = false
+            } else if ((resposta[i].umidade >= 55 && resposta[i].umidade <= 59) || (resposta[i].umidade >= 71 && resposta[i].umidade <= 75)) {
+                analiseBomUmi = false
+                analiseMedioUmi = true
+                analiseRuimUmi = false
+            } else if (resposta[i].umidade < 55 || resposta[i].umidade > 75) {
+                analiseBomUmi = false
+                analiseMedioUmi = false
+                analiseRuimUmi = true
+            }
 
-
-
-                if (analiseBomTemp == true && analiseBomUmi == true) {
-                    document.getElementById("grid-container").innerHTML += `
+            if (analiseBomTemp == true && analiseBomUmi == true) {
+                document.getElementById("grid-container").innerHTML += `
             <div id="gridItem${listaCamaras[i]}" class="gridItem" onclick="ativarCamara(this)">Camara  ${listaCamaras[i]} <div class="indicador bom"></div></div>
                   
                     `
-                } else if ((analiseRuimTemp == true || analiseRuimUmi == true) &&
-                    (analiseMedioTemp == true || analiseMedioUmi == true)) {
-                    document.getElementById("grid-container").innerHTML += `
+            } else if ((analiseRuimTemp == true || analiseRuimUmi == true) &&
+                (analiseMedioTemp == true || analiseMedioUmi == true)) {
+                document.getElementById("grid-container").innerHTML += `
             <div id="gridItem${listaCamaras[i]}" class="gridItem" onclick="ativarCamara(this)">Camara  ${listaCamaras[i]} <div class="indicador"></div></div>
 
                     `
-                } else if (analiseRuimTemp == true || analiseRuimUmi == true) {
-                    document.getElementById("grid-container").innerHTML += `
+            } else if (analiseRuimTemp == true || analiseRuimUmi == true) {
+                document.getElementById("grid-container").innerHTML += `
             <div id="gridItem${listaCamaras[i]}" class="gridItem" onclick="ativarCamara(this)">Camara  ${listaCamaras[i]} <div class="indicador"></div></div>
 
                     `
-                } else if (analiseMedioTemp == true || analiseMedioUmi == true) {
-                    document.getElementById("grid-container").innerHTML += `
+            } else if (analiseMedioTemp == true || analiseMedioUmi == true) {
+                document.getElementById("grid-container").innerHTML += `
             <div id="gridItem${listaCamaras[i]}" class="gridItem" onclick="ativarCamara(this)">Camara  ${listaCamaras[i]} <div class="indicador medio"></div></div>
 
                     `
-                }
             }
+
         }
 
     }
-
-    
 
     function pegarCamara() {
         var comando = `${fkEmpresa} AND idCamara = ${indiceFunction}`;
@@ -231,7 +225,7 @@
                     console.log(`Dados recebidos pegar camara: ${JSON.stringify(resposta)}`);
                     temperaturaCam = resposta[0].temperatura
                     umidadeCam = resposta[0].umidade
-                }); 
+                });
                 plotarGauges();
             }
         })
@@ -256,7 +250,7 @@
                 resultado.json().then(function (resposta) {
                     console.log(`Dados recebidos pegar camara dia: ${JSON.stringify(resposta)}`);
                     plotarGraficosDia()
-                    extremosDia = resposta 
+                    extremosDia = resposta
                 });
             }
         })
@@ -266,8 +260,8 @@
     }
 
     function ativarCamara(camara) {
-        dash.classList.remove('dashDis')
-        dash.classList.add('dash')
+        document.getElementById("grid-container").style.display = "none";
+        document.getElementById("dash").style.display = "flex";
         voltar.classList.toggle('dis')
 
         var indiceCamara = camara.id[camara.id.length - 1];
@@ -595,89 +589,87 @@
 
         }, 50);
     }
-    
-    function plotarGraficosDia() {
-        setTimeout(() =>{
-            
-        const ctx = document.getElementById('dadosHora');
-        var maxTemp = extremosDia[0].maiorTemperatura;
-        var minTemp = extremosDia[0].menorTemperatura;
-        var maxUmi = extremosDia[0].maiorUmidade;
-        var minUmi = extremosDia[0].menorUmidade;
 
-        var dadosHora = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Extremos diarios'],
-                datasets: [
-                    {
-                        label: 'Temperatura Maxima',
-                        data: [maxTemp], 
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Temperatura Minima', 
-                        data: [minTemp], 
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Umidade Maxima', 
-                        data: [maxUmi], 
-                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                        borderColor: 'rgba(255, 206, 86, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Umidade Minima',
-                        data: [minUmi], 
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    function plotarGraficosDia() {
+        setTimeout(() => {
+
+            const ctx = document.getElementById('dadosHora');
+            var maxTemp = extremosDia[0].maiorTemperatura;
+            var minTemp = extremosDia[0].menorTemperatura;
+            var maxUmi = extremosDia[0].maiorUmidade;
+            var minUmi = extremosDia[0].menorUmidade;
+
+            var dadosHora = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Extremos diarios'],
+                    datasets: [
+                        {
+                            label: 'Temperatura Maxima',
+                            data: [maxTemp],
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Temperatura Minima',
+                            data: [minTemp],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Umidade Maxima',
+                            data: [maxUmi],
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Umidade Minima',
+                            data: [minUmi],
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }
+                    ]
                 },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top', 
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     },
-                    title: {
-                        display: true,
-                        text: 'Dados dos Extremos do Dia', 
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Dados dos Extremos do Dia',
+                        }
                     }
                 }
-            }
-        });
-      
-    }, 50)
+            });
+
+        }, 50)
     }
 
     setInterval(() => {
         var graf = document.getElementById('dash')
         pegarCamara(indiceFunction)
         pegarCamaraDia(indiceFunction)
-       maiorGrafico.innerHTML = ` <canvas id="dadosHora"></canvas>`
+        maiorGrafico.innerHTML = ` <canvas id="dadosHora"></canvas>`
 
-  
+
 
     }, 10000)
 
-
     function modalDash() {
-        dash.classList.remove('dash')
-        dash.classList.add('dashDis')
+        document.getElementById("dash").style.display = "none"
+        document.getElementById("grid-container").style.display = "grid";
         voltar.classList.toggle('dis')
-
     }
 
     function closeModalDois() {
@@ -706,5 +698,6 @@
 
     setInterval(() => {
         obterDadosCamara()
+        exibirCamaras(resposta)
     }, 10000)
 </script>
